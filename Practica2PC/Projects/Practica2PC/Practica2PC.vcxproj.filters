@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{b8743b7a-aa98-49d5-aed9-d1f51430ca93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\PC">
+      <UniqueIdentifier>{c10d6931-32d5-437c-b8b3-4d87a8b0f251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{4290dfff-e077-4ce2-ae6d-c64b6fc569de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\PC">
+      <UniqueIdentifier>{c2c2600b-8cd2-4af3-8075-2f62716fbc64}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Practica2\main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica2\Renderer\PC\PCRenderer.cpp">
+      <Filter>Renderer\PC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp">
+      <Filter>Platform\PC</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Practica2\Platform\Platform.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica2\Renderer\PC\PCRenderer.h">
+      <Filter>Renderer\PC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica2\Platform\PC\PCPlatform.h">
+      <Filter>Platform\PC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica2\Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
