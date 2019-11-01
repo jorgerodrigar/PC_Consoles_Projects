@@ -8,7 +8,7 @@
 void Fire::simulatePixel(int x, int y)
 {
 	int rnd = (rand() % 3) - 1; //rnd btw [-1, 1]
-	int pixelValue = fire[x - 1][y + rnd];
+	int pixelValue = fire[x + rnd][y - 1];
 	int pixelTemperature = pixelValue;
 
 	if (pixelValue != 0) {

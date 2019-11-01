@@ -36,11 +36,11 @@
     <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp">
       <Filter>Platform\PC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica2\Logic\Fire.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica2\main.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica2\Logic\Fire.cpp">
+      <Filter>Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +57,7 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica2\Logic\Fire.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
