@@ -1,23 +1,16 @@
 #ifndef PCPLATFORM_H_  
 #define PCPLATFORM_H_
 
-class SDL_Window;
-class SDL_Renderer;
-
 class PCPlatform {
 private:
-	SDL_Window* _window = nullptr;
-	SDL_Renderer* _renderer = nullptr;
+	static bool _initialized;
 
-	int _winWidth, _winHeight;
+	PCPlatform();
 
 public:
-	PCPlatform();
-	~PCPlatform();
-	void init();
-	void release();
-
-	void tick();
+	static void init();
+	static void release();
+	static bool tick();
 };
 
 #endif 

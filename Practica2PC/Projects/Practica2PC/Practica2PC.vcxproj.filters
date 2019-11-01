@@ -25,16 +25,22 @@
     <Filter Include="Renderer\PC">
       <UniqueIdentifier>{c2c2600b-8cd2-4af3-8075-2f62716fbc64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{221b75e6-9fc5-4190-b709-091453047981}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Practica2\main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica2\Renderer\PC\PCRenderer.cpp">
       <Filter>Renderer\PC</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp">
       <Filter>Platform\PC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica2\Logic\Fire.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica2\main.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Practica2\Renderer\Renderer.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica2\Logic\Fire.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,33 +1,41 @@
-#ifdef _WIN32 
+#if defined(_WIN64) || defined(_WIN32) 
 
 #include "PCPlatform.h"
 #include <SDL.h>
 
-PCPlatform::PCPlatform()
-{
-}
+bool PCPlatform::_initialized = false;
 
-PCPlatform::~PCPlatform()
-{
-}
+PCPlatform::PCPlatform() {}
 
 void PCPlatform::init()
 {
-	int winX, winY;
-	winX = winY = SDL_WINDOWPOS_CENTERED;
-	//Inicialización del sistema y renderer
-	SDL_Init(SDL_INIT_EVERYTHING);
-	_window = SDL_CreateWindow("Moonace", winX, winY, 800, 600, SDL_WINDOW_SHOWN);
-	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_ShowCursor(0);
+	if (!_initialized) {
+		//Inicialización del sistema 
+		SDL_Init(SDL_INIT_EVERYTHING);
+		_initialized = true;
+	}
 }
 
 void PCPlatform::release()
 {
+	if (_initialized) {		 
+		SDL_Quit();
+		_initialized = false;
+	}
 }
 
-void PCPlatform::tick()
+bool PCPlatform::tick()
 {
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+			return true;
+		}
+		else if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+			//TODO: RESIZE WINDOW TO FULLSCREEN
+		}
+		return false;
+	}
 }
 
 #endif

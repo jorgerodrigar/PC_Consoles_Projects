@@ -147,11 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Practica2\Logic\Fire.cpp" />
     <ClCompile Include="..\..\src\Practica2\main.cpp" />
     <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp" />
     <ClCompile Include="..\..\src\Practica2\Renderer\PC\PCRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Practica2\Logic\Fire.h" />
     <ClInclude Include="..\..\src\Practica2\Platform\PC\PCPlatform.h" />
     <ClInclude Include="..\..\src\Practica2\Platform\Platform.h" />
     <ClInclude Include="..\..\src\Practica2\Renderer\PC\PCRenderer.h" />
