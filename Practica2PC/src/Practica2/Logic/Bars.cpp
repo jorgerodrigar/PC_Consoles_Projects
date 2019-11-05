@@ -2,9 +2,9 @@
 #include <Renderer/Renderer.h>
 #include <math.h>
 
-Bars::Bars(int maxHeight, int barInitialPosition): _maxHeight(maxHeight), 
-	_barPosition(barInitialPosition), _maxWidth(ceil(Renderer::getWindowWidth()/float(BAR_WIDTH + BAR_HSEPARATION)) 
-		* (BAR_WIDTH + BAR_HSEPARATION))
+Bars::Bars(int maxHeight, int barInitialPosition) : _maxHeight(maxHeight),
+_barPosition(barInitialPosition), _maxWidth(ceil(Renderer::getWindowWidth() / float(BAR_WIDTH + BAR_HSEPARATION))
+	* (BAR_WIDTH + BAR_HSEPARATION))
 {
 }
 
@@ -35,7 +35,7 @@ void Bars::renderBarWithDelta(int iniPosX, int posY, int delta)
 			if (iniPosX > _maxWidth) {
 				iniPosX -= _maxWidth + 1;
 			}
-			Renderer::putPixel(i + iniPosX, j, 0x000000); 
+			Renderer::putPixel(i + iniPosX, j, 0x000000);
 			if (finPosX > _maxWidth) {
 				finPosX -= _maxWidth + 1;
 			}

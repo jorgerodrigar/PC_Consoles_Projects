@@ -17,7 +17,6 @@ int main() {
 	Platform::init();
 	Renderer::init("Fuego");
 	bool exit = false;
-
 	Bars bars = Bars(Renderer::getWindowHeight()-FIRE_HEIGHT, 0);
 	Fire fire;
 	fire.initFire();
@@ -35,7 +34,7 @@ int main() {
 		bars.renderBarsWithDelta();
 
 		//FUEGO
-		/*if (frame / FIREFRAMES == 0)
+		if (frame / FIREFRAMES == 0)
 			fire.simulateFire(LIGHT);
 		else if (frame / FIREFRAMES == 1)
 			fire.simulateFire(SIMULATE);
@@ -43,7 +42,7 @@ int main() {
 			fire.simulateFire(EXTINGUISH);
 		else
 			frame = -1; // TEMPORAL
-		fire.renderFire();*/
+		fire.renderFire();
 
 		Renderer::present();
 

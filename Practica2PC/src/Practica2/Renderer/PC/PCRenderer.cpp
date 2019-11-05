@@ -58,7 +58,6 @@ void PCRenderer::present()
 	SDL_RenderPresent(_renderer);
 }
 
-
 int* PCRenderer::hexToBGR(int hexColor)
 {
 	int bgr[3];
