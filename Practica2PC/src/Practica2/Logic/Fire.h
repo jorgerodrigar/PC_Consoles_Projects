@@ -3,16 +3,19 @@
 #define LIGHT 1
 #define SIMULATE 0
 #define EXTINGUISH -1
-#define FIRE_WIDTH  200
-#define FIRE_HEIGHT 200
+#define FIRE_WIDTH  400
+#define FIRE_HEIGHT 100
 
 class Fire
 {
 private:
+	int _fire[FIRE_WIDTH][FIRE_HEIGHT];
+	int _paletaFuego[38];
+
 	void simulatePixel(int x, int y);
-	int fire[FIRE_WIDTH][FIRE_HEIGHT];
-	void changeFirstLineFire(int mode);
-	int paletaFuego[3];
+	void lightFirstLineFire();
+	void extinguishFirstLineFire();
+	int clamp(int value, int min, int max);
 
 public:
 	Fire();

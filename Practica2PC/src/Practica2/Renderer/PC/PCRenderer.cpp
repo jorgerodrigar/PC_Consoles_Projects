@@ -6,6 +6,8 @@
 
 SDL_Window* PCRenderer::_window = nullptr;
 SDL_Renderer* PCRenderer::_renderer = nullptr;
+int PCRenderer::WIN_WIDTH = 800;
+int PCRenderer::WIN_HEIGHT = 600;
 
 bool PCRenderer::_initialized = false;
 
@@ -15,6 +17,8 @@ void PCRenderer::init(const char* winName,  int winWidth, int winHeight)
 {
 	if (!_initialized) {
 		int winX, winY;
+		WIN_WIDTH = winWidth;
+		WIN_HEIGHT = winHeight;
 		winX = winY = SDL_WINDOWPOS_CENTERED;
 		//Inicialización del renderer
 		_window = SDL_CreateWindow(winName, winX, winY, winWidth, winHeight, SDL_WINDOW_SHOWN);
@@ -44,8 +48,8 @@ void PCRenderer::clear(int color)
 
 void PCRenderer::putPixel(int x, int y, int color)
 {
-	int* argb = hexToARGB(color);
-	SDL_SetRenderDrawColor(_renderer, argb[1], argb[2], argb[3], argb[0]);
+	int* argb = hexToBGR(color);
+	SDL_SetRenderDrawColor(_renderer, argb[0], argb[1], argb[2], 0xff);
 	SDL_RenderDrawPoint(_renderer, x, y); //Renders on middle of screen.
 }
 
@@ -54,25 +58,30 @@ void PCRenderer::present()
 	SDL_RenderPresent(_renderer);
 }
 
-int* PCRenderer::hexToARGB(int hexColor)
-{
-	int argb[4];
-	argb[0] = hexColor & 0xFF;         //a
-	argb[1] = (hexColor >> 8) & 0xFF;  //r
-	argb[2] = (hexColor >> 16) & 0xFF; //g
-	argb[3] = (hexColor >> 24) & 0xFF; //b
 
-	return argb;
+int* PCRenderer::hexToBGR(int hexColor)
+{
+	int bgr[3];
+	bgr[0] = (hexColor >> 16) & 0xFF;  //b
+	bgr[1] = (hexColor >> 8) & 0xFF; //g
+	bgr[2] = (hexColor) & 0xFF; //r
+
+	return bgr;
 }
 
-int PCRenderer::getWindowWidth()
+unsigned const int PCRenderer::getNumBuffers()
 {
-	return 800;
+	return 1; //TODO:: DEVOLVER EL NUMERO DE BUFFERS CORRESPONDIENTE
 }
 
-int PCRenderer::getWindowHeight()
+const int PCRenderer::getWindowWidth()
 {
-	return 600;
+	return WIN_WIDTH;
+}
+
+const int PCRenderer::getWindowHeight()
+{
+	return WIN_HEIGHT;
 }
 
 #endif

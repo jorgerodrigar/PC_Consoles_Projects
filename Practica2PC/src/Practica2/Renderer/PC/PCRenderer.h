@@ -17,7 +17,7 @@ class PCRenderer {
 private:
 	static SDL_Window* _window;
 	static SDL_Renderer* _renderer;
-
+	static int WIN_WIDTH, WIN_HEIGHT;
 	static bool _initialized;
 
 	PCRenderer();
@@ -31,10 +31,11 @@ public:
 	static void putPixel(int x, int y, int color);
 	static void present();
 
-	static int getWindowWidth();
-	static int getWindowHeight();
+	static int const getWindowWidth();
+	static int const getWindowHeight();
+	static const unsigned int getNumBuffers();
 
-	static int* hexToARGB(int hexColor);
+	static int* hexToBGR(int hexColor);
 };
 
 #endif 
