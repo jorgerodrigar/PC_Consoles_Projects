@@ -34,7 +34,7 @@ public:
 	static int getWindowWidth();
 	static int getWindowHeight();
 
-	static int* hexToARGB(int hexColor);
+	static int* hexToBGR(int hexColor);
 };
 
 #endif 
