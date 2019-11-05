@@ -5,10 +5,12 @@
 #include <iostream>
 
 /*
- *[0, 500] --> encender
- *[501, 1000] --> simular
- *[1001, 1200] --> apagar
+ *[0, 200] --> encender
+ *(200, 400] --> simular
+ *(400, 600] --> apagar
 */
+#define FIREFRAMES 200
+
 int main() {
 	Platform::init();
 	Renderer::init("Fuego");
@@ -17,26 +19,35 @@ int main() {
 	Bars bars = Bars(Renderer::getWindowHeight() - FIRE_HEIGHT);
 	Fire fire;
 	fire.initFire();
-	int frame = 0;
-	bars.renderBars(frame); //1 vez x buffer
+
+	int frame = 0, barPosition = 0;
+	bars.renderBars(barPosition); //1 vez x buffer
+
 	while (!exit)
 	{
 		//Renderer::clear(0x000000);
 		exit = Platform::tick();
 
-		bars.renderBarsWithDelta(frame);
-		//TODO: CICLICO
-		/*if(frame/200 == 0)
+		//BARRAS
+		bars.renderBarsWithDelta(barPosition);
+
+		//FUEGO
+		if (frame / FIREFRAMES == 0)
 			fire.simulateFire(LIGHT);
-		else if(frame/200 == 1)
+		else if (frame / FIREFRAMES == 1)
 			fire.simulateFire(SIMULATE);
-		else if(frame/200 == 2)
+		else if (frame / FIREFRAMES == 2)
 			fire.simulateFire(EXTINGUISH);
-		
-		fire.renderFire();*/
+		else
+			frame = -1; // TEMPORAL
+		fire.renderFire();
+
 		Renderer::present();
+
+		barPosition++;
 		frame++;
-		std::cout << frame << std::endl;
+
+		//std::cout << frame << std::endl;
 	}
 
 	Renderer::release();

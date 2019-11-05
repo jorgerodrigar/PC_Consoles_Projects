@@ -29,7 +29,7 @@ void Bars::renderBarWithDelta(int posX, int posY, int delta)
 	for (int i = 0; i < delta; i++) {
 		for (int j = posY; j < posY + BAR_HEIGHT; j++) {
 			if (posX > Renderer::getWindowWidth()) {
-				posX = posX - Renderer::getWindowWidth();
+				posX = posX - Renderer::getWindowWidth() - BAR_WIDTH;
 			}
 			Renderer::putPixel(posX - (delta - i), j, 0x000000);
 			Renderer::putPixel(i + posX + BAR_WIDTH, j, BAR_COLOR);
@@ -48,9 +48,9 @@ void Bars::renderBars(int posX)
 
 void Bars::renderBarsWithDelta(int posX)
 {
-	for (int i = posX; i < Renderer::getWindowWidth() + posX; i += BAR_HSEPARATION + BAR_WIDTH) {
+	for (int i = 0; i < Renderer::getWindowWidth(); i += BAR_HSEPARATION + BAR_WIDTH) {
 		for (int j = 0; j < _maxHeight; j += BAR_VSEPARATION + BAR_HEIGHT) {
-			renderBarWithDelta(i, j, 1); //1 == renderer::getnumbuffers()
+			renderBarWithDelta(i + posX, j, 1); //1 == renderer::getnumbuffers()
 		}
 	}
 }
