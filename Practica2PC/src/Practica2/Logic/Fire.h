@@ -6,7 +6,7 @@
 #define FIRE_WIDTH  400
 #define FIRE_HEIGHT 100
 
-#define RGB(r, g, b) (r << 16) + (g << 8) + (b)
+#define RGB(r, g, b) ((r & 0xff) << 16) + ((g & 0xff) << 8) + ((b & 0xff))
 
 class Fire
 {
