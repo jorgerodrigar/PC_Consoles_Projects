@@ -64,7 +64,7 @@ void Fire::simulatePixel(int x, int y)
 void Fire::lightFirstLineFire()
 {
 	for (int i = 0; i < FIRE_WIDTH; i++) {
-		if (_fire[i][0] < 38) {
+		if (_fire[i][0] < sizeof(_paletaFuego) / sizeof(_paletaFuego[0]) - 1) {
 			int rnd = rand() % 2;
 			_fire[i][0] += rnd;
 		}
