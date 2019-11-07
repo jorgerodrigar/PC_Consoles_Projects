@@ -4,13 +4,13 @@
 class SDL_Window;
 class SDL_Renderer;
 
-#define RGB(R, G, B)({ \
+/*#define RGB(R, G, B)({ \
     int r = R & 0xFF; \
     int g = G & 0xFF; \
     int b = B & 0xFF; \
 	int rgb[3] = {r, g, b}; \
 	return rgb; \
-})\
+})\*/
 
 class PCRenderer {
 
