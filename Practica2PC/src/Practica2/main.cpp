@@ -3,7 +3,6 @@
 #include <Logic/Fire.h>
 #include <Logic/Bars.h>
 #include <iostream>
-#include <windows.h>
 
 
 /*
@@ -15,15 +14,18 @@
 
 int main() {
 	Platform::init();
-	Renderer::init("Fuego");
+	Renderer::init();
+
 	bool exit = false;
-	Bars bars = Bars(Renderer::getWindowHeight()-FIRE_HEIGHT, 0);
+	Bars bars = Bars(Renderer::getWindowHeight() - FIRE_HEIGHT, 0);
 	Fire fire;
 	fire.initFire();
 
 	int frame = 0;
-	for(int i = 0; i < Renderer::getNumBuffers(); i++)
+	for (int i = 0; i < Renderer::getNumBuffers(); i++) {
 		bars.renderBars(i); //1 vez x buffer
+		Renderer::present(); //swap buffers
+	}
 
 	while (!exit)
 	{
@@ -41,15 +43,12 @@ int main() {
 		else if (frame / FIREFRAMES == 2)
 			fire.simulateFire(EXTINGUISH);
 		else
-			frame = -1; // TEMPORAL
+			frame = -1;
 		fire.renderFire();
 
 		Renderer::present();
 
 		frame++;
-		Sleep(10);
-
-		//std::cout << frame << std::endl;
 	}
 
 	Renderer::release();

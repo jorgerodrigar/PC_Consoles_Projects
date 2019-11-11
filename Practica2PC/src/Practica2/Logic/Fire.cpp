@@ -43,7 +43,6 @@ int _paletaFuego[] = {
 				 RGB(0xFF,0xFF,0xFF)
 };
 
-//TODO: PREGUNTAR MACRO A PEPA O MARCO
 void Fire::simulatePixel(int x, int y)
 {
 	int rnd = (rand() % 3) - 1; //rnd btw [-1, 1]

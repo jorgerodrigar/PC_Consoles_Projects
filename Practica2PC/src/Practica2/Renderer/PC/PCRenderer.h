@@ -11,12 +11,12 @@ private:
 	static SDL_Renderer* _renderer;
 	static int WIN_WIDTH, WIN_HEIGHT;
 	static bool _initialized;
-
+	static int windowType;
 	PCRenderer();
 
 
 public:
-	static void init(const char* winName, int winWidth = 800, int winHeight = 600);
+	static void init();
 	static void release();
 
 	static void clear(int color);

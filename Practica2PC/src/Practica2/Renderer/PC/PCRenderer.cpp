@@ -6,22 +6,21 @@
 
 SDL_Window* PCRenderer::_window = nullptr;
 SDL_Renderer* PCRenderer::_renderer = nullptr;
-int PCRenderer::WIN_WIDTH = 800;
-int PCRenderer::WIN_HEIGHT = 600;
+int PCRenderer::WIN_WIDTH = 1280;
+int PCRenderer::WIN_HEIGHT = 720;
+int PCRenderer::windowType = SDL_WINDOW_SHOWN;
 
 bool PCRenderer::_initialized = false;
 
 PCRenderer::PCRenderer() {}
 
-void PCRenderer::init(const char* winName,  int winWidth, int winHeight)
+void PCRenderer::init()
 {
 	if (!_initialized) {
 		int winX, winY;
-		WIN_WIDTH = winWidth;
-		WIN_HEIGHT = winHeight;
 		winX = winY = SDL_WINDOWPOS_CENTERED;
-		//Inicialización del renderer
-		_window = SDL_CreateWindow(winName, winX, winY, winWidth, winHeight, SDL_WINDOW_SHOWN);
+		//Inicialización del renderer. Creacion de la ventana
+		_window = SDL_CreateWindow("Practica 2", winX, winY, WIN_WIDTH, WIN_HEIGHT, windowType);
 		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 
 		_initialized = true;
@@ -70,7 +69,7 @@ int* PCRenderer::hexToBGR(int hexColor)
 
 unsigned const int PCRenderer::getNumBuffers()
 {
-	return 1; //TODO:: DEVOLVER EL NUMERO DE BUFFERS CORRESPONDIENTE
+	return windowType == SDL_WINDOW_FULLSCREEN ? 2 : 1;
 }
 
 const int PCRenderer::getWindowWidth()

@@ -18,7 +18,7 @@ void PCPlatform::init()
 
 void PCPlatform::release()
 {
-	if (_initialized) {		 
+	if (_initialized) {
 		SDL_Quit();
 		_initialized = false;
 	}
@@ -30,9 +30,6 @@ bool PCPlatform::tick()
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
 			return true;
-		}
-		else if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-			//TODO: RESIZE WINDOW TO FULLSCREEN
 		}
 		return false;
 	}

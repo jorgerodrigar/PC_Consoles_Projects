@@ -19,7 +19,7 @@ void Bars::renderBar(int posX, int posY)
 	for (int i = posX; i < posX + BAR_WIDTH; i++) {
 		for (int j = posY; j < posY + BAR_HEIGHT; j++) {
 			x = i;
-			if(i > _maxWidth){
+			if (i > _maxWidth) {
 				x = i - _maxWidth;
 			}
 			Renderer::putPixel(x, j, BAR_COLOR);
@@ -32,14 +32,16 @@ void Bars::renderBarWithDelta(int iniPosX, int posY, int delta)
 	int finPosX = iniPosX + BAR_WIDTH;
 	for (int i = 0; i < delta; i++) {
 		for (int j = posY; j < posY + BAR_HEIGHT; j++) {
-			if (iniPosX > _maxWidth) {
-				iniPosX -= _maxWidth + 1;
+			if (iniPosX > _maxWidth) {    // if (iniPosX + i > _maxWidth)
+				iniPosX -= _maxWidth + 1; // iniPosX -= _maxWidth + i + 1;
 			}
-			Renderer::putPixel(i + iniPosX, j, 0x000000);
+			if (iniPosX + i >= 0 && iniPosX + i <= _maxWidth)
+				Renderer::putPixel(i + iniPosX, j, 0x000000);
 			if (finPosX > _maxWidth) {
 				finPosX -= _maxWidth + 1;
 			}
-			Renderer::putPixel(i + finPosX, j, BAR_COLOR);
+			if (finPosX + i >= 0 && finPosX + i <= _maxWidth)
+				Renderer::putPixel(i + finPosX, j, BAR_COLOR);
 		}
 	}
 }
