@@ -17,11 +17,13 @@ int main() {
 	Renderer::init();
 
 	bool exit = false;
+	// establecemos altura para que no colisione con el fuego
 	Bars bars = Bars(Renderer::getWindowHeight() - FIRE_HEIGHT, 0);
 	Fire fire;
 	fire.initFire();
 
 	int frame = 0;
+
 	for (int i = 0; i < Renderer::getNumBuffers(); i++) {
 		bars.renderBars(i); //1 vez x buffer
 		Renderer::present(); //swap buffers

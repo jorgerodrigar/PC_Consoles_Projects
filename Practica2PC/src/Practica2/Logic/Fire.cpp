@@ -1,6 +1,7 @@
 #include "Fire.h"
 #include <Renderer/Renderer.h>
 #include <random>
+#include <iostream>
 
 int _paletaFuego[] = {
 				 RGB(0x00,0x00,0x00),
@@ -43,6 +44,8 @@ int _paletaFuego[] = {
 				 RGB(0xFF,0xFF,0xFF)
 };
 
+// update del comportamiento del fuego: para cada posicion coge la temperatura del pixel de abajo
+// o abajo izq/der y le resta o no temperatura
 void Fire::simulatePixel(int x, int y)
 {
 	int rnd = (rand() % 3) - 1; //rnd btw [-1, 1]
@@ -50,32 +53,34 @@ void Fire::simulatePixel(int x, int y)
 	int posY = y - 1;
 	posX = clamp(posX, 0, FIRE_WIDTH);
 	posY = clamp(posY, 0, FIRE_HEIGHT);
-	int pixelValue = _fire[posX][posY];
+	int pixelValue = _fire[posY][posX];
 	int pixelTemperature = pixelValue;
 
 	if (pixelValue != 0) { //si no se cumple, es que tiene temperatura y se le puede restar
 		pixelTemperature -= rand() % 2;
 	}
 
-	_fire[x][y] = pixelTemperature;
+	_fire[y][x] = pixelTemperature;
 }
 
+// enciende el fuego: va sumando temperatura a la linea de inicio del fuego
 void Fire::lightFirstLineFire()
 {
 	for (int i = 0; i < FIRE_WIDTH; i++) {
-		if (_fire[i][0] < sizeof(_paletaFuego) / sizeof(_paletaFuego[0]) - 1) {
+		if (_fire[0][i] < sizeof(_paletaFuego) / sizeof(_paletaFuego[0]) - 1) {
 			int rnd = rand() % 2;
-			_fire[i][0] += rnd;
+			_fire[0][i] += rnd;
 		}
 	}
 }
 
+// apaga el fuego: va restando temperatura a la linea de inicio del fuego
 void Fire::extinguishFirstLineFire()
 {
 	for (int i = 0; i < FIRE_WIDTH; i++) {
-		if (_fire[i][0] > 0) {
+		if (_fire[0][i] > 0) {
 			int rnd = rand() % 2;
-			_fire[i][0] -= rnd;
+			_fire[0][i] -= rnd;
 		}
 	}
 }
@@ -97,20 +102,20 @@ Fire::Fire()
 {
 }
 
-
 Fire::~Fire()
 {
 }
 
 void Fire::initFire()
 {
-	for (int i = 0; i < FIRE_WIDTH; i++) {
-		for (int j = 0; j < FIRE_HEIGHT; j++) {
-			_fire[i][j] = 0;
+	for (int i = 0; i < FIRE_HEIGHT; i++) {
+		for (int j = 0; j < FIRE_WIDTH; j++) {
+			_fire[i][j] = 0; // temperatura inicial
 		}
 	}
 }
 
+// manda simular el fuego y enecenderlo o apagarlo dependiendo del modo actual
 void Fire::simulateFire(int mode)
 {
 	if (mode == LIGHT) {
@@ -120,20 +125,22 @@ void Fire::simulateFire(int mode)
 		extinguishFirstLineFire();
 	}
 
-	//simulate
-	for (int i = 0; i < FIRE_WIDTH; i++) {
-		for (int j = 1; j < FIRE_HEIGHT; j++) {
-			simulatePixel(i, j);
+	// siempre se simula su logica
+	for (int i = FIRE_HEIGHT - 1; i > 0; i--) {
+		for (int j = 0; j < FIRE_WIDTH; j++) {
+			simulatePixel(j, i);
 		}
 	}
 }
 
+// recorre los valores del fuego (temperaturas) y pinta cada pixel del color correspondiente
+// los pixeles son pintados de abajo arriba, ya que la fila inicial del fuego comienza arriba
 void Fire::renderFire()
 {
-	for (int i = 0; i < FIRE_WIDTH; i++) {
-		for (int j = 0; j < FIRE_HEIGHT; j++) {
-			int width = (Renderer::getWindowWidth() / 2) - (FIRE_WIDTH / 2) + i;
-			int height = Renderer::getWindowHeight() - j;
+	for (int i = 0; i < FIRE_HEIGHT; i++) {
+		for (int j = 0; j < FIRE_WIDTH; j++) {
+			int width = (Renderer::getWindowWidth() / 2) - (FIRE_WIDTH / 2) + j;
+			int height = Renderer::getWindowHeight() - i - 1; // [0, alto de la pantalla)
 
 			Renderer::putPixel(width, height, _paletaFuego[_fire[i][j]]);
 		}

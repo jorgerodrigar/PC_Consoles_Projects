@@ -6,6 +6,7 @@
 #define BAR_VSEPARATION 20
 #define BAR_COLOR 0xFFFFFF
 
+// esta clase pinta todas las barras que habra en pantalla
 class Bars
 {
 private:
