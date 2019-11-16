@@ -4,6 +4,7 @@
 class SDL_Window;
 class SDL_Renderer;
 
+
 class PCRenderer {
 
 private:
@@ -27,7 +28,7 @@ public:
 	static int const getWindowHeight();
 	static const unsigned int getNumBuffers();
 
-	static int* hexToBGR(int hexColor);
+	static int* hexToRGBA(int hexColor);
 };
 
 #endif 

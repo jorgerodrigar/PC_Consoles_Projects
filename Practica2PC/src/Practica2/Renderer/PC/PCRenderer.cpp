@@ -47,8 +47,8 @@ void PCRenderer::clear(int color)
 
 void PCRenderer::putPixel(int x, int y, int color)
 {
-	int* argb = hexToBGR(color);
-	SDL_SetRenderDrawColor(_renderer, argb[0], argb[1], argb[2], 0xff);
+	int* rgba = hexToRGBA(color);
+	SDL_SetRenderDrawColor(_renderer, rgba[0], rgba[1], rgba[2], rgba[3]);
 	SDL_RenderDrawPoint(_renderer, x, y); //Renders on middle of screen.
 }
 
@@ -57,14 +57,15 @@ void PCRenderer::present()
 	SDL_RenderPresent(_renderer);
 }
 
-int* PCRenderer::hexToBGR(int hexColor)
+int* PCRenderer::hexToRGBA(int hexColor)
 {
-	int bgr[3];
-	bgr[0] = (hexColor >> 16) & 0xFF;  //b
-	bgr[1] = (hexColor >> 8) & 0xFF; //g
-	bgr[2] = (hexColor) & 0xFF; //r
+	int rgba[4];
+	rgba[0] = (hexColor >> 24) & 0xFF; //r
+	rgba[1] = (hexColor >> 16) & 0xFF;  //g
+	rgba[2] = (hexColor >> 8) & 0xFF; //b
+	rgba[3] = (hexColor) & 0xFF; //a
 
-	return bgr;
+	return rgba;
 }
 
 unsigned const int PCRenderer::getNumBuffers()
