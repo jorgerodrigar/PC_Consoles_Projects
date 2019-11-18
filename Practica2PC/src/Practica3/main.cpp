@@ -15,13 +15,24 @@ int main() {
 	}
 
 	bool exit = false;
+	int frame = 0;
 
 	while (!exit)
 	{
 		//Renderer::clear(0x000000);
 		exit = Platform::tick();
+
+		if (frame == 0) {
+			screenSim.startRandomWave();
+			//frame = 0;
+		}
+
+		screenSim.simulateRain();
+
 		screenSim.render();
 		Renderer::present();
+
+		frame++;
 	}
 
 	Renderer::release();
