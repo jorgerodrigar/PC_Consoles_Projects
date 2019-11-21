@@ -28,7 +28,7 @@ public:
 	static int const getWindowHeight();
 	static const unsigned int getNumBuffers();
 
-	static int* hexToRGBA(int hexColor);
+	static void hexToRGBA(int hexColor, int* rgba);
 };
 
 #endif 

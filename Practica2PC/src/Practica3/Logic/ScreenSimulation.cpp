@@ -3,44 +3,30 @@
 #include <Renderer/Renderer.h>
 #include <iostream>
 
+int image[720 * 1280];
+int matrix0[720 * 1280];
+int matrix1[720 * 1280];
+
 void ScreenSimulation::simulatePixel(int x, int y)
 {
-	if (currentMatrix == 0) {
-		//valor de propio pixel = matrix0; valor vecinos = matrix1
-		float sumaVecinos = 0;
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				if (isValid(y + i, x + j)) {
-					sumaVecinos += matrix1[y + i][x + j] * 0.5f;
-				}
+	float sumaVecinos = 0;
+	for (int i = -1; i < 2; i++) {
+		for (int j = -1; j < 2; j++) {
+			if (isValid(y + i, x + j)) {
+				sumaVecinos += previous[(y + i) * 1280 + (x + j)] >> 1;
 			}
 		}
-		float total = (sumaVecinos + matrix0[y][x]) * 31.0f / 32.0f;
-		total = clamp(total, 0, 256);
-
-		matrix0[y][x] = total;
 	}
-	else { //TODO: solucionar repeticion de codigo
-		//valor de propio pixel = matrix1; valor vecinos = matrix0
-		float sumaVecinos = 0;
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				if (isValid(y + i, x + j)) {
-					sumaVecinos += matrix0[y + i][x + j] * 0.5f;
-				}
-			}
-		}
-		float total = (sumaVecinos + matrix1[y][x]) * 31.0f / 32.0f;
-		total = clamp(total, 0, 256);
+	int total = (sumaVecinos + current[y * 1280 + x]);
+	total -= total >> 5;
 
-		matrix1[y][x] = total;
-	}
+	current[y * 1280 + x] = total;
 }
 
 void ScreenSimulation::simulateRain()
 {
-	for (int i = 0; i < 300; i++) {
-		for (int j = 0; j < 300; j++) {
+	for (int i = 0; i < TEST_DIMENSIONS; i++) {
+		for (int j = 0; j < TEST_DIMENSIONS; j++) {
 			simulatePixel(j, i);
 		}
 	}
@@ -61,24 +47,29 @@ int ScreenSimulation::clamp(int value, int min, int max) //[min, max)
 
 void ScreenSimulation::renderPixel(int x, int y)
 {
-	int* rgba = Renderer::hexToRGBA(image[y][x]);
-	int aux[] = { rgba[0], rgba[1], rgba[2], rgba[3] };
-	int aux2[] = { rgba[0], rgba[1], rgba[2], rgba[3] };
+	int rgba[4];
+	Renderer::hexToRGBA(image[y * 1280 + x], rgba);
 
 	for (int i = 0; i < 4; i++) {
 		float iz = 0, der = 0;
 		if (isValid(y, x - 1)) {
-			iz = currentMatrix == 0 ? matrix0[y][x - 1] : matrix1[y][x - 1];
+			iz = current[y * 1280 + (x - 1)];
 		}
 		if (isValid(y, x + 1)) {
-			der = currentMatrix == 0 ? matrix0[y][x + 1] : matrix1[y][x + 1];
+			der = current[y * 1280 + (x + 1)];
 		}
 
-		aux[i] = clamp(aux[i] - (iz - der), 0, 256);
+		rgba[i] = clamp(rgba[i] - (iz - der), 0, 256);
 	}
 
-	//if(matrix0[y][x] != matrix1[y][x])
-		Renderer::putPixel(x, y, RGBA(aux[0], aux[1], aux[2], aux[3]));
+	if (matrix0[y * 1280 + x] != matrix1[y * 1280 + x]) {
+		RendererThread::RenderCommand command;
+		command.type = RendererThread::PUT_PIXEL;
+		command.params.color = RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
+		command.params.putPixelParam.x = x;
+		command.params.putPixelParam.y = y;
+		_rendererThread->enqueueCommand(command);
+	}
 }
 
 bool ScreenSimulation::isValid(int i, int j)
@@ -86,35 +77,25 @@ bool ScreenSimulation::isValid(int i, int j)
 	return i > 0 && i < Renderer::getWindowHeight() && j > 0 && Renderer::getWindowWidth();
 }
 
-ScreenSimulation::ScreenSimulation()
+void ScreenSimulation::swap(int *& a, int *& b)
 {
-	image = new int*[Renderer::getWindowHeight()];
-	matrix0 = new float*[Renderer::getWindowHeight()];
-	matrix1 = new float*[Renderer::getWindowHeight()];
-
-	for (int i = 0; i < Renderer::getWindowHeight(); i++) {
-		image[i] = new int[Renderer::getWindowWidth()];
-		matrix0[i] = new float[Renderer::getWindowWidth()];
-		matrix1[i] = new float[Renderer::getWindowWidth()];
-	}
+	int * c = a;
+	a = b;
+	b = c;
 }
 
+ScreenSimulation::ScreenSimulation()
+{
+}
 
 ScreenSimulation::~ScreenSimulation()
 {
-	for (int i = 0; i < Renderer::getWindowHeight(); i++) {
-		delete[] image[i];
-		delete[] matrix0[i];
-		delete[] matrix1[i];
-	}
-
-	delete[] image;
-	delete[] matrix0;
-	delete[] matrix1;
 }
 
-void ScreenSimulation::init(const char* filePath)
+void ScreenSimulation::init(const char* filePath, RendererThread* rendererThread)
 {
+	_rendererThread = rendererThread;
+
 	FILE* ptr = BinReader::openFile(filePath);
 	for (int i = 0; i < Renderer::getWindowHeight(); i++) {
 		for (int j = 0; j < Renderer::getWindowWidth(); j++) {
@@ -125,39 +106,48 @@ void ScreenSimulation::init(const char* filePath)
 			if (r == EOF) {
 				break;
 			}
-			image[i][j] = RGBA(r, g, b, a);
+			image[i * 1280 + j] = RGBA(r, g, b, a);
 
-			matrix0[i][j] = 0;
-			matrix1[i][j] = 0;
+			matrix0[i * 1280 + j] = 0;
+			matrix1[i * 1280 + j] = 0;
 		}
 	}
 
 	BinReader::closeFile(ptr);
+
+	current = matrix0;
+	previous = matrix1;
 }
 
 void ScreenSimulation::drawBackground()
 {
 	for (int i = 0; i < Renderer::getWindowHeight(); i++) {
 		for (int j = 0; j < Renderer::getWindowWidth(); j++) {
-			Renderer::putPixel(j, i, image[i][j]);
+			RendererThread::RenderCommand command;
+			command.type = RendererThread::PUT_PIXEL;
+			command.params.color = image[i * 1280 + j];
+			command.params.putPixelParam.x = j;
+			command.params.putPixelParam.y = i;
+
+			_rendererThread->enqueueCommand(command);
 		}
 	}
 }
 
 void ScreenSimulation::render()
 {
-	for (int i = 0; i < 300; i++) {
-		for (int j = 0; j < 300; j++) {
+	for (int i = 0; i < TEST_DIMENSIONS; i++) {
+		for (int j = 0; j < TEST_DIMENSIONS; j++) {
 			renderPixel(j, i);
 		}
 	}
 
-	currentMatrix = !currentMatrix;
+	swap(current, previous);
 }
 
 void ScreenSimulation::startRandomWave()
 {
-	currentMatrix == 0 ? matrix0[100][100] = 255 : matrix1[100][100] = 255;
+	current[100 * 1280 + 100] = 5000;
 }
 
 

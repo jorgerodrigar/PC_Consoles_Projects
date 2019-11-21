@@ -1,7 +1,5 @@
 #include "BinReader.h"
 
-
-
 BinReader::BinReader()
 {
 }

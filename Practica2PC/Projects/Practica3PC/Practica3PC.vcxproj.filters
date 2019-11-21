@@ -45,6 +45,15 @@
     <ClInclude Include="..\..\src\Practica3\Logic\ScreenSimulation.h">
       <Filter>Logic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Practica3\Utils\user_malloc.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica3\Utils\ConcurrentQueue.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica3\Utils\RendererThread.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp">
@@ -56,14 +65,14 @@
     <ClCompile Include="..\..\src\Practica3\main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica3\user_malloc.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica3\Utils\BinReader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Practica3\Logic\ScreenSimulation.cpp">
       <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica3\Utils\RendererThread.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

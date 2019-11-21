@@ -10,26 +10,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define HEAP_SIZE (15 * 1024 * 1024) // 15 MB
+#define HEAP_SIZE (16 * 1024 * 1024) // 15 MB
 
 static SceLibcMspace s_mspace;
 static off_t s_memStart;
-static size_t s_memLength = 4 * 1024 * 1024;
+static size_t s_memLength = 16 * 1024 * 1024;
 static size_t s_memAlign = 2 * 1024 * 1024;
 
 extern "C" {
-int user_malloc_init(void);
-int user_malloc_finalize(void);
-void *user_malloc(size_t size);
-void user_free(void *ptr);
-void *user_calloc(size_t nelem, size_t size);
-void *user_realloc(void *ptr, size_t size);
-void *user_memalign(size_t boundary, size_t size);
-int user_posix_memalign(void **ptr, size_t boundary, size_t size);
-void *user_reallocalign(void *ptr, size_t size, size_t boundary);
-int user_malloc_stats(SceLibcMallocManagedSize *mmsize);
-int user_malloc_stats_fast(SceLibcMallocManagedSize *mmsize);
-size_t user_malloc_usable_size(void *ptr);
+	int user_malloc_init(void);
+	int user_malloc_finalize(void);
+	void *user_malloc(size_t size);
+	void user_free(void *ptr);
+	void *user_calloc(size_t nelem, size_t size);
+	void *user_realloc(void *ptr, size_t size);
+	void *user_memalign(size_t boundary, size_t size);
+	int user_posix_memalign(void **ptr, size_t boundary, size_t size);
+	void *user_reallocalign(void *ptr, size_t size, size_t boundary);
+	int user_malloc_stats(SceLibcMallocManagedSize *mmsize);
+	int user_malloc_stats_fast(SceLibcMallocManagedSize *mmsize);
+	size_t user_malloc_usable_size(void *ptr);
 }
 
 //E Replace _malloc_init function.
@@ -37,7 +37,7 @@ int user_malloc_init(void)
 {
 	int res;
 	void *addr;
-	
+
 	//E Allocate direct memory
 	res = sceKernelAllocateDirectMemory(0, SCE_KERNEL_MAIN_DMEM_SIZE, s_memLength, s_memAlign, SCE_KERNEL_WB_ONION, &s_memStart);
 	if (res < 0) {

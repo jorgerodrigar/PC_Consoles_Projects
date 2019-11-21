@@ -164,14 +164,17 @@
     <ClInclude Include="..\..\src\Practica2\Renderer\Renderer.h" />
     <ClInclude Include="..\..\src\Practica3\Logic\ScreenSimulation.h" />
     <ClInclude Include="..\..\src\Practica3\Utils\BinReader.h" />
+    <ClInclude Include="..\..\src\Practica3\Utils\ConcurrentQueue.h" />
+    <ClInclude Include="..\..\src\Practica3\Utils\RendererThread.h" />
+    <ClInclude Include="..\..\src\Practica3\Utils\user_malloc.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp" />
     <ClCompile Include="..\..\src\Practica2\Renderer\PC\PCRenderer.cpp" />
     <ClCompile Include="..\..\src\Practica3\Logic\ScreenSimulation.cpp" />
     <ClCompile Include="..\..\src\Practica3\main.cpp" />
-    <ClCompile Include="..\..\src\Practica3\user_malloc.cpp" />
     <ClCompile Include="..\..\src\Practica3\Utils\BinReader.cpp" />
+    <ClCompile Include="..\..\src\Practica3\Utils\RendererThread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
