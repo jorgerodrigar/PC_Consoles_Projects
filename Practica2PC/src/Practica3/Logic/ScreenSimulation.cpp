@@ -9,18 +9,31 @@ int matrix1[720 * 1280];
 
 void ScreenSimulation::simulatePixel(int x, int y)
 {
-	float sumaVecinos = 0;
-	for (int i = -1; i < 2; i++) {
+	int sumaVecinos = 0;
+	/*for (int i = -1; i < 2; i++) {
 		for (int j = -1; j < 2; j++) {
 			if (isValid(y + i, x + j)) {
 				sumaVecinos += previous[(y + i) * 1280 + (x + j)] >> 1;
 			}
 		}
-	}
+	}*/
+	if (isValid(y, x + 1))
+		sumaVecinos += previous[y * 1280 + x + 1] >> 1;
+	if (isValid(y, x - 1))
+		sumaVecinos += previous[y * 1280 + x - 1] >> 1;
+	if (isValid(y + 1, x))
+		sumaVecinos += previous[(y + 1) * 1280 + x] >> 1;
+	if (isValid(y - 1, x))
+		sumaVecinos += previous[(y - 1) * 1280 + x] >> 1;
+
 	int total = (sumaVecinos + current[y * 1280 + x]);
 	total -= total >> 5;
 
 	current[y * 1280 + x] = total;
+	/*
+	current[y * 1280 + x] = sumaVecinos + current[y * 1280 + x];
+	current[y * 1280 + x] = current[y * 1280 + x] - current[y * 1280 + x] >> 5;
+	*/
 }
 
 void ScreenSimulation::simulateRain()
@@ -45,7 +58,7 @@ int ScreenSimulation::clamp(int value, int min, int max) //[min, max)
 	return clampedValue;
 }
 
-void ScreenSimulation::renderPixel(int x, int y)
+int ScreenSimulation::renderPixel(int x, int y)
 {
 	int rgba[4];
 	Renderer::hexToRGBA(image[y * 1280 + x], rgba);
@@ -61,15 +74,8 @@ void ScreenSimulation::renderPixel(int x, int y)
 
 		rgba[i] = clamp(rgba[i] - (iz - der), 0, 256);
 	}
-
-	if (matrix0[y * 1280 + x] != matrix1[y * 1280 + x]) {
-		RendererThread::RenderCommand command;
-		command.type = RendererThread::PUT_PIXEL;
-		command.params.color = RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
-		command.params.putPixelParam.x = x;
-		command.params.putPixelParam.y = y;
-		_rendererThread->enqueueCommand(command);
-	}
+	
+	return RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
 }
 
 bool ScreenSimulation::isValid(int i, int j)
@@ -134,14 +140,8 @@ void ScreenSimulation::drawBackground()
 	}
 }
 
-void ScreenSimulation::render()
+void ScreenSimulation::swap()
 {
-	for (int i = 0; i < TEST_DIMENSIONS; i++) {
-		for (int j = 0; j < TEST_DIMENSIONS; j++) {
-			renderPixel(j, i);
-		}
-	}
-
 	swap(current, previous);
 }
 

@@ -18,6 +18,13 @@ void RendererThread::renderLoop()
 				Renderer::putPixel(params.putPixelParam.x, params.putPixelParam.y, params.color);
 				break;
 			case WRITE_RAIN:
+				RenderCommandParams params = currentCommand.params;
+				float radius = params.radius;
+				for (int i = -radius; i < radius; i++) {
+					for (int j = -radius; j < radius; j++) {
+						Renderer::putPixel(i, j, params.color);
+					}
+				}
 
 				break;
 			default:
