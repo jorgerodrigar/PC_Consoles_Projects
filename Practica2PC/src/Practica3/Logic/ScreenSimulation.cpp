@@ -10,13 +10,7 @@ int matrix1[720 * 1280];
 void ScreenSimulation::simulatePixel(int x, int y)
 {
 	int sumaVecinos = 0;
-	/*for (int i = -1; i < 2; i++) {
-		for (int j = -1; j < 2; j++) {
-			if (isValid(y + i, x + j)) {
-				sumaVecinos += previous[(y + i) * 1280 + (x + j)] >> 1;
-			}
-		}
-	}*/
+
 	if (isValid(y, x + 1))
 		sumaVecinos += previous[y * 1280 + x + 1] >> 1;
 	if (isValid(y, x - 1))
@@ -26,56 +20,28 @@ void ScreenSimulation::simulatePixel(int x, int y)
 	if (isValid(y - 1, x))
 		sumaVecinos += previous[(y - 1) * 1280 + x] >> 1;
 
-	int total = (sumaVecinos + current[y * 1280 + x]);
+	int total = (sumaVecinos - current[y * 1280 + x]);
 	total -= total >> 5;
 
 	current[y * 1280 + x] = total;
-	/*
-	current[y * 1280 + x] = sumaVecinos + current[y * 1280 + x];
-	current[y * 1280 + x] = current[y * 1280 + x] - current[y * 1280 + x] >> 5;
-	*/
 }
 
 void ScreenSimulation::simulateRain()
 {
-	for (int i = 0; i < TEST_DIMENSIONS; i++) {
-		for (int j = 0; j < TEST_DIMENSIONS; j++) {
+	for (int i = 0; i < 300; i++) {
+		for (int j = 0; j < 300; j++) {
 			simulatePixel(j, i);
 		}
 	}
-}
 
-int ScreenSimulation::clamp(int value, int min, int max) //[min, max)
-{
-	int clampedValue = value;
-	if (clampedValue < min) {
-		clampedValue = min;
-	}
-	else if (clampedValue >= max) {
-		clampedValue = max - 1;
-	}
-
-	return clampedValue;
-}
-
-int ScreenSimulation::renderPixel(int x, int y)
-{
-	int rgba[4];
-	Renderer::hexToRGBA(image[y * 1280 + x], rgba);
-
-	for (int i = 0; i < 4; i++) {
-		float iz = 0, der = 0;
-		if (isValid(y, x - 1)) {
-			iz = current[y * 1280 + (x - 1)];
-		}
-		if (isValid(y, x + 1)) {
-			der = current[y * 1280 + (x + 1)];
-		}
-
-		rgba[i] = clamp(rgba[i] - (iz - der), 0, 256);
-	}
-	
-	return RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
+	RendererThread::RenderCommand command;
+	command.type = RendererThread::WRITE_RAIN;
+	command.params.radius = 100;
+	command.params.putPixelParam.x = 100;
+	command.params.putPixelParam.y = 100;
+	command.params.image = image;
+	command.params.current = current;
+	_rendererThread->enqueueCommand(command);
 }
 
 bool ScreenSimulation::isValid(int i, int j)
@@ -147,7 +113,11 @@ void ScreenSimulation::swap()
 
 void ScreenSimulation::startRandomWave()
 {
-	current[100 * 1280 + 100] = 5000;
+	int rndX = rand() % 300;
+	int rndY = rand() % 300;
+	int rndH = rand() % 27000 + 3000;
+	//current[rndY * 1280 + rndX] = rndH;
+	current[100 * 1280 + 100] = rndH;
 }
 
 

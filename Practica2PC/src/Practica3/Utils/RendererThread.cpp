@@ -18,15 +18,20 @@ void RendererThread::renderLoop()
 				Renderer::putPixel(params.putPixelParam.x, params.putPixelParam.y, params.color);
 				break;
 			case WRITE_RAIN:
+			{
 				RenderCommandParams params = currentCommand.params;
 				float radius = params.radius;
 				for (int i = -radius; i < radius; i++) {
 					for (int j = -radius; j < radius; j++) {
-						Renderer::putPixel(i, j, params.color);
+						int x = i + params.putPixelParam.x;
+						int y = j + params.putPixelParam.y;
+
+						Renderer::putPixel(x, y, renderPixel(x, y, params.current, params.image));
 					}
 				}
 
 				break;
+			}
 			default:
 				break;
 			}
@@ -75,4 +80,43 @@ void RendererThread::enqueueCommand(RenderCommand c)
 		_pendingframes++;
 	//enqueue
 	_concurrentQueue.push(c);
+}
+
+
+int RendererThread::renderPixel(int x, int y, int* current, int* image)
+{
+	int rgba[4];
+	Renderer::hexToRGBA(image[y * 1280 + x], rgba);
+
+	for (int i = 0; i < 4; i++) {
+		float iz = 0, der = 0;
+		if (isValid(y, x - 1)) {
+			iz = current[y * 1280 + (x - 1)];
+		}
+		if (isValid(y, x + 1)) {
+			der = current[y * 1280 + (x + 1)];
+		}
+
+		rgba[i] = clamp(rgba[i] - (iz - der), 0, 256);
+	}
+
+	return RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
+}
+
+int RendererThread::clamp(int value, int min, int max) //[min, max)
+{
+	int clampedValue = value;
+	if (clampedValue < min) {
+		clampedValue = min;
+	}
+	else if (clampedValue >= max) {
+		clampedValue = max - 1;
+	}
+
+	return clampedValue;
+}
+
+bool RendererThread::isValid(int i, int j)
+{
+	return i > 0 && i < Renderer::getWindowHeight() && j > 0 && Renderer::getWindowWidth();
 }

@@ -13,8 +13,11 @@ public:
 	};
 
 	struct RenderCommandParams { //TODO : UNION LOKO
-		int color;
 		float radius;
+		int* current;
+		int* image;
+
+		int color;
 		RenderCommandPutPixelParams putPixelParam; 
 	};
 
@@ -30,6 +33,9 @@ private:
 	ConcurrentQueue<RenderCommand> _concurrentQueue;
 
 	void renderLoop();
+	int renderPixel(int x, int y, int* current, int* image);
+	bool isValid(int i, int j);
+	int clamp(int value, int min, int max);
 
 public:
 	RendererThread();
