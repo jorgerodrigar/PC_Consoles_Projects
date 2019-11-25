@@ -6,19 +6,23 @@
 class RendererThread
 {
 public:
-	enum RenderCommandType { CLEAR, END_FRAME, PUT_PIXEL, WRITE_RAIN };
+	enum RenderCommandType { CLEAR, END_FRAME, PUT_PIXEL, DRAW_BACKGROUND, WRITE_RAIN };
 
 	struct RenderCommandPutPixelParams {
 		int x, y;
 	};
 
-	struct RenderCommandParams { //TODO : UNION LOKO
-		float radius;
+	struct SimulationData {
 		int* current;
 		int* image;
+	};
 
+	struct RenderCommandParams { 
 		int color;
-		RenderCommandPutPixelParams putPixelParam; 
+		//union { // TODO: HACER QUE SEA UNION
+			RenderCommandPutPixelParams putPixelParams;
+			SimulationData simulationData;
+		//};
 	};
 
 	struct RenderCommand {

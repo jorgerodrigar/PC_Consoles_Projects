@@ -14,19 +14,31 @@ void RendererThread::renderLoop()
 				Renderer::clear(currentCommand.params.color);
 				break;
 			case PUT_PIXEL:
+			{
 				RenderCommandParams params = currentCommand.params;
-				Renderer::putPixel(params.putPixelParam.x, params.putPixelParam.y, params.color);
+				Renderer::putPixel(params.putPixelParams.x, params.putPixelParams.y, params.color);
 				break;
+			}
+			case DRAW_BACKGROUND:
+			{
+				RenderCommandParams params = currentCommand.params;
+				for (int i = 0; i < Renderer::getWindowHeight(); i++) {
+					for (int j = 0; j < Renderer::getWindowWidth(); j++) {
+						Renderer::putPixel(j, i, params.simulationData.image[i * 1280 + j]);
+					}
+				}
+				break;
+			}
 			case WRITE_RAIN:
 			{
 				RenderCommandParams params = currentCommand.params;
-				float radius = params.radius;
+				float radius = 100;
 				for (int i = -radius; i < radius; i++) {
 					for (int j = -radius; j < radius; j++) {
-						int x = i + params.putPixelParam.x;
-						int y = j + params.putPixelParam.y;
+						int x = i + params.putPixelParams.x;
+						int y = j + params.putPixelParams.y;
 
-						Renderer::putPixel(x, y, renderPixel(x, y, params.current, params.image));
+						Renderer::putPixel(x, y, renderPixel(x, y, params.simulationData.current, params.simulationData.image));
 					}
 				}
 

@@ -36,11 +36,10 @@ void ScreenSimulation::simulateRain()
 
 	RendererThread::RenderCommand command;
 	command.type = RendererThread::WRITE_RAIN;
-	command.params.radius = 100;
-	command.params.putPixelParam.x = 100;
-	command.params.putPixelParam.y = 100;
-	command.params.image = image;
-	command.params.current = current;
+	command.params.putPixelParams.x = 100;
+	command.params.putPixelParams.y = 100;
+	command.params.simulationData.image = image;
+	command.params.simulationData.current = current;
 	_rendererThread->enqueueCommand(command);
 }
 
@@ -93,17 +92,11 @@ void ScreenSimulation::init(const char* filePath, RendererThread* rendererThread
 
 void ScreenSimulation::drawBackground()
 {
-	for (int i = 0; i < Renderer::getWindowHeight(); i++) {
-		for (int j = 0; j < Renderer::getWindowWidth(); j++) {
-			RendererThread::RenderCommand command;
-			command.type = RendererThread::PUT_PIXEL;
-			command.params.color = image[i * 1280 + j];
-			command.params.putPixelParam.x = j;
-			command.params.putPixelParam.y = i;
+	RendererThread::RenderCommand command;
+	command.type = RendererThread::DRAW_BACKGROUND;
+	command.params.simulationData.image = image;
 
-			_rendererThread->enqueueCommand(command);
-		}
-	}
+	_rendererThread->enqueueCommand(command);
 }
 
 void ScreenSimulation::swap()
