@@ -44,7 +44,7 @@ void ScreenSimulation::simulateRain()
 	_rendererThread->enqueueCommand(command);
 
 	delta++;
-	if (delta > Renderer::getNumBuffers() + 1) {
+	if (delta >= Renderer::getNumBuffers() + 1) {
 		delta = 0;
 	}
 }
@@ -75,7 +75,7 @@ void ScreenSimulation::calculateIncrement()
 			int diff = iz - der;
 			//cambios
 			int prevDelta = delta + 1;
-			if (prevDelta > Renderer::getNumBuffers() + 1) prevDelta = 0;
+			if (prevDelta >= Renderer::getNumBuffers() + 1) prevDelta = 0;
 			if (_increments[prevDelta][i * MATRIX_WIDTH + j] >> 1 != diff) {
 				diff << 1;
 				diff |= 1;
@@ -94,7 +94,7 @@ ScreenSimulation::ScreenSimulation()
 
 ScreenSimulation::~ScreenSimulation()
 {
-	for (int i = 0; i <= Renderer::getNumBuffers() + 1; i++) {
+	for (int i = 0; i < Renderer::getNumBuffers() + 1; i++) {
 		delete[] _increments[i]; //todo sacar cosas vector
 		_increments[i] = nullptr;
 	}
@@ -127,7 +127,7 @@ void ScreenSimulation::init(const char* filePath, RendererThread* rendererThread
 	previous = matrix1;
 
 	//init increments
-	for (int i = 0; i <= Renderer::getNumBuffers() + 1; i++) {
+	for (int i = 0; i < Renderer::getNumBuffers() + 1; i++) {
 		_increments.push_back(new int[MATRIX_HEIGHT * MATRIX_WIDTH]);
 		for (int incr = 0; incr < MATRIX_HEIGHT * MATRIX_WIDTH; incr++) {
 			_increments[i][incr] = 0;
