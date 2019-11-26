@@ -1,6 +1,6 @@
 #include "RendererThread.h"
 #include <Renderer/Renderer.h>
-
+#include <Logic/ScreenSimulation.h>
 
 void RendererThread::renderLoop()
 {
@@ -32,6 +32,8 @@ void RendererThread::renderLoop()
 			case WRITE_RAIN:
 			{
 				RenderCommandParams params = currentCommand.params;
+				renderRain(params.simulationData.current, params.simulationData.image, params.simulationData.increments);
+				/*RenderCommandParams params = currentCommand.params;
 				float radius = 100;
 				for (int i = -radius; i < radius; i++) {
 					for (int j = -radius; j < radius; j++) {
@@ -41,7 +43,7 @@ void RendererThread::renderLoop()
 						Renderer::putPixel(x, y, renderPixel(x, y, params.simulationData.current, params.simulationData.image));
 					}
 				}
-
+*/
 				break;
 			}
 			default:
@@ -95,24 +97,24 @@ void RendererThread::enqueueCommand(RenderCommand c)
 }
 
 
-int RendererThread::renderPixel(int x, int y, int* current, int* image)
+void RendererThread::renderRain(int* current, int* image, int* increments)
 {
-	int rgba[4];
-	Renderer::hexToRGBA(image[y * 1280 + x], rgba);
+	for (int i = 0; i < MATRIX_HEIGHT; i++) {
+		for (int j = 0; j < MATRIX_WIDTH; j++) {
+			int incr = increments[i * MATRIX_WIDTH + j];
+			if (incr & 1) {
+				incr >>= 1;
+				int rgba[4];
+				Renderer::hexToRGBA(image[i * MATRIX_WIDTH + j], rgba);
 
-	for (int i = 0; i < 4; i++) {
-		float iz = 0, der = 0;
-		if (isValid(y, x - 1)) {
-			iz = current[y * 1280 + (x - 1)];
-		}
-		if (isValid(y, x + 1)) {
-			der = current[y * 1280 + (x + 1)];
-		}
+				for (int c = 0; c < 4; c++) {
+					rgba[c] = clamp(rgba[c] - (incr), 0, 256);
+				}
 
-		rgba[i] = clamp(rgba[i] - (iz - der), 0, 256);
+				Renderer::putPixel(j, i, RGBA(rgba[0], rgba[1], rgba[2], rgba[3]));
+			}
+		}
 	}
-
-	return RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
 }
 
 int RendererThread::clamp(int value, int min, int max) //[min, max)
@@ -126,9 +128,4 @@ int RendererThread::clamp(int value, int min, int max) //[min, max)
 	}
 
 	return clampedValue;
-}
-
-bool RendererThread::isValid(int i, int j)
-{
-	return i > 0 && i < Renderer::getWindowHeight() && j > 0 && Renderer::getWindowWidth();
 }

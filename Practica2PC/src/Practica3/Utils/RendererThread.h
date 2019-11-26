@@ -15,6 +15,7 @@ public:
 	struct SimulationData {
 		int* current;
 		int* image;
+		int* increments;
 	};
 
 	struct RenderCommandParams { 
@@ -37,8 +38,7 @@ private:
 	ConcurrentQueue<RenderCommand> _concurrentQueue;
 
 	void renderLoop();
-	int renderPixel(int x, int y, int* current, int* image);
-	bool isValid(int i, int j);
+	void renderRain(int* current, int* image, int* increments);
 	int clamp(int value, int min, int max);
 
 public:

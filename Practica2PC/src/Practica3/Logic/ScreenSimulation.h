@@ -1,16 +1,22 @@
 #pragma once
 
-#include <Utils/RendererThread.h>
+#include <vector>
+#define MATRIX_WIDTH 1280
+#define MATRIX_HEIGHT 720
 
+class RendererThread;
 class ScreenSimulation
 {
 private:
 	int *current, *previous;
 	RendererThread* _rendererThread;
+	std::vector<int*> _increments;
+	int delta = 0;
 
 	void simulatePixel(int x, int y);
 	bool isValid(int i, int j);
 	void swap(int*& a, int*& b);
+	void calculateIncrement();
 
 public:
 	ScreenSimulation();
