@@ -20,10 +20,10 @@ public:
 
 	struct RenderCommandParams { 
 		int color;
-		//union { // TODO: HACER QUE SEA UNION
+		union { // TODO: HACER QUE SEA UNION
 			RenderCommandPutPixelParams putPixelParams;
 			SimulationData simulationData;
-		//};
+		};
 	};
 
 	struct RenderCommand {

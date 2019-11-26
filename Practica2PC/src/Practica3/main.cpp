@@ -32,20 +32,14 @@ int main() {
 		//Renderer::clear(0x000000);
 		exit = Platform::tick();
 
-		if (frame >= 50) {
+		if (frame == 5) {
 			screenSim.startRandomWave();
 			frame = 0;
 		}
 
-		std::cout << frame << std::endl;
+		//std::cout << frame << std::endl;
 
 		screenSim.simulateRain();
-
-		//TODO: hacer cola de gotas? para llamar a cada una en cada bucle
-		//ratio entre radio y altura
-		//Preguntar lo del union
-		//Por que tarda al principio
-		//Renderthread static?
 
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;

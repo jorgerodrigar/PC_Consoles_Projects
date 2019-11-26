@@ -29,19 +29,19 @@ void ScreenSimulation::simulatePixel(int x, int y)
 
 void ScreenSimulation::simulateRain()
 {
-	for (int i = 0; i < 300; i++) {
-		for (int j = 0; j < 300; j++) {
+	for (int i = 0; i < MATRIX_HEIGHT; i++) {
+		for (int j = 0; j < MATRIX_WIDTH; j++) {
 			simulatePixel(j, i);
 		}
 	}
 	calculateIncrement();
 
-	/*RendererThread::RenderCommand command;
+	RendererThread::RenderCommand command;
 	command.type = RendererThread::WRITE_RAIN;
 	command.params.simulationData.increments = _increments[delta];
 	command.params.simulationData.image = image;
 	command.params.simulationData.current = current;
-	_rendererThread->enqueueCommand(command);*/
+	_rendererThread->enqueueCommand(command);
 
 	delta++;
 	if (delta > Renderer::getNumBuffers() + 1) {
@@ -76,14 +76,14 @@ void ScreenSimulation::calculateIncrement()
 			//cambios
 			int prevDelta = delta + 1;
 			if (prevDelta > Renderer::getNumBuffers() + 1) prevDelta = 0;
-			//if (_increments[prevDelta][i * MATRIX_WIDTH + j] >> 1 != diff) {
-			//	diff << 1;
-			//	diff |= 1;
-			//}
-			//else {
-			//	diff << 1;
-			//}	
-			////_increments[delta][i * MATRIX_WIDTH + j] = diff;
+			if (_increments[prevDelta][i * MATRIX_WIDTH + j] >> 1 != diff) {
+				diff << 1;
+				diff |= 1;
+			}
+			else {
+				diff << 1;
+			}	
+			_increments[delta][i * MATRIX_WIDTH + j] = diff;
 		}
 	}
 }
@@ -94,8 +94,8 @@ ScreenSimulation::ScreenSimulation()
 
 ScreenSimulation::~ScreenSimulation()
 {
-	for (int i = 0; i <= Renderer::getNumBuffers(); i++) {
-		delete _increments[i]; //todo sacar cosas vector
+	for (int i = 0; i <= Renderer::getNumBuffers() + 1; i++) {
+		delete[] _increments[i]; //todo sacar cosas vector
 		_increments[i] = nullptr;
 	}
 }
@@ -127,14 +127,12 @@ void ScreenSimulation::init(const char* filePath, RendererThread* rendererThread
 	previous = matrix1;
 
 	//init increments
-	for (int i = 0; i < Renderer::getNumBuffers() + 1; i++) {
-		_increments.push_back(new int(MATRIX_HEIGHT * MATRIX_WIDTH));
+	for (int i = 0; i <= Renderer::getNumBuffers() + 1; i++) {
+		_increments.push_back(new int[MATRIX_HEIGHT * MATRIX_WIDTH]);
 		for (int incr = 0; incr < MATRIX_HEIGHT * MATRIX_WIDTH; incr++) {
 			_increments[i][incr] = 0;
 		}
 	}
-
-
 }
 
 void ScreenSimulation::drawBackground()
@@ -153,11 +151,10 @@ void ScreenSimulation::swap()
 
 void ScreenSimulation::startRandomWave()
 {
-	int rndX = rand() % 300;
-	int rndY = rand() % 300;
-	int rndH = rand() % 27000 + 3000;
-	//current[rndY * MATRIX_WIDTH + rndX] = rndH;
-	current[100 * MATRIX_WIDTH + 100] = rndH;
+	int rndX = rand() % MATRIX_WIDTH;
+	int rndY = rand() % MATRIX_HEIGHT;
+	int rndH = rand() % 27000 + 3000; // 3000-30000
+	current[rndY * MATRIX_WIDTH + rndX] = rndH;
 }
 
 
