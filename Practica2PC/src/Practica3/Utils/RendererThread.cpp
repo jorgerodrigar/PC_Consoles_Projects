@@ -7,6 +7,8 @@ void RendererThread::renderLoop()
 	while (!_quitRequested) {
 		//pintar frame
 		RenderCommand currentCommand = _concurrentQueue.pop();
+
+		// esperamos a que termine el frame (mala idea acabar de forma abrupta)
 		while (currentCommand.type != END_FRAME && !_quitRequested) {
 			switch (currentCommand.type)
 			{
@@ -19,8 +21,8 @@ void RendererThread::renderLoop()
 				Renderer::putPixel(params.putPixelParams.x, params.putPixelParams.y, params.color);
 				break;
 			}
-			case DRAW_BACKGROUND:
-			{
+			case DRAW_BACKGROUND: // llama putPixel por cada pixel de la imagen 
+			{                     // (un solo comando mejor que muchos comandos de putPixel)
 				RenderCommandParams params = currentCommand.params;
 				for (int i = 0; i < Renderer::getWindowHeight(); i++) {
 					for (int j = 0; j < Renderer::getWindowWidth(); j++) {
@@ -32,18 +34,7 @@ void RendererThread::renderLoop()
 			case WRITE_RAIN:
 			{
 				RenderCommandParams params = currentCommand.params;
-				renderRain(params.simulationData.current, params.simulationData.image, params.simulationData.increments);
-				/*RenderCommandParams params = currentCommand.params;
-				float radius = 100;
-				for (int i = -radius; i < radius; i++) {
-					for (int j = -radius; j < radius; j++) {
-						int x = i + params.putPixelParams.x;
-						int y = j + params.putPixelParams.y;
-
-						Renderer::putPixel(x, y, renderPixel(x, y, params.simulationData.current, params.simulationData.image));
-					}
-				}
-*/
+				renderRain(params.simulationData.image, params.simulationData.increments);
 				break;
 			}
 			default:
@@ -57,7 +48,7 @@ void RendererThread::renderLoop()
 	}
 }
 
-RendererThread::RendererThread()
+RendererThread::RendererThread() : _thread(nullptr), _pendingframes(0), _quitRequested(true)
 {
 }
 
@@ -68,47 +59,48 @@ RendererThread::~RendererThread()
 
 void RendererThread::start()
 {
-	_quitRequested = false; 
+	_quitRequested = false;
 
-	if (_thread != nullptr) return; 
-	
+	if (_thread != nullptr) return;
+
 	_thread = new std::thread(&RendererThread::renderLoop, this);
 }
 
 void RendererThread::stop()
 {
-	_quitRequested = true; 
+	_quitRequested = true;
 
-	if (_thread == nullptr) return; 
-	
+	if (_thread == nullptr) return;
+
 	RenderCommand command;
 	command.type = END_FRAME;
-	_concurrentQueue.push(command); //	TODO: PROVISIONAL, AQUI O EN MAIN??
+	_concurrentQueue.push(command);
 
 	_thread->join(); delete _thread; _thread = nullptr;
 }
 
 void RendererThread::enqueueCommand(RenderCommand c)
 {
-	if (c.type == END_FRAME) 
+	if (c.type == END_FRAME)
 		_pendingframes++;
 	//enqueue
 	_concurrentQueue.push(c);
 }
 
-
-void RendererThread::renderRain(int* current, int* image, int* increments)
+// recorre el array de incrementos para pintar solo los pixeles que hayan cambiado
+// con respecto al buffer anterior -> coherencia de buffers
+void RendererThread::renderRain(int* image, int* increments)
 {
 	for (int i = 0; i < MATRIX_HEIGHT; i++) {
 		for (int j = 0; j < MATRIX_WIDTH; j++) {
 			int incr = increments[i * MATRIX_WIDTH + j];
-			if (incr & 1) {
-				incr >>= 1;
+			if (incr & 1) { // ultimo bit a 1 -> ha cambiado respecto al anterior y hay que pintarlo
+				incr >>= 1; // recuperamos el valor original
 				int rgba[4];
 				Renderer::hexToRGBA(image[i * MATRIX_WIDTH + j], rgba);
 
-				for (int c = 0; c < 4; c++) {
-					rgba[c] = clamp(rgba[c] - (incr), 0, 256);
+				for (int c = 0; c < 4; c++) {                  // para cada componente de color
+					rgba[c] = clamp(rgba[c] - (incr), 0, 256); // clamp(componente - (iz - der), 0, 256)
 				}
 
 				Renderer::putPixel(j, i, RGBA(rgba[0], rgba[1], rgba[2], rgba[3]));

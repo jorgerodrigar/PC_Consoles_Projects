@@ -4,14 +4,17 @@
 #define MATRIX_WIDTH 1280
 #define MATRIX_HEIGHT 720
 
+// clase que gestiona la simulacion de las gotas
+// tiene tambien la imagen del fondo
+
 class RendererThread;
 class ScreenSimulation
 {
 private:
-	int *current, *previous;
+	int *current, *previous;       // arrays de simulacion (alturas)
 	RendererThread* _rendererThread;
-	std::vector<int*> _increments;
-	int delta = 0;
+	std::vector<int*> _increments; // vector de arrays con los incrementos (diferencias entre izq y der)
+	int delta = 0;                 // indicador del array de incremento actualmente visitado
 
 	void simulatePixel(int x, int y);
 	bool isValid(int i, int j);

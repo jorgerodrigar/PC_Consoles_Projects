@@ -20,7 +20,7 @@ void PCRenderer::init()
 		int winX, winY;
 		winX = winY = SDL_WINDOWPOS_CENTERED;
 		//Inicialización del renderer. Creacion de la ventana
-		_window = SDL_CreateWindow("Practica 3", winX, winY, WIN_WIDTH, WIN_HEIGHT, windowType);
+		_window = SDL_CreateWindow("Practica 2", winX, winY, WIN_WIDTH, WIN_HEIGHT, windowType);
 		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 
 		_initialized = true;
