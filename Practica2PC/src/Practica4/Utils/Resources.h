@@ -15,7 +15,12 @@ public:
 	enum ImageId {
 		debug2x2,
 		debug500x500,
-		marcoPuerta
+		bang, 
+		cliente,
+		dolares, 
+		ladron,
+		marcoPuerta,
+		puertas
 	};
 
 	pair<uint32_t*, uint32_t*> getImage(ImageId id);

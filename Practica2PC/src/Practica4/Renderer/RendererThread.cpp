@@ -1,5 +1,8 @@
 #include "RendererThread.h"
 #include <Renderer/Renderer.h>
+#include <iostream>
+
+#define SCALE_FACTOR 3
 
 void RendererThread::renderLoop()
 {
@@ -20,12 +23,10 @@ void RendererThread::renderLoop()
 			}
 			case DRAW_SPRITE:
 			{
-				//TODO: reescalado
 				RenderCommandParams params = currentCommand.params;
 				for (int i = params.spriteData.srcTop; i < params.spriteData.srcBottom; i++) {
 					for (int j = params.spriteData.srcLeft; j < params.spriteData.srcRight; j++) {
-						Renderer::putPixel(j + params.x - params.spriteData.srcLeft, i + params.y - params.spriteData.srcTop,
-							params.spriteData.image[i * params.spriteData.imageWidth + j]);
+						drawRescaled(i, j, params, SCALE_FACTOR); // pintaremos todas las imagenes reescaladas
 					}
 				}
 				break;
@@ -38,6 +39,22 @@ void RendererThread::renderLoop()
 		}
 		Renderer::present();
 		_pendingframes--; //ha acabado el frame
+	}
+}
+
+// por cada pixel en j, i, lo pintamos reescalado a scale * scale
+void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& params, const int scale)
+{
+	int color = params.spriteData.image[i * params.spriteData.imageWidth + j]; // color del pixel a reescalar
+
+	// pintamos el pixel repetido en un cuadrado de scale * scale que empieza en j, i
+	int y = i * scale;
+	for (y; y < (i * scale) + scale; y++) {
+		int x = j * scale;
+		for (x; x < (j * scale) + scale; x++) {
+			Renderer::putPixel(x + params.x - params.spriteData.srcLeft, 
+				y + params.y - params.spriteData.srcTop, color);
+		}
 	}
 }
 

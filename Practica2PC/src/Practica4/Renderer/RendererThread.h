@@ -37,6 +37,7 @@ private:
 
 	void renderLoop();
 	int clamp(int value, int min, int max);
+	void drawRescaled(int x, int y, const RenderCommandParams& params, const int scale);
 
 public:
 	RendererThread();

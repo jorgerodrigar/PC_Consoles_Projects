@@ -16,7 +16,7 @@ public:
 
 	void draw(int x, int y, RendererThread* renderThread);
 	void draw(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread);
-	//TODO: draw con numero de frame (animaciones)
+	void draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread);
 
 private:
 	uint32_t* _image;

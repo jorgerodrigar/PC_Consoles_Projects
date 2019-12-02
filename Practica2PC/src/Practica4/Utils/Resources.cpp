@@ -8,7 +8,12 @@ Resources* Resources::_instance = nullptr;
 
 std::vector<std::string> Resources::_imageFiles{ "assets/SpritesSheetsWestBank/Debug/rgb.rgba", 
 "assets/SpritesSheetsWestBank/Debug/rgb_500x500.rgba",
-"assets/SpritesSheetsWestBank/marcoPuerta.rgba" };
+"assets/SpritesSheetsWestBank/bang.rgba",
+"assets/SpritesSheetsWestBank/client.rgba",
+"assets/SpritesSheetsWestBank/dolares.rgba",
+"assets/SpritesSheetsWestBank/ladron.rgba",
+"assets/SpritesSheetsWestBank/marcoPuerta.rgba",
+"assets/SpritesSheetsWestBank/puertas.rgba" };
 
 Resources::Resources()
 {

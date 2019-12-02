@@ -30,6 +30,16 @@ void Sprite::draw(int x, int y, int left, int top, int right, int bottom, Render
 	sendDrawCommand(x, y, left, top, right, bottom, renderThread);
 }
 
+void Sprite::draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread)
+{
+	int frameWidth = _width / cols;
+	int frameHeight = _height / rows;
+	int left = (frame % cols)*frameWidth;
+	int top = (frame / cols)*frameHeight;
+
+	sendDrawCommand(x, y, left, top, frameWidth, frameHeight, renderThread);
+}
+
 //Crea y encola un comando DRAW_SPRITE a la hebra de render
 void Sprite::sendDrawCommand(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread)
 {

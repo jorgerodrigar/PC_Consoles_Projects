@@ -16,8 +16,8 @@ int main() {
 	int frame = 0;
 	
 	Sprite sprite;
-	sprite.setImage(Resources::marcoPuerta);
-	sprite.draw(400, 400, 30, 50, 150, 150, &rendererThread);
+	sprite.setImage(Resources::puertas);
+	sprite.draw(0, 0, &rendererThread);
 
 	rendererThread.start();
 	while (!exit)
