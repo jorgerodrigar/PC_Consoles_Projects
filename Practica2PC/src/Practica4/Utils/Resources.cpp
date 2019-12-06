@@ -1,7 +1,6 @@
 #include "Resources.h"
 #include <Platform/Platform.h>
 #include <Utils/BinReader.h>
-#include <Utils/EndianConverter.h>
 
 
 Resources* Resources::_instance = nullptr;
@@ -65,12 +64,12 @@ void Resources::load()
 		FILE* ptr = BinReader::openFile(filePath.c_str());
 		BinReader::read(header, 2, ptr);
 
-		header = EndianConverter::toCurrentEndian(header, 2);
+		header = Platform::toCurrentEndian(header, 2);
 
 		uint32_t* buffer = (uint32_t*)malloc(sizeof(uint32_t) * header[0] * header[1]);
 		BinReader::read(buffer, header[0] * header[1], ptr);
 
-		buffer = EndianConverter::toCurrentEndian(buffer, header[0]* header[1]);
+		buffer = Platform::toCurrentEndian(buffer, header[0]* header[1]);
 		
 		_images.insert({ImageId(i), { header, buffer }});
 

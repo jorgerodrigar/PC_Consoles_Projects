@@ -46,6 +46,10 @@ void RendererThread::renderLoop()
 void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& params, const int scale)
 {
 	int color = params.spriteData.image[i * params.spriteData.imageWidth + j]; // color del pixel a reescalar
+	int  rgba[4];
+	Renderer::hexToRGBA(color, rgba);
+
+	int true_color = RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
 
 	// pintamos el pixel repetido en un cuadrado de scale * scale que empieza en j, i
 	int y = i * scale;
@@ -53,7 +57,7 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 		int x = j * scale;
 		for (x; x < (j * scale) + scale; x++) {
 			Renderer::putPixel(x + params.x - params.spriteData.srcLeft, 
-				y + params.y - params.spriteData.srcTop, color);
+				y + params.y - params.spriteData.srcTop, true_color);
 		}
 	}
 }

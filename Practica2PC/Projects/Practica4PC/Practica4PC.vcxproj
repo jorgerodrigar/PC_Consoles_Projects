@@ -19,16 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Practica4\Input\PC\InputListener.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Input\PC\PCInput.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Sprite.cpp" />
     <ClCompile Include="..\..\src\Practica4\main.cpp" />
     <ClCompile Include="..\..\src\Practica4\Platform\PC\PCPlatform.cpp" />
     <ClCompile Include="..\..\src\Practica4\Renderer\PC\PCRenderer.cpp" />
     <ClCompile Include="..\..\src\Practica4\Renderer\RendererThread.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\BinReader.cpp" />
-    <ClCompile Include="..\..\src\Practica4\Utils\EndianConverter.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Utils\Listener.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\Resources.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Practica4\Input\Input.h" />
+    <ClInclude Include="..\..\src\Practica4\Input\InputData.h" />
+    <ClInclude Include="..\..\src\Practica4\Input\PC\InputListener.h" />
+    <ClInclude Include="..\..\src\Practica4\Input\PC\PCInput.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Sprite.h" />
     <ClInclude Include="..\..\src\Practica4\Platform\PC\PCPlatform.h" />
     <ClInclude Include="..\..\src\Practica4\Platform\Platform.h" />
@@ -37,7 +44,9 @@
     <ClInclude Include="..\..\src\Practica4\Renderer\RendererThread.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\BinReader.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\ConcurrentQueue.h" />
-    <ClInclude Include="..\..\src\Practica4\Utils\EndianConverter.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\Listener.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\Message.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\Resources.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
