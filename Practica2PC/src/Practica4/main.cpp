@@ -37,7 +37,8 @@ int main() {
 		exit = Platform::tick();
 		Input::tick();
 		data = Input::getUserInput();
-		std::cout << data.buttonsInfo.CIRCLE << std::endl;
+
+		//std::cout << data.buttonsInfo.L1 << std::endl;
 
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
