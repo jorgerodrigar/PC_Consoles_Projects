@@ -7,6 +7,7 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
+	_animations.clear();
 }
 
 void Sprite::setImage(Resources::ImageId id)
@@ -16,6 +17,13 @@ void Sprite::setImage(Resources::ImageId id)
 	_image = params.second;
 	_width = params.first[0];
 	_height = params.first[1];
+}
+
+void Sprite::init(char rows, char cols, char frame)
+{
+	_rows = rows;
+	_cols = cols;
+	_currentFrame = frame;
 }
 
 //Dibuja la imagen completa en la posicion x, y
@@ -38,6 +46,54 @@ void Sprite::draw(int x, int y, char rows, char cols, char frame, RendererThread
 	int top = (frame / cols)*frameHeight;
 
 	sendDrawCommand(x, y, left, top, frameWidth, frameHeight, renderThread);
+}
+
+bool Sprite::update(double deltaTime)
+{
+	if (_isAnimated) {
+		_lastTime += deltaTime;
+
+		if (_lastTime >= _currentAnim.rate) {
+			changeFrame();
+			_lastTime = 0;
+			return true;
+		}
+	}
+	return false;
+}
+
+void Sprite::render(int x, int y, RendererThread* renderThread)
+{
+	draw(x, y, _rows, _cols, _currentFrame, renderThread);
+}
+
+void Sprite::addAnim(std::string name, AnimInfo& animInfo)
+{
+	_animations.insert({ name, animInfo });
+}
+
+void Sprite::setAnim(std::string name)
+{
+	auto it = _animations.find(name);
+	if (it != _animations.end()) {
+		_currentAnim = it->second;
+		_currentFrame *= _currentAnim.iniFrame;
+		_isAnimated = true;
+	}
+}
+
+void Sprite::changeFrame()
+{
+	_currentFrame++;
+	
+	if (_currentFrame > _currentAnim.endFrame) {
+		if (_currentAnim.isLooped) 
+			_currentFrame = _currentAnim.iniFrame;
+		else {
+			_isAnimated = false;
+			_currentFrame = _currentAnim.endFrame;
+		}
+	}
 }
 
 //Crea y encola un comando DRAW_SPRITE a la hebra de render

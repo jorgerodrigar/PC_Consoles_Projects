@@ -1,9 +1,13 @@
 #if defined(_WIN64) || defined(_WIN32) 
 
 #include "PCPlatform.h"
+#include <Utils/Listener.h>
+#include <Utils/Message.h>
 #include <SDL.h>
 
 bool PCPlatform::_initialized = false;
+std::list<Listener*> PCPlatform::_listeners;
+double PCPlatform::_currentTime;
 
 PCPlatform::PCPlatform() {}
 
@@ -14,6 +18,7 @@ void PCPlatform::init()
 		SDL_Init(SDL_INIT_EVERYTHING);
 		_initialized = true;
 	}
+	_currentTime = SDL_GetTicks();
 }
 
 void PCPlatform::release()
@@ -34,6 +39,30 @@ bool PCPlatform::tick()
 		InputEventMessage message = InputEventMessage(MessageType::INPUT_EVENT, event);
 		sendMessage(message);
 		return false;
+	}
+}
+
+double PCPlatform::getDeltaTime()
+{
+	double lastTime = _currentTime;
+	_currentTime = SDL_GetTicks();
+	return (_currentTime - lastTime)/1000;
+}
+
+void PCPlatform::addListener(Listener * listener)
+{
+	_listeners.push_back(listener);
+}
+
+void PCPlatform::removeListener(Listener * listener)
+{
+	_listeners.remove(listener);
+}
+
+void PCPlatform::sendMessage(const Message& message)
+{
+	for (Listener* listener : _listeners) {
+		if(listener->receiveMessage(message)) break;
 	}
 }
 

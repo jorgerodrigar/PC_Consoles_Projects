@@ -56,8 +56,8 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 	for (y; y < (i * scale) + scale; y++) {
 		int x = j * scale;
 		for (x; x < (j * scale) + scale; x++) {
-			Renderer::putPixel(x + params.x - params.spriteData.srcLeft, 
-				y + params.y - params.spriteData.srcTop, true_color);
+			Renderer::putPixel(x + params.x - (params.spriteData.srcLeft * scale), 
+				y + params.y - (params.spriteData.srcTop*scale), true_color);
 		}
 	}
 }

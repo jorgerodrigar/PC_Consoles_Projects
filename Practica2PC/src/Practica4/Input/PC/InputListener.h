@@ -9,7 +9,7 @@ private:
 public:
 	InputListener();
 	~InputListener();
-	virtual void receiveMessage(const Message& message);
+	virtual bool receiveMessage(const Message& message);
 	void init();
 	std::list <SDL_Event> getEvents();
 };

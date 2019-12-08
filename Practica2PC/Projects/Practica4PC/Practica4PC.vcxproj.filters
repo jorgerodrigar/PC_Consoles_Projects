@@ -54,14 +54,14 @@
     <ClCompile Include="..\..\src\Practica4\Input\PC\PCInput.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Utils\Listener.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Input\PC\InputListener.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp">
+      <Filter>Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +101,6 @@
     <ClInclude Include="..\..\src\Practica4\Input\PC\PCInput.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Utils\Listener.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -112,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Input\PC\InputListener.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

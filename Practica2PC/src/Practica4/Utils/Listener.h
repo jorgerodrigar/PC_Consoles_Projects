@@ -5,5 +5,5 @@ class Listener {
 public:
 	Listener();
 	~Listener();
-	virtual void receiveMessage(const Message& message) = 0;
+	virtual bool receiveMessage(const Message& message) = 0;
 };

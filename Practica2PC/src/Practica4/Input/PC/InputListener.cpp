@@ -11,7 +11,7 @@ InputListener::~InputListener()
 {
 }
 
-void InputListener::receiveMessage(const Message & message)
+bool InputListener::receiveMessage(const Message & message)
 {
 	switch (message.type)
 	{
@@ -23,8 +23,11 @@ void InputListener::receiveMessage(const Message & message)
 		_events.push_back(event);
 		break;
 	default:
+		return false;
 		break;
 	}
+
+	return true;
 }
 
 void InputListener::init()

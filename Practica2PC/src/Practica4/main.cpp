@@ -4,7 +4,7 @@
 #include <Input/Input.h>
 #include <Input/InputData.h>
 #include <Utils/Resources.h>
-#include <Logic/Sprite.h>
+#include <Logic/GameObject.h>
 #include <iostream>
 
 int main() {
@@ -18,10 +18,11 @@ int main() {
 	bool exit = false;
 	int frame = 0;
 	
-	Sprite sprite;
-	sprite.setImage(Resources::puertas);
+	GameObject go;
+	go.init();
+
 	for (int i = 0; i < Renderer::getNumBuffers(); i++) {
-		sprite.draw(120, 0, 1, 3, 1, &rendererThread);
+		go.forceRender(&rendererThread);
 
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
@@ -31,21 +32,26 @@ int main() {
 	InputData data;
 
 	rendererThread.start();
+
 	while (!exit)
 	{
 		//Renderer::clear(0x000000);
 		exit = Platform::tick();
 		Input::tick();
+
 		data = Input::getUserInput();
 
 		//std::cout << data.buttonsInfo.L1 << std::endl;
+
+		go.update(Platform::getDeltaTime());                             
+		go.render(&rendererThread);
 
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
 		rendererThread.enqueueCommand(command);
 
 		frame++;
-
+		
 		while (rendererThread.getPendingFrames() >= Renderer::getNumBuffers()); //espera activa de la cpu
 	}
 
