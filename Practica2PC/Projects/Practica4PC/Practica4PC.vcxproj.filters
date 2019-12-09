@@ -63,6 +63,9 @@
     <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Practica4\Platform\Platform.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

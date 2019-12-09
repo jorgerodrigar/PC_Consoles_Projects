@@ -28,6 +28,7 @@
     <ClCompile Include="..\..\src\Practica4\Renderer\PC\PCRenderer.cpp" />
     <ClCompile Include="..\..\src\Practica4\Renderer\RendererThread.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\BinReader.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\Listener.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\Resources.cpp" />
   </ItemGroup>
@@ -45,6 +46,7 @@
     <ClInclude Include="..\..\src\Practica4\Renderer\RendererThread.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\BinReader.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\ConcurrentQueue.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\Listener.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\Message.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\Resources.h" />
