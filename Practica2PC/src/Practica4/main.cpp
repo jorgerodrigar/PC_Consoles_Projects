@@ -5,6 +5,7 @@
 #include <Input/InputData.h>
 #include <Utils/Resources.h>
 #include <Logic/GameObject.h>
+#include <Logic/DoorEvent.h>
 #include <iostream>
 
 int main() {
@@ -17,7 +18,7 @@ int main() {
 	
 	int frame = 0;
 	
-	GameObject go;
+	DoorEvent go;
 	go.init();
 
 	for (int i = 0; i < Renderer::getNumBuffers(); i++) {

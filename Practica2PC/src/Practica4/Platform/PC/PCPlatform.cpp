@@ -38,8 +38,8 @@ bool PCPlatform::tick()
 		}
 		InputEventMessage message = InputEventMessage(MessageType::INPUT_EVENT, event);
 		sendMessage(message);
-		return true;
 	}
+	return true;
 }
 
 double PCPlatform::getDeltaTime()

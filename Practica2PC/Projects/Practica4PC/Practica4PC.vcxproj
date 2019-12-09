@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Practica4\Input\PC\InputListener.cpp" />
     <ClCompile Include="..\..\src\Practica4\Input\PC\PCInput.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\DoorEvent.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Sprite.cpp" />
     <ClCompile Include="..\..\src\Practica4\main.cpp" />
@@ -37,6 +38,7 @@
     <ClInclude Include="..\..\src\Practica4\Input\InputData.h" />
     <ClInclude Include="..\..\src\Practica4\Input\PC\InputListener.h" />
     <ClInclude Include="..\..\src\Practica4\Input\PC\PCInput.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\DoorEvent.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Sprite.h" />
     <ClInclude Include="..\..\src\Practica4\Platform\PC\PCPlatform.h" />

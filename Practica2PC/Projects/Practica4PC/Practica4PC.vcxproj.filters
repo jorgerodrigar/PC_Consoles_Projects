@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\DoorEvent.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Practica4\Platform\Platform.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\DoorEvent.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

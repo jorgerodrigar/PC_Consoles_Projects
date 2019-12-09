@@ -5,7 +5,7 @@
 class RendererThread;
 
 class GameObject {
-private:
+protected:
 	Sprite _sprite;
 	float _x, _y;
 	bool _active, _hasChanged;
