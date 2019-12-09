@@ -1,5 +1,6 @@
 #include "Sprite.h"
 #include <Renderer/RendererThread.h>
+#include <Renderer/Renderer.h>
 
 Sprite::Sprite()
 {
@@ -24,6 +25,14 @@ void Sprite::init(char rows, char cols, char frame)
 	_rows = rows;
 	_cols = cols;
 	_currentFrame = frame;
+
+	int frameWidth = _width / cols;
+	int frameHeight = _height / rows;
+	int left = (frame % cols)*frameWidth;
+	int top = (frame / cols)*frameHeight;
+
+	_srcRect = Rect(left, top, frameWidth, frameHeight);
+	_currentSrcRect = _srcRect;
 }
 
 //Dibuja la imagen completa en la posicion x, y
@@ -40,12 +49,7 @@ void Sprite::draw(int x, int y, int left, int top, int right, int bottom, Render
 
 void Sprite::draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread)
 {
-	int frameWidth = _width / cols;
-	int frameHeight = _height / rows;
-	int left = (frame % cols)*frameWidth;
-	int top = (frame / cols)*frameHeight;
-
-	sendDrawCommand(x, y, left, top, frameWidth, frameHeight, renderThread);
+	sendDrawCommand(x, y, _currentSrcRect.left, _currentSrcRect.top, _currentSrcRect.right, _currentSrcRect.bottom, renderThread);
 }
 
 bool Sprite::update(double deltaTime)
@@ -64,6 +68,13 @@ bool Sprite::update(double deltaTime)
 
 void Sprite::render(int x, int y, RendererThread* renderThread)
 {
+	if (x + _currentSrcRect.left*3 < 100) {
+		_currentSrcRect.left = -_currentSrcRect.left;
+	}
+	else if ((x + (_currentSrcRect.left + _currentSrcRect.right)*3) > 800) {
+		_currentSrcRect.right = 800 - _currentSrcRect.left;
+	}
+
 	draw(x, y, _rows, _cols, _currentFrame, renderThread);
 }
 
@@ -80,6 +91,16 @@ void Sprite::setAnim(std::string name)
 		_currentFrame *= _currentAnim.iniFrame;
 		_isAnimated = true;
 	}
+}
+
+void Sprite::setCurrentRect(Rect rect)
+{
+	_currentSrcRect = rect;
+}
+
+Sprite::Rect Sprite::getRect()
+{
+	return _srcRect;
 }
 
 void Sprite::changeFrame()

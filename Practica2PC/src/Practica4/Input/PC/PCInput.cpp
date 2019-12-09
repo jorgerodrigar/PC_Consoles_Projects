@@ -17,10 +17,6 @@ void PCInput::release()
 
 void PCInput::tick()
 {
-}
-
-InputData PCInput::getUserInput()
-{
 	std::list<SDL_Event> eventList = _inputListener.getEvents();
 	for (SDL_Event event : eventList) {
 		if (event.type == SDL_KEYDOWN) {
@@ -43,7 +39,10 @@ InputData PCInput::getUserInput()
 			handleButtonUp(event);
 		}
 	}
+}
 
+InputData PCInput::getUserInput()
+{
 	return _inputData;
 }
 

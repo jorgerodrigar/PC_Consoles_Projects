@@ -19,6 +19,13 @@ public:
 		AnimInfo(float rate, char iniFrame, char endFrame, bool isLooped):rate(rate), iniFrame(iniFrame), endFrame(endFrame), isLooped(isLooped) {};
 	};
 
+	struct Rect {
+		int left, top;
+		int right, bottom;
+		Rect() :left(0), top(0), right(0), bottom(0) {};
+		Rect(int left, int top, int right, int bottom) :left(left), top(top), right(right), bottom(bottom) {};
+	};
+
 	void setImage(Resources::ImageId id);
 
 	void init(char rows, char cols, char frame = 0);
@@ -33,12 +40,17 @@ public:
 	void addAnim(std::string name, AnimInfo& animInfo);
 	void setAnim(std::string name);
 
+	void setCurrentRect(Rect rect);
+	Rect getRect();
+
 	int getWidth();
 	int getHeight();
 
 private:
 	uint32_t* _image;
 	AnimInfo _currentAnim;
+	Rect _srcRect;
+	Rect _currentSrcRect;
 	float _lastTime; 
 	bool _isAnimated;
 	int  _width, _height;

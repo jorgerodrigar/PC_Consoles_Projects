@@ -35,7 +35,7 @@ int main() {
 
 	while (!exit)
 	{
-		//Renderer::clear(0x000000);
+		Renderer::clear(0x000000);
 		exit = Platform::tick();
 		Input::tick();
 
@@ -43,7 +43,8 @@ int main() {
 
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 
-		go.update(Platform::getDeltaTime());                             
+		go.setX(frame*10);
+		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
 
 		RendererThread::RenderCommand command;
