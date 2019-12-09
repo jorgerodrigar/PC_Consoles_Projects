@@ -28,7 +28,7 @@ public:
 
 	void setImage(Resources::ImageId id);
 
-	void init(char rows, char cols, char frame = 0);
+	void init(Resources::ImageId id, char rows, char cols, char frame = 0);
 
 	void draw(int x, int y, RendererThread* renderThread);
 	void draw(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread);
@@ -45,6 +45,7 @@ public:
 
 	int getWidth();
 	int getHeight();
+	void sourceInWidthBounds(int x, int boundMin, int boundMax);
 
 private:
 	uint32_t* _image;

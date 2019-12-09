@@ -20,8 +20,9 @@ void Sprite::setImage(Resources::ImageId id)
 	_height = params.first[1];
 }
 
-void Sprite::init(char rows, char cols, char frame)
+void Sprite::init(Resources::ImageId id, char rows, char cols, char frame)
 {
+	setImage(id);
 	_rows = rows;
 	_cols = cols;
 	_currentFrame = frame;
@@ -68,13 +69,7 @@ bool Sprite::update(double deltaTime)
 
 void Sprite::render(int x, int y, RendererThread* renderThread)
 {
-	if (x + _currentSrcRect.left*3 < 100) {
-		_currentSrcRect.left = -_currentSrcRect.left;
-	}
-	else if ((x + (_currentSrcRect.left + _currentSrcRect.right)*3) > 800) {
-		_currentSrcRect.right = 800 - _currentSrcRect.left;
-	}
-
+	sourceInWidthBounds(x, 0, Renderer::getWindowWidth());
 	draw(x, y, _rows, _cols, _currentFrame, renderThread);
 }
 
@@ -143,4 +138,17 @@ int Sprite::getWidth()
 int Sprite::getHeight()
 {
 	return _height;
+}
+
+void Sprite::sourceInWidthBounds(int x, int boundMin, int boundMax)
+{
+	if (x < boundMin) {
+		_currentSrcRect.left = _srcRect.left + (boundMin - x);
+		_currentSrcRect.right = _srcRect.right - (boundMin - x);
+		x = 100;
+	}
+
+	if ((x + (_currentSrcRect.right * SCALE_FACTOR) >= boundMax)) {
+		_currentSrcRect.right -= ((x + (_currentSrcRect.right * SCALE_FACTOR)) - (boundMax)) / SCALE_FACTOR;
+	}
 }

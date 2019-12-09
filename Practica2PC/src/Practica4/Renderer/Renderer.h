@@ -10,7 +10,4 @@ using Renderer = PCRenderer;
 #error Platform not supported
 #endif
 
-// macro de conversion de rgb a color en hexadecimal
-#define RGB(r, g, b) ((r & 0xff) << 16) + ((g & 0xff) << 8) + ((b & 0xff))
-
 

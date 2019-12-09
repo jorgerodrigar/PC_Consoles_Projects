@@ -34,11 +34,11 @@ bool PCPlatform::tick()
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
-			return true;
+			return false;
 		}
 		InputEventMessage message = InputEventMessage(MessageType::INPUT_EVENT, event);
 		sendMessage(message);
-		return false;
+		return true;
 	}
 }
 

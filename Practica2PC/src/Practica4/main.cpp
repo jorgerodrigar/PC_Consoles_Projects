@@ -15,7 +15,6 @@ int main() {
 
 	RendererThread rendererThread;
 	
-	bool exit = false;
 	int frame = 0;
 	
 	GameObject go;
@@ -33,17 +32,16 @@ int main() {
 
 	rendererThread.start();
 
-	while (!exit)
+	while (Platform::tick())
 	{
-		Renderer::clear(0x000000);
-		exit = Platform::tick();
+		//Renderer::clear(0x000000);
 		Input::tick();
 
 		data = Input::getUserInput();
 
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 
-		go.setX(frame*10);
+		go.setX(frame*5);
 		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
 

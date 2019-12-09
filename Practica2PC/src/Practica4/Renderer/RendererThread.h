@@ -4,6 +4,8 @@
 #include <Utils/ConcurrentQueue.h>
 #include <stdint.h>
 
+#define SCALE_FACTOR 2
+
 class RendererThread
 {
 public:
