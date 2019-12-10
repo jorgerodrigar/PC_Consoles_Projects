@@ -180,13 +180,13 @@ void const Sprite::setVisible(bool value)
 void Sprite::sourceInWidthBounds(int& x, int boundMin, int boundMax)
 {
 	if (x + (_srcRect.left * SCALE_FACTOR) <= boundMin) {
-		_currentSrcRect.left = _srcRect.left + ((boundMin - x)/SCALE_FACTOR);
+		_currentSrcRect.left = _srcRect.left + ((boundMin - x) / SCALE_FACTOR);
 		_currentSrcRect.right = _srcRect.right - _currentSrcRect.left;
 		x = boundMin;
 	}
 
 	if ((x + (_srcRect.right * SCALE_FACTOR) >= boundMax)) {
-		_currentSrcRect.right = _currentSrcRect.left + ((boundMax - x)/SCALE_FACTOR);
+		_currentSrcRect.right = _currentSrcRect.left + ((boundMax - x) / SCALE_FACTOR);
 	}
 }
 

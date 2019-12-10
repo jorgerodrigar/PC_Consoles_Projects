@@ -39,16 +39,16 @@ int main() {
 
 		data = Input::getUserInput();
 		if (data.buttonsInfo.L1 == 1) {
-			/*ShootMessage m = ShootMessage(MessageType::SHOOT, 0);
-			go.receiveMessage(m);*/
+			kk = false;
 			if(go.isClosed())
 				go.startRandomEvent();
-			kk = true;
-
 		}
-		else {
-			kk = false;
-		}
+		else kk = true;
+		if (kk)
+			frame--;
+		else
+			frame++;
+		//go.setX(frame * 10);
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 		/*if(!kk)
 			go.setX(go.getX() + Platform::getDeltaTime()*50);
@@ -56,11 +56,10 @@ int main() {
 			go.setX(go.getX() - Platform::getDeltaTime()*50);*/
 		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
+
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
 		rendererThread.enqueueCommand(command);
-
-		frame++;
 		
 		while (rendererThread.getPendingFrames() >= Renderer::getNumBuffers()); //espera activa de la cpu
 	}
