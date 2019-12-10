@@ -48,8 +48,11 @@ public:
 	int getHeight();
 	int const getFrameWidth() const;
 	int const getFrameHeight() const;
-
+	int const getCurrentFrame() const;
 	bool const getVisible() const;
+	bool const isAnimated() const;
+
+
 	void const setVisible(bool value);
 
 	void sourceInWidthBounds(int& x, int boundMin, int boundMax);

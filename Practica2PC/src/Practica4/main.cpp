@@ -29,7 +29,7 @@ int main() {
 		command.type = RendererThread::END_FRAME;
 		rendererThread.enqueueCommand(command);
 	}
-
+	bool kk = false;
 	InputData data;
 	rendererThread.start();
 	while (Platform::tick())
@@ -43,12 +43,19 @@ int main() {
 			go.receiveMessage(m);*/
 			if(go.isClosed())
 				go.startRandomEvent();
+			kk = true;
+
+		}
+		else {
+			kk = false;
 		}
 		//std::cout << data.buttonsInfo.L1 << std::endl;
-
+		/*if(!kk)
+			go.setX(go.getX() + Platform::getDeltaTime()*50);
+		else
+			go.setX(go.getX() - Platform::getDeltaTime()*50);*/
 		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
-
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
 		rendererThread.enqueueCommand(command);

@@ -5,6 +5,7 @@
 class DoorEvent : public GameObject, public Listener {
 private:
 	Sprite _door, _client, _bandit;
+	Sprite* _currentSprite;
 	unsigned int _centerX, _centerY;
 	unsigned char _id;
 	bool _isClosed = true;
@@ -12,11 +13,11 @@ private:
 	float timer = 0;
 
 	void throwRandomEvent(); //lanza un evento aleatorio (50% bandido, 50% cliente)
+	void adjustSprite();
 	void checkShot();
 	void openDoor();
 	void closeDoor();
 
-	bool const isClient() const;
 
 public:
 	DoorEvent();
@@ -27,9 +28,11 @@ public:
 	virtual void update(double deltaTime);
 
 	virtual bool receiveMessage(const Message& message);
+	void startRandomEvent(); //opens the door and starts a random event
 
-	void startRandomEvent();
 	bool const isClosed() const;
+	bool const isClient() const;
 	unsigned char const getId() const;
+
 	void setId(unsigned char value);
 };

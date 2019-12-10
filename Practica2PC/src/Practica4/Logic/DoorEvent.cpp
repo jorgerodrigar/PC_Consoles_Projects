@@ -5,11 +5,39 @@
 void DoorEvent::throwRandomEvent()
 {
 	unsigned int rnd = rand() % 2;
-	if (rand) {
-		//_client.setVisible(true);
+	if (rnd) {
+		_client.setVisible(true);
+		_currentSprite = &_client;
 	}
 	else {
-		//_bandit.setVisible(true);
+		_bandit.setVisible(true);
+		_currentSprite = &_bandit;
+	}
+}
+
+void DoorEvent::adjustSprite()
+{
+	Sprite::Rect r(0, 0, _currentSprite->getRect().right/3, _currentSprite->getRect().bottom);
+
+	switch (_door.getCurrentFrame())
+	{
+	case 0:
+		r.right = _client.getRect().left;
+		_currentSprite->setCurrentRect(r);
+		break;
+	case 1:
+		_currentSprite->setCurrentRect(r);
+		break;
+	case 2:
+		r.right = _currentSprite->getRect().right * (2.0f / 3.0f);
+		_currentSprite->setCurrentRect(r);
+		break;
+	case 3:
+		r.right = _currentSprite->getRect().right;
+		_currentSprite->setCurrentRect(r);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -42,16 +70,18 @@ void DoorEvent::init()
 {
 	_sprite.init(Resources::marcoPuerta, 1, 1);
 	_door.init(Resources::puertas, 1, 4, 0);
-	Sprite::AnimInfo openingAnimInfo(1, 0, 3, false);
+	Sprite::AnimInfo openingAnimInfo(0.1, 0, 3, false);
 	_door.addAnim("opening", openingAnimInfo);
-	Sprite::AnimInfo closingAnimInfo(1, 3, 0, false);
+	Sprite::AnimInfo closingAnimInfo(0.1, 3, 0, false);
 	_door.addAnim("closing", closingAnimInfo);
 
 	_client.init(Resources::cliente, 1, 3, 0, false);
 	_bandit.init(Resources::ladron, 1, 5, 0, false);
 
-	_centerX = _sprite.getWidth()/2 - (_door.getFrameWidth()/2); //provisional xd
-	_centerY = _sprite.getHeight() / 2 - (_door.getFrameHeight()/5);
+	_centerX = getX() + (32 * 2); //provisional xd
+	_centerY = getY() + (24 * 2);
+
+	_currentSprite = &_client;
 }
 
 void DoorEvent::render(RendererThread * renderThread)
@@ -83,11 +113,15 @@ void DoorEvent::update(double deltaTime)
 		if (timer >= timeToClose) {
 			//bandido dispara, cliente deposita dinero i guess
 			closeDoor();
+			timer = 0;
 		}
 	}
-	bool aux = _sprite.update(deltaTime) || _door.update(deltaTime) || _client.update(deltaTime);
+
+	bool aux = _sprite.update(deltaTime) || _door.update(deltaTime) || _client.update(deltaTime) || _bandit.update(deltaTime);
 	if (!_hasChanged)
 		_hasChanged = aux;
+
+	adjustSprite();
 	//setX(getX() + (deltaTime * 100));
 }
 
@@ -121,8 +155,6 @@ void DoorEvent::openDoor()
 void DoorEvent::closeDoor()
 {
 	_door.setAnim("closing");
-	_bandit.setVisible(false);
-	_client.setVisible(false);
 	_isClosed = true;
 }
 
@@ -134,7 +166,7 @@ void DoorEvent::startRandomEvent()
 
 bool const DoorEvent::isClosed() const
 {
-	return _isClosed;
+	return (!_door.isAnimated()) && (_door.getCurrentFrame() == 0);
 }
 
 unsigned char const DoorEvent::getId() const

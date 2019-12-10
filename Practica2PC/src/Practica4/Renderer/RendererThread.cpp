@@ -55,8 +55,8 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 		int x = j * scale;
 		for (x; x < (j * scale) + scale; x++) {
 			//if ((x + params.x - (params.spriteData.srcLeft * scale) >= 0 && (x + params.x - (params.spriteData.srcLeft * scale) < Renderer::getWindowWidth()))) { //todo: esta bien aqui??
-				Renderer::putPixel(x + params.x - (params.spriteData.srcLeft * scale),
-					y + params.y - (params.spriteData.srcTop*scale), true_color);
+				Renderer::putPixel(x + (params.x) - (params.spriteData.srcLeft * scale),
+					y + (params.y) - (params.spriteData.srcTop*scale), true_color);
 			//}
 		}
 	}
