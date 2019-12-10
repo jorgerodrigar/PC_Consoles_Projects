@@ -15,8 +15,9 @@ public:
 		float rate;
 		char iniFrame, endFrame;
 		bool isLooped;
-		AnimInfo():rate(0), iniFrame(0), endFrame(0), isLooped(false) {};
-		AnimInfo(float rate, char iniFrame, char endFrame, bool isLooped):rate(rate), iniFrame(iniFrame), endFrame(endFrame), isLooped(isLooped) {};
+		char count;
+		AnimInfo():rate(0), iniFrame(0), endFrame(0), isLooped(false), count(0) {};
+		AnimInfo(float rate, char iniFrame, char endFrame, bool isLooped):rate(rate), iniFrame(iniFrame), endFrame(endFrame), isLooped(isLooped), count(0) {};
 	};
 
 	struct Rect {
@@ -45,7 +46,9 @@ public:
 
 	int getWidth();
 	int getHeight();
-	void sourceInWidthBounds(int x, int boundMin, int boundMax);
+	int const getFrameWidth() const;
+	int const getFrameHeight() const;
+	void sourceInWidthBounds(int& x, int boundMin, int boundMax);
 
 private:
 	uint32_t* _image;

@@ -50,7 +50,9 @@ void Sprite::draw(int x, int y, int left, int top, int right, int bottom, Render
 
 void Sprite::draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread)
 {
-	sendDrawCommand(x, y, _currentSrcRect.left, _currentSrcRect.top, _currentSrcRect.right, _currentSrcRect.bottom, renderThread);
+	int left = _currentSrcRect.left + (frame % cols) * _srcRect.right;
+	int top = _currentSrcRect.top + (frame / cols) * _srcRect.bottom;
+	sendDrawCommand(x, y, left, top, _currentSrcRect.right, _currentSrcRect.bottom, renderThread);
 }
 
 bool Sprite::update(double deltaTime)
@@ -100,15 +102,22 @@ Sprite::Rect Sprite::getRect()
 
 void Sprite::changeFrame()
 {
-	_currentFrame++;
+	if (_currentAnim.iniFrame > _currentAnim.endFrame)
+		_currentFrame--;
+	else
+		_currentFrame++;
 	
-	if (_currentFrame > _currentAnim.endFrame) {
-		if (_currentAnim.isLooped) 
+	_currentAnim.count++;
+
+	if (_currentAnim.count > abs(_currentAnim.endFrame - _currentAnim.iniFrame)) {
+		if (_currentAnim.isLooped) {
 			_currentFrame = _currentAnim.iniFrame;
+		}
 		else {
 			_isAnimated = false;
 			_currentFrame = _currentAnim.endFrame;
 		}
+		_currentAnim.count = 0;
 	}
 }
 
@@ -140,15 +149,25 @@ int Sprite::getHeight()
 	return _height;
 }
 
-void Sprite::sourceInWidthBounds(int x, int boundMin, int boundMax)
+int const Sprite::getFrameWidth() const
 {
-	if (x < boundMin) {
-		_currentSrcRect.left = _srcRect.left + (boundMin - x);
-		_currentSrcRect.right = _srcRect.right - (boundMin - x);
-		x = 100;
+	return _currentSrcRect.right;
+}
+
+int const Sprite::getFrameHeight() const
+{
+	return _currentSrcRect.bottom;
+}
+
+void Sprite::sourceInWidthBounds(int& x, int boundMin, int boundMax)
+{
+	if (x + (_srcRect.left * SCALE_FACTOR) <= boundMin) {
+		_currentSrcRect.left = _srcRect.left + ((boundMin - x)/SCALE_FACTOR);
+		_currentSrcRect.right = _srcRect.right - _currentSrcRect.left;
+		x = boundMin;
 	}
 
-	if ((x + (_currentSrcRect.right * SCALE_FACTOR) >= boundMax)) {
-		_currentSrcRect.right -= ((x + (_currentSrcRect.right * SCALE_FACTOR)) - (boundMax)) / SCALE_FACTOR;
+	if ((x + (_srcRect.right * SCALE_FACTOR) >= boundMax)) {
+		_currentSrcRect.right = _currentSrcRect.left + ((boundMax - x)/SCALE_FACTOR);
 	}
 }

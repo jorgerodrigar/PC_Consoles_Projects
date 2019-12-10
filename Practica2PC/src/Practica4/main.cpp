@@ -32,17 +32,14 @@ int main() {
 	InputData data;
 
 	rendererThread.start();
-
 	while (Platform::tick())
 	{
-		//Renderer::clear(0x000000);
+		Renderer::clear(0x000000);
 		Input::tick();
 
 		data = Input::getUserInput();
-
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 
-		//go.setX(frame*5);
 		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
 
