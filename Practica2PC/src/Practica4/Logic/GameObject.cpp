@@ -16,7 +16,7 @@ void GameObject::init()
 	_sprite.init(Resources::debug500x500, 2, 2);
 	Sprite::AnimInfo animInfo(1, 0, 3, true);
 	_sprite.addAnim("test", animInfo);
-	//_sprite.setAnim("test");
+	_sprite.setAnim("test");
 }
 
 void GameObject::render(RendererThread* renderThread)

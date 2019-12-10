@@ -42,7 +42,7 @@ int main() {
 
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 
-		go.setX(frame*5);
+		//go.setX(frame*5);
 		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
 
