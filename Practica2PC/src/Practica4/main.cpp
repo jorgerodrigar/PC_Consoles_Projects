@@ -20,6 +20,7 @@ int main() {
 	
 	DoorEvent go;
 	go.init();
+	go.setId(0);
 
 	for (int i = 0; i < Renderer::getNumBuffers(); i++) {
 		go.forceRender(&rendererThread);
@@ -30,7 +31,6 @@ int main() {
 	}
 
 	InputData data;
-
 	rendererThread.start();
 	while (Platform::tick())
 	{
@@ -38,6 +38,12 @@ int main() {
 		Input::tick();
 
 		data = Input::getUserInput();
+		if (data.buttonsInfo.L1 == 1) {
+			/*ShootMessage m = ShootMessage(MessageType::SHOOT, 0);
+			go.receiveMessage(m);*/
+			if(go.isClosed())
+				go.startRandomEvent();
+		}
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 
 		go.update(Platform::getDeltaTime()); 

@@ -88,7 +88,7 @@ void Sprite::setAnim(std::string name)
 	auto it = _animations.find(name);
 	if (it != _animations.end()) {
 		_currentAnim = it->second;
-		_currentFrame *= _currentAnim.iniFrame;
+		_currentFrame = _currentAnim.iniFrame;
 		_isAnimated = true;
 	}
 }
