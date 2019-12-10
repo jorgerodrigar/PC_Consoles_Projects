@@ -20,12 +20,13 @@ void Sprite::setImage(Resources::ImageId id)
 	_height = params.first[1];
 }
 
-void Sprite::init(Resources::ImageId id, char rows, char cols, char frame)
+void Sprite::init(Resources::ImageId id, char rows, char cols, char frame, bool visible)
 {
 	setImage(id);
 	_rows = rows;
 	_cols = cols;
 	_currentFrame = frame;
+	_isVisible = visible;
 
 	int frameWidth = _width / cols;
 	int frameHeight = _height / rows;
@@ -71,8 +72,10 @@ bool Sprite::update(double deltaTime)
 
 void Sprite::render(int x, int y, RendererThread* renderThread)
 {
-	sourceInWidthBounds(x, 0, Renderer::getWindowWidth());
-	draw(x, y, _rows, _cols, _currentFrame, renderThread);
+	if (_isVisible) {
+		sourceInWidthBounds(x, 0, Renderer::getWindowWidth());
+		draw(x, y, _rows, _cols, _currentFrame, renderThread);
+	}
 }
 
 void Sprite::addAnim(std::string name, AnimInfo& animInfo)
@@ -157,6 +160,16 @@ int const Sprite::getFrameWidth() const
 int const Sprite::getFrameHeight() const
 {
 	return _currentSrcRect.bottom;
+}
+
+bool const Sprite::getVisible() const
+{
+	return _isVisible;
+}
+
+void const Sprite::setVisible(bool value)
+{
+	_isVisible = value;
 }
 
 void Sprite::sourceInWidthBounds(int& x, int boundMin, int boundMax)

@@ -4,9 +4,11 @@
 
 class DoorEvent : public GameObject, public Listener {
 private:
-	Sprite _door, _client;
+	Sprite _door, _client, _bandit;
 	unsigned int _centerX, _centerY;
 	bool _isClosed = true;
+	void throwRandomEvent(); //lanza un evento aleatorio (50% bandido, 50% cliente)
+	bool const isClient() const;
 
 public:
 	DoorEvent();
@@ -20,5 +22,5 @@ public:
 
 	void openDoor();
 	void closeDoor();
-	bool isClosed();
+	bool const isClosed() const;
 };

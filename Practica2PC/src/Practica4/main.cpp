@@ -34,7 +34,7 @@ int main() {
 	rendererThread.start();
 	while (Platform::tick())
 	{
-		Renderer::clear(0x000000);
+		//Renderer::clear(0x000000);
 		Input::tick();
 
 		data = Input::getUserInput();
