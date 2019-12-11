@@ -1,7 +1,6 @@
-#include "InputListener.h"
-#include <iostream>
-#include <Platform/Platform.h>
 #if defined(_WIN64) || defined(_WIN32)
+#include "InputListener.h"
+#include <Platform/Platform.h>
 
 InputListener::InputListener() 
 {
@@ -11,22 +10,9 @@ InputListener::~InputListener()
 {
 }
 
-bool InputListener::receiveMessage(const Message & message)
+bool InputListener::receiveEvent(const SDL_Event& event)
 {
-	switch (message.type)
-	{
-	case MessageType::TEST:
-		std::cout << static_cast<const TestMessage*>(&message)->test << std::endl;
-		break;
-	case MessageType::INPUT_EVENT:
-		SDL_Event event = static_cast<const InputEventMessage*>(&message)->event;
-		_events.push_back(event);
-		break;
-	default:
-		return false;
-		break;
-	}
-
+	_events.push_back(event);
 	return true;
 }
 

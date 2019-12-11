@@ -8,7 +8,8 @@ class GameObject {
 protected:
 	Sprite _sprite;
 	float _x, _y;
-	bool _active, _hasChanged;
+	bool _active;
+    int _pendingFrames;
 
 public:
 	GameObject();
@@ -16,7 +17,6 @@ public:
 
 	virtual void init();
 	virtual void render(RendererThread* renderThread);
-	virtual void forceRender(RendererThread* renderThread);
 	virtual void update(double deltaTime);
 	virtual void handleInput() {};
 

@@ -25,7 +25,6 @@ public:
 	~DoorEvent();
 	virtual void init();
 	virtual void render(RendererThread* renderThread);
-	virtual void forceRender(RendererThread* renderThread);
 	virtual void update(double deltaTime);
 
 	virtual bool receiveMessage(const Message& message);

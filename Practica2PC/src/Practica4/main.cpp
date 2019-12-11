@@ -22,27 +22,24 @@ int main() {
 	go.init();
 	go.setId(0);
 
-	for (int i = 0; i < Renderer::getNumBuffers(); i++) {
-		go.forceRender(&rendererThread);
-
-		RendererThread::RenderCommand command;
-		command.type = RendererThread::END_FRAME;
-		rendererThread.enqueueCommand(command);
-	}
 	bool kk = false;
 	InputData data;
 	rendererThread.start();
-		bool kk1 = true;
+	bool kk1 = true;
+
 	while (Platform::tick())
 	{
 		//Renderer::clear(0x000000);
 		Input::tick();
 
 		data = Input::getUserInput();
-		if (data.buttonsInfo.L1 == 1) {
+		go.isClosed();
+		if (data.buttonsInfo.L1 == 1.0f) {
 			kk = false;
-			if(go.isClosed())
+			if (go.isClosed()) {
 				go.startRandomEvent();
+				std::cout << "kk" << std::endl;
+			}
 		}
 		/*else if (data.leftStick.x > 0) {
 			if (!go.isClosed() && kk1) {
@@ -50,8 +47,7 @@ int main() {
 				kk1 = false;
 			}
 		}*/
-		else kk = true;
-
+		//else kk = true;
 		/*if (go.isClosed() && !kk1)
 			kk1 = true;*/
 
@@ -59,12 +55,15 @@ int main() {
 			frame--;
 		else
 			frame++;
+
+		//go.setX(go.getX() + Platform::getDeltaTime() * 50);
 		//go.setX(frame * 10);
 		//std::cout << data.buttonsInfo.L1 << std::endl;
 		/*if(!kk)
 			go.setX(go.getX() + Platform::getDeltaTime()*50);
 		else
 			go.setX(go.getX() - Platform::getDeltaTime()*50);*/
+
 		go.update(Platform::getDeltaTime()); 
 		go.render(&rendererThread);
 

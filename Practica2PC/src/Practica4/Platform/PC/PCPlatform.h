@@ -3,14 +3,14 @@
 
 #include <stdint.h>
 #include <list>
+#include <SDL_events.h>
 
-class Listener; //TODO CLASS LISTENER DESARROLLADA AQUI?
-class Message;
+class InputListener;
 
 class PCPlatform {
 private:
 	static bool _initialized;
-	static std::list<Listener*> _listeners;
+	static std::list<InputListener*> _listeners;
 	static double _currentTime;
 	
 	static uint32_t* _toCurrentEndian(uint32_t* endian, uint32_t size);
@@ -24,9 +24,9 @@ public:
 
 	static double getDeltaTime();
 
-	static void addListener(Listener* listener);
-	static void removeListener(Listener* listener);
-	static void sendMessage(const Message& message);
+	static void addListener(InputListener* listener);
+	static void removeListener(InputListener* listener);
+	static void sendEvent(const SDL_Event& event);
 
 	static uint32_t* toCurrentEndian(uint32_t* endian, uint32_t size);
 };

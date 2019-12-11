@@ -1,8 +1,9 @@
 #include "GameObject.h"
 #include <Utils/Resources.h>
+#include <Renderer/Renderer.h>
 #include <iostream>
 
-GameObject::GameObject(): _x(0), _y(0), _active(true), _hasChanged(true)
+GameObject::GameObject(): _x(0), _y(0), _active(true), _pendingFrames(Renderer::getNumBuffers())
 {
 }
 
@@ -21,25 +22,18 @@ void GameObject::init()
 
 void GameObject::render(RendererThread* renderThread)
 {
-	if (_hasChanged && _active) {
+	if (_active && _pendingFrames >= 0) {
 		_sprite.render(_x, _y, renderThread);
-		_hasChanged = false;
-	}
-}
-
-void GameObject::forceRender(RendererThread* renderThread)
-{
-	if (_active) {
-		_sprite.render(_x, _y, renderThread);
-		_hasChanged = false;
+		_pendingFrames--;
 	}
 }
 
 void GameObject::update(double deltaTime)
 {
 	bool aux = _sprite.update(deltaTime);
-	if (!_hasChanged) 
-		_hasChanged = aux;
+	if (aux) {
+		_pendingFrames = Renderer::getNumBuffers();
+	}
 }
 
 bool GameObject::getActive()
@@ -65,11 +59,11 @@ float GameObject::getY()
 void GameObject::setX(float value)
 {
 	_x = value;
-	_hasChanged = true;
+	_pendingFrames = Renderer::getNumBuffers();
 }
 
 void GameObject::setY(float value)
 {
 	_y = value;
-	_hasChanged = true;
+	_pendingFrames = Renderer::getNumBuffers();
 }

@@ -1,6 +1,7 @@
 #include "DoorEvent.h"
 #include <Utils/Resources.h>
 #include <iostream>
+#include <Renderer/Renderer.h>
 
 //Resetea el sprite actual del evento elegido anteriormente.
 //Si es un cliente, lo hace visible y setea su animacion a "idle". Si es un bandido, 
@@ -90,7 +91,7 @@ void DoorEvent::init()
 	_door.addAnim("opening", openingAnimInfo);
 	Sprite::AnimInfo closingAnimInfo(0.1f, 3, 0, false);
 	_door.addAnim("closing", closingAnimInfo);
-
+	//_door.setAnim("opening");
 	_client.init(Resources::cliente, 1, 3, 0, false);
 	Sprite::AnimInfo idleAnimInfo(0, 0, 0, false);
 	_client.addAnim("idle", idleAnimInfo);
@@ -113,26 +114,18 @@ void DoorEvent::init()
 
 void DoorEvent::render(RendererThread * renderThread)
 {
-	if (_hasChanged && _active) {
-		_sprite.render(_x, _y, renderThread);
+	if (_pendingFrames > 0 && _active) {
+		//_sprite.render(_x, _y, renderThread);
 		_door.render(_x + _centerX, _y + _centerY, renderThread);
-		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
-		_hasChanged = false;
-	}
-}
-
-void DoorEvent::forceRender(RendererThread * renderThread)
-{
-	if (_active) {
-		_sprite.render(_x, _y, renderThread);
-		_door.render(_x + _centerX, _y + _centerY, renderThread);
-		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
-		_hasChanged = false;
+		//_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
+		//std::cout << "  " << _door.getCurrentFrame() << std::endl;
+		_pendingFrames--;
 	}
 }
 
 void DoorEvent::update(double deltaTime)
 {
+	//std::cout << deltaTime << std::endl;
 	if (!isClosed()) {
 		timer += deltaTime;
 
@@ -144,8 +137,8 @@ void DoorEvent::update(double deltaTime)
 	}
 
 	bool aux = _sprite.update(deltaTime) || _door.update(deltaTime) || _currentEventSprite->update(deltaTime);
-	if (!_hasChanged)
-		_hasChanged = aux;
+	if (aux)
+		_pendingFrames = Renderer::getNumBuffers();
 
 	adjustCurrentEventSprite();
 }
@@ -163,7 +156,7 @@ bool DoorEvent::receiveMessage(const Message & message)
 		if (shootMessage->id == getId()) {
 			checkShot();
 			_currentEventSprite->setAnim("dying");
-			_hasChanged = true;
+			_pendingFrames = Renderer::getNumBuffers();
 			return true;
 		}
 		return false;

@@ -1,12 +1,11 @@
 #if defined(_WIN64) || defined(_WIN32) 
 
 #include "PCPlatform.h"
-#include <Utils/Listener.h>
-#include <Utils/Message.h>
 #include <SDL.h>
+#include <Input/PC/InputListener.h>
 
 bool PCPlatform::_initialized = false;
-std::list<Listener*> PCPlatform::_listeners;
+std::list<InputListener*> PCPlatform::_listeners;
 double PCPlatform::_currentTime;
 
 PCPlatform::PCPlatform() {}
@@ -33,11 +32,10 @@ bool PCPlatform::tick()
 {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
+		if (event.type == SDL_QUIT || event.type == SDL_MOUSEBUTTONDOWN) {
 			return false;
 		}
-		InputEventMessage message = InputEventMessage(MessageType::INPUT_EVENT, event);
-		sendMessage(message);
+		sendEvent(event);
 	}
 	return true;
 }
@@ -49,20 +47,20 @@ double PCPlatform::getDeltaTime()
 	return (_currentTime - lastTime)/1000;
 }
 
-void PCPlatform::addListener(Listener * listener)
+void PCPlatform::addListener(InputListener * listener)
 {
 	_listeners.push_back(listener);
 }
 
-void PCPlatform::removeListener(Listener * listener)
+void PCPlatform::removeListener(InputListener * listener)
 {
 	_listeners.remove(listener);
 }
 
-void PCPlatform::sendMessage(const Message& message)
+void PCPlatform::sendEvent(const SDL_Event& event)
 {
-	for (Listener* listener : _listeners) {
-		if(listener->receiveMessage(message)) break;
+	for (InputListener* listener : _listeners) {
+		if(listener->receiveEvent(event)) break;
 	}
 }
 

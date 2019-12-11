@@ -1,8 +1,9 @@
 #include "Sprite.h"
 #include <Renderer/RendererThread.h>
 #include <Renderer/Renderer.h>
+#include <iostream>
 
-Sprite::Sprite()
+Sprite::Sprite(): _lastTime(0)
 {
 }
 
@@ -26,6 +27,7 @@ void Sprite::init(Resources::ImageId id, char rows, char cols, char frame, bool 
 	_rows = rows;
 	_cols = cols;
 	_currentFrame = frame;
+	_isAnimated = false;
 	_isVisible = visible;
 
 	int frameWidth = _width / _cols;

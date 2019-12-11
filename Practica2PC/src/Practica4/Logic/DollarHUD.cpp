@@ -1,4 +1,5 @@
 #include "DollarHUD.h"
+#include <Renderer/Renderer.h>
 
 DollarHUD::DollarHUD()
 {
@@ -28,7 +29,7 @@ void DollarHUD::switchSelected()
 	else
 		_sprite.setFrame(currentFrame - 1);
 
-	_hasChanged = true;
+	_pendingFrames = Renderer::getNumBuffers();
 }
 
 void DollarHUD::depositMoney()
