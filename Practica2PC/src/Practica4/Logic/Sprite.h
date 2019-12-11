@@ -40,6 +40,7 @@ public:
 
 	void addAnim(std::string name, AnimInfo& animInfo);
 	void setAnim(std::string name);
+	void setFrame(char frame);
 
 	void setCurrentRect(Rect rect);
 	Rect getRect();

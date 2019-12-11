@@ -28,10 +28,10 @@ void Sprite::init(Resources::ImageId id, char rows, char cols, char frame, bool 
 	_currentFrame = frame;
 	_isVisible = visible;
 
-	int frameWidth = _width / cols;
-	int frameHeight = _height / rows;
-	int left = (frame % cols)*frameWidth;
-	int top = (frame / cols)*frameHeight;
+	int frameWidth = _width / _cols;
+	int frameHeight = _height / _rows;
+	int left = (frame % _cols)*frameWidth;
+	int top = (frame / _cols)*frameHeight;
 
 	_srcRect = Rect(left, top, frameWidth, frameHeight);
 	_currentSrcRect = _srcRect;
@@ -91,6 +91,11 @@ void Sprite::setAnim(std::string name)
 		_currentFrame = _currentAnim.iniFrame;
 		_isAnimated = true;
 	}
+}
+
+void Sprite::setFrame(char frame)
+{
+	_currentFrame = frame;
 }
 
 void Sprite::setCurrentRect(Rect rect)
