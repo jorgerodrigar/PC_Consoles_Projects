@@ -115,9 +115,9 @@ void DoorEvent::init()
 void DoorEvent::render(RendererThread * renderThread)
 {
 	if (_pendingFrames > 0 && _active) {
-		//_sprite.render(_x, _y, renderThread);
+		_sprite.render(_x, _y, renderThread);
 		_door.render(_x + _centerX, _y + _centerY, renderThread);
-		//_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
+		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
 		//std::cout << "  " << _door.getCurrentFrame() << std::endl;
 		_pendingFrames--;
 	}

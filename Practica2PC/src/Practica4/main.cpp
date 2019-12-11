@@ -4,8 +4,7 @@
 #include <Input/Input.h>
 #include <Input/InputData.h>
 #include <Utils/Resources.h>
-#include <Logic/GameObject.h>
-#include <Logic/DoorEvent.h>
+#include <Logic/GameManager.h>
 #include <iostream>
 
 int main() {
@@ -18,9 +17,9 @@ int main() {
 	
 	int frame = 0;
 	
-	DoorEvent go;
-	go.init();
-	go.setId(0);
+	GameManager* gm;
+	gm = GameManager::getInstance();
+	gm->init(&rendererThread);
 
 	bool kk = false;
 	InputData data;
@@ -32,40 +31,8 @@ int main() {
 		//Renderer::clear(0x000000);
 		Input::tick();
 
-		data = Input::getUserInput();
-		go.isClosed();
-		if (data.buttonsInfo.L1 == 1.0f) {
-			kk = false;
-			if (go.isClosed()) {
-				go.startRandomEvent();
-				std::cout << "kk" << std::endl;
-			}
-		}
-		/*else if (data.leftStick.x > 0) {
-			if (!go.isClosed() && kk1) {
-				go.receiveMessage(ShootMessage(MessageType::SHOOT, 0));
-				kk1 = false;
-			}
-		}*/
-		//else kk = true;
-		/*if (go.isClosed() && !kk1)
-			kk1 = true;*/
-
-		if (kk)
-			frame--;
-		else
-			frame++;
-
-		//go.setX(go.getX() + Platform::getDeltaTime() * 50);
-		//go.setX(frame * 10);
-		//std::cout << data.buttonsInfo.L1 << std::endl;
-		/*if(!kk)
-			go.setX(go.getX() + Platform::getDeltaTime()*50);
-		else
-			go.setX(go.getX() - Platform::getDeltaTime()*50);*/
-
-		go.update(Platform::getDeltaTime()); 
-		go.render(&rendererThread);
+		gm->update(Platform::getDeltaTime()); 
+		gm->render();
 
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
@@ -76,6 +43,7 @@ int main() {
 
 	rendererThread.stop();
 
+	GameManager::release();
 	Resources::release();
 	Input::release();
 	Renderer::release();

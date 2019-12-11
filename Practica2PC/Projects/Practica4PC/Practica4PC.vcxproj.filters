@@ -63,14 +63,20 @@
     <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Logic\DoorEvent.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Logic\DollarHUD.cpp">
       <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\GameManager.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\Shooter.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +128,20 @@
     <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h">
       <Filter>Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\DoorEvent.h">
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\DollarHUD.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\GameManager.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\Shooter.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
