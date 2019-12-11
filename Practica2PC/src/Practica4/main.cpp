@@ -32,6 +32,7 @@ int main() {
 	bool kk = false;
 	InputData data;
 	rendererThread.start();
+		bool kk1 = true;
 	while (Platform::tick())
 	{
 		//Renderer::clear(0x000000);
@@ -43,7 +44,17 @@ int main() {
 			if(go.isClosed())
 				go.startRandomEvent();
 		}
+		/*else if (data.leftStick.x > 0) {
+			if (!go.isClosed() && kk1) {
+				go.receiveMessage(ShootMessage(MessageType::SHOOT, 0));
+				kk1 = false;
+			}
+		}*/
 		else kk = true;
+
+		/*if (go.isClosed() && !kk1)
+			kk1 = true;*/
+
 		if (kk)
 			frame--;
 		else

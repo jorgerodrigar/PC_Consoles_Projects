@@ -2,53 +2,69 @@
 #include <Utils/Resources.h>
 #include <iostream>
 
-void DoorEvent::throwRandomEvent()
+//Resetea el sprite actual del evento elegido anteriormente.
+//Si es un cliente, lo hace visible y setea su animacion a "idle". Si es un bandido, 
+//hace un random y, dependiendo del mismo, decide si aparece apuntando al jugador o no.
+void DoorEvent::resetCurrentEventSprite()
 {
-	unsigned int rnd = rand() % 2;
-	if (rnd) {
-		_client.setVisible(true);
-		_currentSprite = &_client;
-	}
-	else {
-		_bandit.setVisible(true);
-		_currentSprite = &_bandit;
+	_currentEventSprite->setVisible(true);
+	_currentEventSprite->setAnim("idle");
+
+	if (_currentEventSprite == &_bandit) {
+		unsigned char rnd = rand() % 100;
+		if (rnd < 40) {
+			_currentEventSprite->setAnim("aiming");
+		}
 	}
 }
 
-void DoorEvent::adjustSprite()
+void DoorEvent::throwRandomEvent()
 {
-	Sprite::Rect r(0, 0, _currentSprite->getRect().right/3, _currentSprite->getRect().bottom);
+	unsigned char rnd = rand() % 2;
+	if (rnd) {
+		_currentEventSprite = &_client;
+	}
+	else {
+		_currentEventSprite = &_bandit;
+	}
+	resetCurrentEventSprite();
+}
+
+void DoorEvent::adjustCurrentEventSprite()
+{
+	Sprite::Rect r(0, 0, _currentEventSprite->getRect().right/3, _currentEventSprite->getRect().bottom);
 
 	switch (_door.getCurrentFrame())
 	{
 	case 0:
 		r.right = _client.getRect().left;
-		_currentSprite->setCurrentRect(r);
+		_currentEventSprite->setCurrentRect(r);
 		break;
 	case 1:
-		_currentSprite->setCurrentRect(r);
+		_currentEventSprite->setCurrentRect(r);
 		break;
 	case 2:
-		r.right = _currentSprite->getRect().right * (2.0f / 3.0f);
-		_currentSprite->setCurrentRect(r);
+		r.right = _currentEventSprite->getRect().right * (2.0f / 3.0f);
+		_currentEventSprite->setCurrentRect(r);
 		break;
 	case 3:
-		r.right = _currentSprite->getRect().right;
-		_currentSprite->setCurrentRect(r);
+		r.right = _currentEventSprite->getRect().right;
+		_currentEventSprite->setCurrentRect(r);
 		break;
 	default:
 		break;
 	}
 }
 
-bool const DoorEvent::isClient() const
+bool const DoorEvent::isValidTarget() const
 {
-	return _client.getVisible();
+	return (_currentEventSprite != &_client && _currentEventSprite->getCurrentFrame() == 1); 
+	//o currentSprite == &_client. anyadir tambien si el bandido te esta apuntando o no maybe (TODO: USAR MEJOR EL NOMBRE DE LA ANIMACION?)
 }
 
 void DoorEvent::checkShot()
 {
-	if (isClient()) {
+	if (!isValidTarget()) {
 		//pierde
 		std::cout << "Pierdesss" << std::endl;
 	}
@@ -70,18 +86,29 @@ void DoorEvent::init()
 {
 	_sprite.init(Resources::marcoPuerta, 1, 1);
 	_door.init(Resources::puertas, 1, 4, 0);
-	Sprite::AnimInfo openingAnimInfo(0.1, 0, 3, false);
+	Sprite::AnimInfo openingAnimInfo(0.1f, 0, 3, false);
 	_door.addAnim("opening", openingAnimInfo);
-	Sprite::AnimInfo closingAnimInfo(0.1, 3, 0, false);
+	Sprite::AnimInfo closingAnimInfo(0.1f, 3, 0, false);
 	_door.addAnim("closing", closingAnimInfo);
 
 	_client.init(Resources::cliente, 1, 3, 0, false);
+	Sprite::AnimInfo idleAnimInfo(0, 0, 0, false);
+	_client.addAnim("idle", idleAnimInfo);
+	Sprite::AnimInfo dyingAnimInfo(0.8f, 1, 2, false);
+	_client.addAnim("dying", dyingAnimInfo);
+
 	_bandit.init(Resources::ladron, 1, 5, 0, false);
+	_bandit.addAnim("idle", idleAnimInfo);
+	Sprite::AnimInfo aimingAnimInfo(0, 1, 1, false);
+	_bandit.addAnim("aiming", aimingAnimInfo);
+	dyingAnimInfo.iniFrame = 2; 
+	dyingAnimInfo.endFrame = 3;
+	_bandit.addAnim("dying", dyingAnimInfo);
 
 	_centerX = getX() + (32 * 2); //provisional xd
 	_centerY = getY() + (24 * 2);
 
-	_currentSprite = &_client;
+	_currentEventSprite = &_client;
 }
 
 void DoorEvent::render(RendererThread * renderThread)
@@ -89,8 +116,7 @@ void DoorEvent::render(RendererThread * renderThread)
 	if (_hasChanged && _active) {
 		_sprite.render(_x, _y, renderThread);
 		_door.render(_x + _centerX, _y + _centerY, renderThread);
-		_client.render(_x + _centerX, _y + _centerY, renderThread);
-		_bandit.render(_x + _centerX, _y + _centerY, renderThread);
+		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
 		_hasChanged = false;
 	}
 }
@@ -100,8 +126,7 @@ void DoorEvent::forceRender(RendererThread * renderThread)
 	if (_active) {
 		_sprite.render(_x, _y, renderThread);
 		_door.render(_x + _centerX, _y + _centerY, renderThread);
-		_client.render(_x + _centerX, _y + _centerY, renderThread);
-		_bandit.render(_x + _centerX, _y + _centerY, renderThread);
+		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
 		_hasChanged = false;
 	}
 }
@@ -110,6 +135,7 @@ void DoorEvent::update(double deltaTime)
 {
 	if (!isClosed()) {
 		timer += deltaTime;
+
 		if (timer >= timeToClose) {
 			//bandido dispara, cliente deposita dinero i guess
 			closeDoor();
@@ -117,12 +143,11 @@ void DoorEvent::update(double deltaTime)
 		}
 	}
 
-	bool aux = _sprite.update(deltaTime) || _door.update(deltaTime) || _client.update(deltaTime) || _bandit.update(deltaTime);
+	bool aux = _sprite.update(deltaTime) || _door.update(deltaTime) || _currentEventSprite->update(deltaTime);
 	if (!_hasChanged)
 		_hasChanged = aux;
 
-	adjustSprite();
-	//setX(getX() + (deltaTime * 100));
+	adjustCurrentEventSprite();
 }
 
 ///Receptor de mensajes de la puerta.
@@ -137,6 +162,8 @@ bool DoorEvent::receiveMessage(const Message & message)
 		const ShootMessage* shootMessage = static_cast<const ShootMessage*>(&message);
 		if (shootMessage->id == getId()) {
 			checkShot();
+			_currentEventSprite->setAnim("dying");
+			_hasChanged = true;
 			return true;
 		}
 		return false;
