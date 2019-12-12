@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include <Utils/Emitter.h>
 
-class Shooter :	public GameObject, Emitter 
+class Shooter :	public GameObject, public Emitter 
 {
 private:
 	float _deadZone;

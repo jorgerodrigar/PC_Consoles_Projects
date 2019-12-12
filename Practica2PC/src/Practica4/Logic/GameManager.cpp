@@ -3,6 +3,7 @@
 #include <Logic/DoorEvent.h>
 #include <Renderer/RendererThread.h>
 #include <Utils/Message.h>
+#include <Logic/Shooter.h>
 
 /*PROVISIONAL*/
 #include <Input/Input.h>
@@ -19,6 +20,7 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+	delete _shooter; _shooter = nullptr;
 }
 
 GameManager * GameManager::getInstance()
@@ -41,7 +43,10 @@ void GameManager::init(RendererThread* rendererThread)
 {
 	_renderThread = rendererThread;
 	_dollars = std::vector<DollarHUD>();
-	_doors = std::vector<DoorEvent>();
+	_doors = std::vector<DoorEvent*>();
+	_shooter = new Shooter();
+
+	_shooter->addListener(this);
 
 	for (int i = 0; i < 9; i++) {
 		DollarHUD go;
@@ -51,12 +56,13 @@ void GameManager::init(RendererThread* rendererThread)
 	}
 
 	for (int i = 0; i < 3; i++) {
-		DoorEvent go;
-		go.init();
-		go.setId(i);
-		go.setY(48 * 2);
-		go.setX(32 * 2 + (192 * i * 2));
+		DoorEvent* go = new DoorEvent();
+		go->init();
+		go->setId(i);
+		go->setY(48 * 2);
+		go->setX(32 * 2 + (192 * i * 2));
 		_doors.push_back(go);
+		addListener(_doors[i]);
 	}
 }
 
@@ -66,8 +72,8 @@ void GameManager::update(double deltaTime)
 	InputData data = Input::getUserInput();
 	if (data.buttonsInfo.L1 == 1) {
 		//kk = false;
-		if (_doors[1].isClosed())
-			_doors[1].startRandomEvent();
+		if (_doors[0]->isClosed())
+			_doors[0]->startRandomEvent();
 	}
 	/*else kk = true;
 	if (kk)
@@ -86,7 +92,7 @@ void GameManager::update(double deltaTime)
 		_dollars[i].update(deltaTime);
 	}
 	for (auto it = _doors.begin(); it != _doors.end(); it++) {
-		it->update(deltaTime);
+		(*it)->update(deltaTime);
 	}
 }
 
@@ -96,8 +102,13 @@ void GameManager::render()
 		_dollars[i].render(_renderThread);
 	}
 	for (auto it = _doors.begin(); it!=_doors.end(); it++) {
-		it->render(_renderThread);
+		(*it)->render(_renderThread);
 	}
+}
+
+void GameManager::handleInput()
+{
+	_shooter->handleInput();
 }
 
 bool GameManager::receiveMessage(const Message & message)
@@ -107,15 +118,23 @@ bool GameManager::receiveMessage(const Message & message)
 	case SHOOT:
 	{
 		const ShootMessage* shootMessage = static_cast<const ShootMessage*>(&message);
-		if (!_doors[shootMessage->id].isClosed()) {
+		if (!_doors[shootMessage->id + 1]->isClosed()) {
 			ShootMessage provMessage(SHOOT, shootMessage->id + 1);
 			sendMessage(provMessage);
+			//gameover si disparas a un target no valido (isvalidtarget)
 		}
 		return true;
-		break;
+	}
+	case DOOR_CLOSING:
+	{
+		const DoorClosingMessage* doorClosingMessage = static_cast<const DoorClosingMessage*>(&message);
+		if (!_doors[doorClosingMessage->id + 1]->isClosed()) {
+			//gameover si es -1
+			//si no depositan dinero
+		}
+		return true;
 	}
 	default:
 		return false;
-		break;
 	}
 }

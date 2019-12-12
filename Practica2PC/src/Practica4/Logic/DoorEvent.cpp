@@ -119,6 +119,7 @@ void DoorEvent::render(RendererThread * renderThread)
 		_door.render(_x + _centerX, _y + _centerY, renderThread);
 		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
 		//std::cout << "  " << _door.getCurrentFrame() << std::endl;
+
 		_pendingFrames--;
 	}
 }
@@ -137,6 +138,7 @@ void DoorEvent::update(double deltaTime)
 	}
 
 	bool aux = _sprite.update(deltaTime) || _door.update(deltaTime) || _currentEventSprite->update(deltaTime);
+
 	if (aux)
 		_pendingFrames = Renderer::getNumBuffers();
 

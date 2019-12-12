@@ -23,12 +23,14 @@ void Shooter::handleInput()
 
 	if (inputData.leftStick.x > _deadZone) {
 		ShootMessage message = ShootMessage(SHOOT, 1);
+		sendMessage(message);
 	}
 	else if (inputData.leftStick.x < -_deadZone) {
 		ShootMessage message = ShootMessage(SHOOT, -1);
+		sendMessage(message);
 	}
 	else {
 		ShootMessage message = ShootMessage(SHOOT, 0);
-		sendMessage(message);
+		//sendMessage(message);
 	}
 }

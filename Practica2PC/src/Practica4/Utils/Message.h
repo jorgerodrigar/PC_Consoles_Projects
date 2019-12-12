@@ -6,7 +6,8 @@ enum MessageType
 	DEFAULT,
 	TEST,
 	INPUT_EVENT,
-	SHOOT
+	SHOOT,
+	DOOR_CLOSING
 };
 
 struct Message
@@ -25,5 +26,11 @@ struct ShootMessage : public Message //mensaje de disparo. Lleva el identificado
 {
 	const char id;
 	ShootMessage(MessageType type, const char id) : Message(type), id(id) {};
+};
+
+struct DoorClosingMessage : public Message //mensaje de disparo. Lleva el identificador de la puerta que ha sido disparada
+{
+	const char id;
+	DoorClosingMessage(MessageType type, const char id) : Message(type), id(id) {};
 };
 

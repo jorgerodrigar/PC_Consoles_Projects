@@ -31,6 +31,7 @@ int main() {
 		//Renderer::clear(0x000000);
 		Input::tick();
 
+		gm->handleInput();
 		gm->update(Platform::getDeltaTime()); 
 		gm->render();
 

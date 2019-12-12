@@ -8,14 +8,14 @@ class DoorEvent;
 class DollarHUD;
 class Shooter;
 
-class GameManager: public Listener, Emitter
+class GameManager: public Listener, public Emitter
 {
 private:
 	RendererThread* _renderThread;
 
 	std::vector<DollarHUD> _dollars;
-	std::vector<DoorEvent> _doors;
-	//Shooter _shooter;
+	std::vector<DoorEvent*> _doors;
+	Shooter* _shooter;
 
 	static GameManager* _instance;
 
@@ -34,6 +34,7 @@ public:
 	void init(RendererThread* rendererThread);
 	void update(double deltaTime);
 	void render();
+	void handleInput();
 
 	virtual bool receiveMessage(const Message& message);
 };
