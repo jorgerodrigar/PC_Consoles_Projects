@@ -11,6 +11,7 @@ private:
 	unsigned char _id;
 	float timeToClose = 5.0f;
 	float timer = 0;
+	float _vel = 0.0f;
 
 	void resetCurrentEventSprite();
 	void throwRandomEvent(); //lanza un evento aleatorio (50% bandido, 50% cliente)
@@ -33,6 +34,8 @@ public:
 	bool const isClosed() const;
 	bool const isValidTarget() const;
 	unsigned char const getId() const;
+	float getVel();
 
 	void setId(unsigned char value);
+	void setVel(float vel);
 };

@@ -145,6 +145,7 @@ void DoorEvent::update(double deltaTime)
 		_pendingFrames = Renderer::getNumBuffers();
 
 	adjustCurrentEventSprite();
+	setX(getX() + (deltaTime * _vel));
 }
 
 ///Receptor de mensajes de la puerta.
@@ -201,7 +202,17 @@ unsigned char const DoorEvent::getId() const
 	return _id;
 }
 
+float DoorEvent::getVel()
+{
+	return _vel;
+}
+
 void DoorEvent::setId(unsigned char value)
 {
 	_id = value;
+}
+
+void DoorEvent::setVel(float vel)
+{
+	_vel = vel;
 }

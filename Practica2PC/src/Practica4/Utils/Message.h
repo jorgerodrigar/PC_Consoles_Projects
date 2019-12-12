@@ -7,7 +7,8 @@ enum MessageType
 	TEST,
 	INPUT_EVENT,
 	SHOOT,
-	DOOR_CLOSING
+	DOOR_CLOSING,
+	LATERAL_SCROLL
 };
 
 struct Message
@@ -32,5 +33,12 @@ struct DoorClosingMessage : public Message //mensaje de disparo. Lleva el identi
 {
 	const char id;
 	DoorClosingMessage(MessageType type, const char id) : Message(type), id(id) {};
+};
+
+struct ScrollMessage : public Message //mensaje de scroll. Indica la velocidad del scroll y su direccion (-1, 1)
+{
+	const float vel;
+	const int dir;
+	ScrollMessage(MessageType type, const float vel, const int dir) : Message(type), vel(vel), dir(dir) {};
 };
 

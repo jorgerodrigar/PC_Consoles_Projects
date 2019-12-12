@@ -4,11 +4,13 @@
 #include <Renderer/RendererThread.h>
 #include <Utils/Message.h>
 #include <Logic/Shooter.h>
+#include <Logic/ScrollManager.h>
 
 /*PROVISIONAL*/
 #include <Input/Input.h>
 #include <Input/InputData.h>
 #include <Platform/Platform.h>
+#include <Renderer/Renderer.h>
 #include <iostream>
 /*PROVISIONAL*/
 
@@ -22,6 +24,7 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
 	delete _shooter; _shooter = nullptr;
+	delete _scrollManager; _scrollManager = nullptr;
 }
 
 GameManager * GameManager::getInstance()
@@ -47,7 +50,11 @@ void GameManager::init(RendererThread* rendererThread)
 	_doors = std::vector<DoorEvent*>();
 	_shooter = new Shooter();
 
+	_scrollManager = new ScrollManager(150.0f); //vel de scroll
+	scrollDir = scrollVel = 0;
+
 	_shooter->addListener(this);
+	_scrollManager->addListener(this);
 
 	for (int i = 0; i < 9; i++) {
 		DollarHUD go;
@@ -56,7 +63,7 @@ void GameManager::init(RendererThread* rendererThread)
 		_dollars.push_back(go);
 	}
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		DoorEvent* go = new DoorEvent();
 		go->init();
 		go->setId(i);
@@ -71,12 +78,12 @@ void GameManager::init(RendererThread* rendererThread)
 void GameManager::update(double deltaTime)
 {
 	/*PROVISIONAL*/
-	InputData data = Input::getUserInput();
+	/*InputData data = Input::getUserInput();
 	if (data.buttonsInfo.L1 == 1) {
 		//kk = false;
 		if (_doors[0]->isClosed())
 			_doors[0]->startRandomEvent();
-	}
+	}*/
 	/*else kk = true;
 	if (kk)
 		frame--;
@@ -93,8 +100,23 @@ void GameManager::update(double deltaTime)
 	for (int i = 0; i < _dollars.size(); i++) {
 		_dollars[i].update(deltaTime);
 	}
+	
+	_scrollManager->update();
+
+	int i = 0;
 	for (auto it = _doors.begin(); it != _doors.end(); it++) {
 		(*it)->update(deltaTime);
+
+		if ((*it)->getVel() != 0) {
+			if (scrollDir > 0 && (*it)->getX() >= targetPositions[i] ||
+				scrollDir < 0 && (*it)->getX() <= targetPositions[i]) {
+				scrollVel = 0.0f;
+				(*it)->setVel(scrollVel);
+				(*it)->setX(targetPositions[i]);
+			}
+		}
+
+		i++;
 	}
 }
 
@@ -135,7 +157,33 @@ bool GameManager::receiveMessage(const Message & message)
 		//si es 1, depositan dinero
 		return true;
 	}
+	case MessageType::LATERAL_SCROLL:
+	{
+		const ScrollMessage* scrollMessage = static_cast<const ScrollMessage*>(&message);
+		if (scrollVel == 0) {
+			scrollDir = scrollMessage->dir;
+			scrollVel = scrollMessage->vel;
+			int i = 0;
+			for (auto it = _doors.begin(); it != _doors.end(); it++) {
+				if (isOutsideBounds((*it)->getX())) {
+					if (scrollDir > 0)
+						(*it)->setX((32.0f*2.0f) - (192.0f*2.0f)); // PROVISIONAL
+					else if (scrollDir < 0)
+						(*it)->setX(Renderer::getWindowWidth() - (32.0f*2.0f)); // PROVISIONAL
+				}
+				targetPositions[i] = (*it)->getX() + (scrollDir * 192 * 2);// PROVISIONAL
+				(*it)->setVel(scrollDir*scrollVel);
+				i++;
+			}
+		}
+		return true;
+	}
 	default:
 		return false;
 	}
+}
+
+bool GameManager::isOutsideBounds(float x) // PROVISIONAL
+{
+	return (x >= Renderer::getWindowWidth() - 32.0f*2.0f || x + (192 * 2) <= 32.0f*2.0f);
 }

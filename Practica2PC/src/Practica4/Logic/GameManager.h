@@ -7,6 +7,7 @@ class RendererThread;
 class DoorEvent;
 class DollarHUD;
 class Shooter;
+class ScrollManager;
 
 class GameManager: public Listener, public Emitter
 {
@@ -17,12 +18,19 @@ private:
 	std::vector<DoorEvent*> _doors;
 	Shooter* _shooter;
 
+	ScrollManager* _scrollManager;
+	float targetPositions[4]; // PROVISIONAL
+	int scrollDir;
+	float scrollVel;
+
 	static GameManager* _instance;
 
 	/*PROVISIONAL*/
 	bool kk;
 	int frame;
 	/*PROVISIONAL*/
+
+	bool isOutsideBounds(float x);
 
 public:
 	GameManager();

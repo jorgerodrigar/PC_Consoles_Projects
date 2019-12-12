@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\ScrollManager.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Practica4\Platform\Platform.h">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\ScrollManager.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
