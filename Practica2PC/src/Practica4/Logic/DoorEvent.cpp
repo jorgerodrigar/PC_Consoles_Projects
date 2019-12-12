@@ -181,7 +181,7 @@ void DoorEvent::closeDoor()
 	//si no se cumple esta condicion, significa o que el target ha sido disparado y por tanto no puede hacer nada 
 	//o que el target es un bandido que no aparece apuntando, por lo que no envia ningun mensaje (no hace nada)
 	if ((isValid || _currentEventSprite == &_client) && _currentEventSprite->getCurrentAnimName() != "dying") {
-		DoorClosingMessage m(DOOR_CLOSING, isValid ? -1 : 1);
+		DoorClosingMessage m(DOOR_CLOSING, isValid ? 1 : -1);
 		sendMessage(m);
 	}
 }

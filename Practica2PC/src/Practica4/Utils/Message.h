@@ -29,7 +29,7 @@ struct ShootMessage : public Message //mensaje de disparo. Lleva el identificado
 	ShootMessage(MessageType type, const char id) : Message(type), id(id) {};
 };
 
-struct DoorClosingMessage : public Message //mensaje de disparo. Lleva el identificador de la puerta que ha sido disparada
+struct DoorClosingMessage : public Message 
 {
 	const char id;
 	DoorClosingMessage(MessageType type, const char id) : Message(type), id(id) {};

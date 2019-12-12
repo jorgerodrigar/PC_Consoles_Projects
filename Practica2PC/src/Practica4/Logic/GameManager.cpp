@@ -5,6 +5,7 @@
 #include <Utils/Message.h>
 #include <Logic/Shooter.h>
 #include <Logic/ScrollManager.h>
+#include <Utils/Resources.h>
 
 /*PROVISIONAL*/
 #include <Input/Input.h>
@@ -48,6 +49,7 @@ void GameManager::init(RendererThread* rendererThread)
 	_renderThread = rendererThread;
 	_dollars = std::vector<DollarHUD>();
 	_doors = std::vector<DoorEvent*>();
+	_screenDoors = std::vector<ScreenDoor>();
 	_shooter = new Shooter();
 
 	_scrollManager = new ScrollManager(150.0f); //vel de scroll
@@ -56,46 +58,45 @@ void GameManager::init(RendererThread* rendererThread)
 	_shooter->addListener(this);
 	_scrollManager->addListener(this);
 
+	_bangSprite.init(Resources::bang, 1, 6, 0, false);
+	Sprite::AnimInfo bangAnimInfo(0.3f, 0, 5, false);
+	_bangSprite.addAnim("bang", bangAnimInfo);
+
+	_accFactor = 0.1;
+	_round = 0;
+
 	for (int i = 0; i < 9; i++) {
-		DollarHUD go;
-		go.init();
-		go.setX(32.0f * 2 + (i * 64 * 2));
-		_dollars.push_back(go);
+		addDollar(i);
 	}
 
 	for (int i = 0; i < 4; i++) {
-		DoorEvent* go = new DoorEvent();
-		go->init();
-		go->setId(i);
-		go->setY(48 * 2);
-		go->setX(32 * 2 + (192 * i * 2));
-		_doors.push_back(go);
-		addListener(_doors[i]);
-		_doors[i]->addListener(this);
+		addDoor(i);
 	}
+
+	reset();
+}
+
+void GameManager::reset()
+{
+	_round++;
+	_timePerEvent = 2 - (_round * _accFactor);
+	_currentTime = 0;
+	_isEventActive = _gameOver = false;
+	_bangSprite.setVisible(false);
+	_gameOver = false;
 }
 
 void GameManager::update(double deltaTime)
 {
-	/*PROVISIONAL*/
-	/*InputData data = Input::getUserInput();
-	if (data.buttonsInfo.L1 == 1) {
-		//kk = false;
-		if (_doors[0]->isClosed())
-			_doors[0]->startRandomEvent();
-	}*/
-	/*else kk = true;
-	if (kk)
-		frame--;
-	else
-		frame++;
-	//go.setX(frame * 10);
-	//std::cout << data.buttonsInfo.L1 << std::endl;
-	if (!kk)
-		_doors[1].setX(_doors[1].getX() + Platform::getDeltaTime() * 50);
-	else
-		_doors[1].setX(_doors[1].getX() - Platform::getDeltaTime() * 50);
-	/*PROVISIONAL*/
+	if(!_isEventActive || _gameOver) _currentTime += deltaTime;
+
+	if (_currentTime >= _timePerEvent) {
+		if (!_gameOver) {
+			activateRandomEvent();
+			_currentTime = 0;
+		}
+		else gameOver(); 
+	}
 
 	for (int i = 0; i < _dollars.size(); i++) {
 		_dollars[i].update(deltaTime);
@@ -118,6 +119,8 @@ void GameManager::update(double deltaTime)
 
 		i++;
 	}
+
+	_bangSprite.update(deltaTime);
 }
 
 void GameManager::render()
@@ -128,6 +131,8 @@ void GameManager::render()
 	for (auto it = _doors.begin(); it!=_doors.end(); it++) {
 		(*it)->render(_renderThread);
 	}
+
+	_bangSprite.render(640, 360, _renderThread); //TODO: recibir medidas
 }
 
 void GameManager::handleInput()
@@ -151,9 +156,14 @@ bool GameManager::receiveMessage(const Message & message)
 	}
 	case DOOR_CLOSING:
 	{
+		_isEventActive = false;
+		
 		const DoorClosingMessage* doorClosingMessage = static_cast<const DoorClosingMessage*>(&message);
-		//gameover si es -1
-		std::cout << (int)doorClosingMessage->id << std::endl;
+		if (doorClosingMessage->id == -1) {
+			/*_gameOver = true;
+			_currentTime = 0;
+			_timePerEvent = 2;*/
+		}
 		//si es 1, depositan dinero
 		return true;
 	}
@@ -181,6 +191,52 @@ bool GameManager::receiveMessage(const Message & message)
 	default:
 		return false;
 	}
+}
+
+void GameManager::addDoor(int id)
+{
+	DoorEvent* go = new DoorEvent();
+	go->init();
+	go->setId(id);
+	go->setY(48 * 2);
+	go->setX(32 * 2 + (192 * id * 2));
+	_doors.push_back(go);
+	addListener(_doors[id]);
+	_doors[id]->addListener(this);
+
+	ScreenDoor screenDoor;
+	screenDoor.currentId = id;
+	screenDoor.currentDollar = id;
+	_screenDoors.push_back(screenDoor);
+}
+
+void GameManager::addDollar(int id)
+{
+	DollarHUD go;
+	go.init();
+	go.setX(32.0f * 2 + (id * 64 * 2));
+	_dollars.push_back(go);
+}
+
+void GameManager::activateRandomEvent()
+{
+	unsigned char rnd = rand() % 3;
+	while (!_doors[_screenDoors[rnd].currentId]->isClosed()) rnd = rand() % 3;
+
+	_isEventActive = true;
+	_doors[_screenDoors[rnd].currentId]->startRandomEvent();
+}
+
+void GameManager::gameOver()
+{
+	if (!_bangSprite.isAnimated()) {
+		_bangSprite.setVisible(true);
+		_bangSprite.setAnim("bang");
+	}
+	std::cout << _bangSprite.getCurrentFrame() << std::endl;
+	if (_bangSprite.getCurrentFrame() == 5)	reset();
+
+	Renderer::clear(0x000000);
 }
 
 bool GameManager::isOutsideBounds(float x) // PROVISIONAL
