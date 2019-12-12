@@ -5,7 +5,7 @@
 class Listener;
 class Emitter {
 private:
-	static std::list<Listener*> _listeners;
+	std::list<Listener*> _listeners;
 
 public:
 	Emitter();

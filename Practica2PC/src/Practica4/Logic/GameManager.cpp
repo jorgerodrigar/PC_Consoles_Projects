@@ -9,6 +9,7 @@
 #include <Input/Input.h>
 #include <Input/InputData.h>
 #include <Platform/Platform.h>
+#include <iostream>
 /*PROVISIONAL*/
 
 GameManager* GameManager::_instance = nullptr;
@@ -63,6 +64,7 @@ void GameManager::init(RendererThread* rendererThread)
 		go->setX(32 * 2 + (192 * i * 2));
 		_doors.push_back(go);
 		addListener(_doors[i]);
+		_doors[i]->addListener(this);
 	}
 }
 
@@ -128,10 +130,9 @@ bool GameManager::receiveMessage(const Message & message)
 	case DOOR_CLOSING:
 	{
 		const DoorClosingMessage* doorClosingMessage = static_cast<const DoorClosingMessage*>(&message);
-		if (!_doors[doorClosingMessage->id + 1]->isClosed()) {
-			//gameover si es -1
-			//si no depositan dinero
-		}
+		//gameover si es -1
+		std::cout << (int)doorClosingMessage->id << std::endl;
+		//si es 1, depositan dinero
 		return true;
 	}
 	default:

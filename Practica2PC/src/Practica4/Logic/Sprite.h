@@ -12,6 +12,7 @@ public:
 	~Sprite();
 
 	struct AnimInfo {
+		std::string name;
 		float rate;
 		char iniFrame, endFrame;
 		bool isLooped;
@@ -50,6 +51,7 @@ public:
 	int const getFrameWidth() const;
 	int const getFrameHeight() const;
 	int const getCurrentFrame() const;
+	std::string getCurrentAnimName() const;
 	bool const getVisible() const;
 	bool const isAnimated() const;
 

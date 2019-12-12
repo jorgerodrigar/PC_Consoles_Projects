@@ -1,21 +1,21 @@
 #include <Logic/GameObject.h>
 #include <Logic/Sprite.h>
 #include <Utils/Listener.h>
+#include <Utils/Emitter.h>
 
-class DoorEvent : public GameObject, public Listener {
+class DoorEvent : public GameObject, public Listener, public Emitter{
 private:
 	Sprite _door, _client, _bandit;
 	Sprite* _currentEventSprite;
 	unsigned int _centerX, _centerY;
 	unsigned char _id;
-	bool _isClosed = true;
 	float timeToClose = 5.0f;
 	float timer = 0;
 
 	void resetCurrentEventSprite();
 	void throwRandomEvent(); //lanza un evento aleatorio (50% bandido, 50% cliente)
 	void adjustCurrentEventSprite();
-	void checkShot();
+	void processShot();
 	void openDoor();
 	void closeDoor();
 

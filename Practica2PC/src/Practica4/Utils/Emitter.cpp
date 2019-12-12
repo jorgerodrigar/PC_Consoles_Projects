@@ -2,7 +2,6 @@
 #include <Utils/Listener.h>
 #if defined(_WIN64) || defined(_WIN32)
 
-std::list<Listener*> Emitter::_listeners;
 Emitter::Emitter()
 {
 }

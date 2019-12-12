@@ -82,6 +82,7 @@ void Sprite::render(int x, int y, RendererThread* renderThread)
 
 void Sprite::addAnim(std::string name, AnimInfo& animInfo)
 {
+	animInfo.name = name; //lo pongo aqui para no modificar todos los addAnim que no he hecho TODO: CAMBIARLO?
 	_animations.insert({ name, animInfo });
 }
 
@@ -200,4 +201,9 @@ void Sprite::sourceInWidthBounds(int& x, int boundMin, int boundMax)
 int const Sprite::getCurrentFrame() const
 {
 	return _currentFrame;
+}
+
+std::string Sprite::getCurrentAnimName() const
+{
+	return _currentAnim.name;
 }

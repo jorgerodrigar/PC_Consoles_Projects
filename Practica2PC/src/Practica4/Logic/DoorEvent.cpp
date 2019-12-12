@@ -63,15 +63,19 @@ bool const DoorEvent::isValidTarget() const
 	//o currentSprite == &_client. anyadir tambien si el bandido te esta apuntando o no maybe (TODO: USAR MEJOR EL NOMBRE DE LA ANIMACION?)
 }
 
-void DoorEvent::checkShot()
+void DoorEvent::processShot()
 {
-	if (!isValidTarget()) {
-		//pierde
-		std::cout << "Pierdesss" << std::endl;
-	}
-	else {
-		//si te esta disparando... si no....
-		std::cout << "GJ BRO" << std::endl;
+	if (_currentEventSprite->getCurrentAnimName() != "dying") { //evita que puedas disparar mientras esta muriendo
+		if (!isValidTarget()) {
+			//pierde
+			std::cout << "Pierdesss" << std::endl;
+		}
+		else {
+			//si te esta disparando... si no....
+			std::cout << "GJ BRO" << std::endl;
+		}
+		_currentEventSprite->setAnim("dying");
+		_pendingFrames = Renderer::getNumBuffers();
 	}
 }
 
@@ -118,7 +122,6 @@ void DoorEvent::render(RendererThread * renderThread)
 		_sprite.render(_x, _y, renderThread);
 		_door.render(_x + _centerX, _y + _centerY, renderThread);
 		_currentEventSprite->render(_x + _centerX, _y + _centerY, renderThread);
-		//std::cout << "  " << _door.getCurrentFrame() << std::endl;
 
 		_pendingFrames--;
 	}
@@ -126,7 +129,6 @@ void DoorEvent::render(RendererThread * renderThread)
 
 void DoorEvent::update(double deltaTime)
 {
-	//std::cout << deltaTime << std::endl;
 	if (!isClosed()) {
 		timer += deltaTime;
 
@@ -156,9 +158,7 @@ bool DoorEvent::receiveMessage(const Message & message)
 	{
 		const ShootMessage* shootMessage = static_cast<const ShootMessage*>(&message);
 		if (shootMessage->id == getId()) {
-			checkShot();
-			_currentEventSprite->setAnim("dying");
-			_pendingFrames = Renderer::getNumBuffers();
+			processShot();
 			return true;
 		}
 		return false;
@@ -171,13 +171,18 @@ bool DoorEvent::receiveMessage(const Message & message)
 void DoorEvent::openDoor()
 {
 	_door.setAnim("opening");
-	_isClosed = false;
 }
 
 void DoorEvent::closeDoor()
 {
 	_door.setAnim("closing");
-	_isClosed = true;
+	bool isValid = isValidTarget();
+	//si no se cumple esta condicion, significa o que el target ha sido disparado y por tanto no puede hacer nada 
+	//o que el target es un bandido que no aparece apuntando, por lo que no envia ningun mensaje (no hace nada)
+	if ((isValid || _currentEventSprite == &_client) && _currentEventSprite->getCurrentAnimName() != "dying") {
+		DoorClosingMessage m(DOOR_CLOSING, isValid ? -1 : 1);
+		sendMessage(m);
+	}
 }
 
 void DoorEvent::startRandomEvent()
