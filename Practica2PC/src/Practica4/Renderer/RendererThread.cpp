@@ -11,7 +11,8 @@ void RendererThread::renderLoop()
 			switch (currentCommand.type)
 			{
 			case CLEAR:
-				Renderer::clear(currentCommand.params.color);
+				for(int i = 0; i < Renderer::getNumBuffers(); i++) 
+					Renderer::clear(currentCommand.params.color);
 				break;
 			case PUT_PIXEL:
 			{

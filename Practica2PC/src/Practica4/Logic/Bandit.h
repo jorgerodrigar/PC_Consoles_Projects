@@ -21,7 +21,7 @@ public:
 
 	virtual void init();
 
-	virtual bool receiveMessage(const Message& message);
+	virtual void receiveMessage(const Message& message);
 
 };
 

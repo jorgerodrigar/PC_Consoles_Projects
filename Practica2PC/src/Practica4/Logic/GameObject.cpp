@@ -35,10 +35,15 @@ void GameObject::render(RendererThread* renderThread)
 
 void GameObject::update(double deltaTime)
 {
-	bool aux = _sprite.update(deltaTime);
-	if (aux) {
+	if (_active && _sprite.update(deltaTime)) {
 		setDirty();
 	}
+}
+
+void GameObject::reset()
+{
+	_active = true;
+	setDirty();
 }
 
 bool GameObject::getActive()

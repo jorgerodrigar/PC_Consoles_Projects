@@ -23,6 +23,7 @@
     <ClCompile Include="..\..\src\Practica4\Input\PC\PCInput.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\BackgroundDoor.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Bandit.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Bang.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Client.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\DollarHUD.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Door.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="..\..\src\Practica4\Input\PC\PCInput.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\BackgroundDoor.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Bandit.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Bang.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Client.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\DollarHUD.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Door.h" />

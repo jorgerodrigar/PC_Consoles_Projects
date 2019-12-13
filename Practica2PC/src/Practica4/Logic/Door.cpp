@@ -57,23 +57,25 @@ void Door::update(double deltaTime)
 {
 	GameObject::update(deltaTime);
 
-	if (!isClosed()) {
-		timer += deltaTime;
+	if (_active) {
+		if (!isClosed()) {
+			timer += deltaTime;
 
-		if (timer >= timeToClose) {
-			closeDoor();
-			timer = 0;
+			if (timer >= timeToClose) {
+				closeDoor();
+				timer = 0;
+			}
 		}
+		else if (_isClosing) {
+			DoorClosedMessage m(DOOR_CLOSED, _id);
+			sendMessage(m);
+			_isClosing = false;
+		}
+		if (_sprite.isAnimated()) adjustSprite();
 	}
-	else if(_isClosing){
-		DoorClosedMessage m(DOOR_CLOSED, _id);
-		sendMessage(m);
-		_isClosing = false;
-	}
-	adjustSprite();
 }
 
-bool Door::receiveMessage(const Message & message)
+void Door::receiveMessage(const Message & message)
 {
 	switch (message.type)
 	{
@@ -81,20 +83,18 @@ bool Door::receiveMessage(const Message & message)
 		const StartEventMessage* startEvent = static_cast<const StartEventMessage*>(&message);
 		if (startEvent->id == _id) {
 			openDoor();
-			return true;
 		}
-		return false;
+		break;
 	}
 	case SHOOT: {
 		const ShootMessage* shootMessage = static_cast<const ShootMessage*>(&message);
-		if (shootMessage->id == _id) {
+		if (!isClosed() && shootMessage->id == _id) {
 			sendMessage(message);
-			return true;
 		}
-		return false;
+		break;
 	}
 	default:
-		return false;
+		break;
 	}
 }
 

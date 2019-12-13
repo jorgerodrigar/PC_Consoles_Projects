@@ -21,6 +21,8 @@ public:
 	virtual void update(double deltaTime);
 	virtual void handleInput() {};
 
+	virtual void reset();
+
 	bool getActive();
 	void setActive(bool value);
 

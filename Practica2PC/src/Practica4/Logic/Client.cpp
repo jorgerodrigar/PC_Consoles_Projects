@@ -19,7 +19,7 @@ void Client::init()
 	_sprite.addAnim("dying", dyingAnimInfo);
 }
 
-bool Client::receiveMessage(const Message & message)
+void Client::receiveMessage(const Message & message)
 {
 	switch (message.type)
 	{
@@ -29,29 +29,26 @@ bool Client::receiveMessage(const Message & message)
 		{
 			_currentDoorId = doorOpening->doorId;
 			openDoor();
-			return true;
 		}
-		return false;
+		break;
 	}
 	case DOOR_CLOSED: {
 		if (getActive())
 		{
 			closeDoor();
-			return true;
 		}
-		return false;
+		break;
 	}
 	case SET_DIRTY:
 		setDirty();
-		return true;
+		break;
 	case SHOOT:
 		if (getActive()){
 			getAShot();
-			return true;
 		}
-		return false;
+		break;
 	default:
-		return false;
+		break;
 	}
 }
 

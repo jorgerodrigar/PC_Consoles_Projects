@@ -36,7 +36,7 @@ void Bandit::init()
 	_sprite.setVisible(false);
 }
 
-bool Bandit::receiveMessage(const Message & message)
+void Bandit::receiveMessage(const Message & message)
 {
 	switch (message.type)
 	{
@@ -46,29 +46,26 @@ bool Bandit::receiveMessage(const Message & message)
 		{
 			_currentDoorId = doorOpening->doorId;
 			openDoor();
-			return true;
 		}
-		return false;
+		break;
 	}
 	case DOOR_CLOSED: {
 		if (getActive())
 		{
 			closeDoor();
-			return true;
 		}
-		return false;
+		break;
 	}
 	case SET_DIRTY:
 		setDirty();
-		return true;
+		break;
 	case SHOOT:
 		if (getActive()) {
 			getAShot();
-			return true;
 		}
-		return false;
+		break;
 	default:
-		return false;
+		break;
 	}
 }
 

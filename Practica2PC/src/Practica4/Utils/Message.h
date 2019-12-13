@@ -13,7 +13,8 @@ enum MessageType
 	LATERAL_SCROLL,
 	SET_DIRTY,
 	GAME_OVER,
-	DEPOSIT
+	DEPOSIT,
+	START_ROUND
 };
 
 struct Message
@@ -73,6 +74,11 @@ struct DepositMessage : public Message
 {
 	const char doorId;
 	DepositMessage(MessageType type, const char doorId) : Message(type), doorId(doorId) {};
+}; 
+
+struct StartRoundMessage : public Message
+{
+	StartRoundMessage(MessageType type) : Message(type) {};
 };
 
 

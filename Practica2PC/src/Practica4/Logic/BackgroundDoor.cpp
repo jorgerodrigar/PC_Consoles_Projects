@@ -19,12 +19,12 @@ void BackgroundDoor::init()
 	_sprite.setVisible(true);
 }
 
-bool BackgroundDoor::receiveMessage(const Message & message)
+void BackgroundDoor::receiveMessage(const Message & message)
 {
 	switch (message.type)
 	{
 	default:
-		return false;
+		break;
 	}
 }
 

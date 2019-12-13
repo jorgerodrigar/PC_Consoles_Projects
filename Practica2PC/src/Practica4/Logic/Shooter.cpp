@@ -19,20 +19,22 @@ void Shooter::init()
 
 void Shooter::handleInput()
 {
-	InputData inputData = Input::getUserInput();
+	if (_active) {
+		InputData inputData = Input::getUserInput();
 
-	if (inputData.triggersInfo.R2 > _deadZone) {
-		if (inputData.leftStick.x > _deadZone) {
-			ShootMessage message = ShootMessage(SHOOT, 1);
-			sendMessage(message);
-		}
-		else if (inputData.leftStick.x < -_deadZone) {
-			ShootMessage message = ShootMessage(SHOOT, -1);
-			sendMessage(message);
-		}
-		else {
-			ShootMessage message = ShootMessage(SHOOT, 0);
-			sendMessage(message);
+		if (inputData.triggersInfo.R2 > _deadZone) {
+			if (inputData.leftStick.x > _deadZone) {
+				ShootMessage message = ShootMessage(SHOOT, 2);
+				sendMessage(message);
+			}
+			else if (inputData.leftStick.x < -_deadZone) {
+				ShootMessage message = ShootMessage(SHOOT, 0);
+				sendMessage(message);
+			}
+			else {
+				ShootMessage message = ShootMessage(SHOOT, 1);
+				sendMessage(message);
+			}
 		}
 	}
 }

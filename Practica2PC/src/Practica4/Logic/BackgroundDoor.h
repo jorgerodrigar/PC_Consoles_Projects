@@ -11,7 +11,7 @@ public:
 
 	virtual void init();
 
-	virtual bool receiveMessage(const Message& message);
+	virtual void receiveMessage(const Message& message);
 	int const getCenterX() const;
 	int const getCenterY() const;
 

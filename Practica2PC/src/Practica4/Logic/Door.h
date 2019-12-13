@@ -22,7 +22,7 @@ public:
 
 	virtual void init();
 	virtual void update(double deltaTime);
-	virtual bool receiveMessage(const Message& message);
+	virtual void receiveMessage(const Message& message);
 
 	unsigned char const getId() const;
 	void setId(unsigned char value);
