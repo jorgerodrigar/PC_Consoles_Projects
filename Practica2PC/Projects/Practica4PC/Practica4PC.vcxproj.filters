@@ -63,9 +63,6 @@
     <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica4\Logic\DoorEvent.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Logic\DollarHUD.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
@@ -79,6 +76,18 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Logic\ScrollManager.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\Bandit.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\Client.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\Door.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\BackgroundDoor.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,9 +140,6 @@
     <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h">
       <Filter>Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Practica4\Logic\DoorEvent.h">
-      <Filter>Logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\DollarHUD.h">
       <Filter>Logic</Filter>
     </ClInclude>
@@ -147,6 +153,18 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\ScrollManager.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\Bandit.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\Client.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\Door.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\BackgroundDoor.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

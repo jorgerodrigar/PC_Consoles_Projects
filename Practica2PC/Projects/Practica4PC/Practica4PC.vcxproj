@@ -21,8 +21,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Practica4\Input\PC\InputListener.cpp" />
     <ClCompile Include="..\..\src\Practica4\Input\PC\PCInput.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\BackgroundDoor.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Bandit.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Client.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\DollarHUD.cpp" />
-    <ClCompile Include="..\..\src\Practica4\Logic\DoorEvent.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Door.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\GameManager.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\ScrollManager.cpp" />
@@ -42,8 +45,11 @@
     <ClInclude Include="..\..\src\Practica4\Input\InputData.h" />
     <ClInclude Include="..\..\src\Practica4\Input\PC\InputListener.h" />
     <ClInclude Include="..\..\src\Practica4\Input\PC\PCInput.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\BackgroundDoor.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Bandit.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Client.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\DollarHUD.h" />
-    <ClInclude Include="..\..\src\Practica4\Logic\DoorEvent.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Door.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\GameManager.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\ScrollManager.h" />

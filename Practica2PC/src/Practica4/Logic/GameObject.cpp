@@ -3,6 +3,11 @@
 #include <Renderer/Renderer.h>
 #include <iostream>
 
+void GameObject::setDirty()
+{
+	_pendingFrames = Renderer::getNumBuffers();
+}
+
 GameObject::GameObject(): _x(0), _y(0), _active(true), _pendingFrames(Renderer::getNumBuffers())
 {
 }
@@ -32,7 +37,7 @@ void GameObject::update(double deltaTime)
 {
 	bool aux = _sprite.update(deltaTime);
 	if (aux) {
-		_pendingFrames = Renderer::getNumBuffers();
+		setDirty();
 	}
 }
 
@@ -46,12 +51,12 @@ void GameObject::setActive(bool value)
 	_active = value;
 }
 
-float GameObject::getX()
+float const GameObject::getX() const
 {
 	return _x;
 }
 
-float GameObject::getY()
+float const GameObject::getY() const
 {
 	return _y;
 }
@@ -59,11 +64,11 @@ float GameObject::getY()
 void GameObject::setX(float value)
 {
 	_x = value;
-	_pendingFrames = Renderer::getNumBuffers();
+	setDirty();
 }
 
 void GameObject::setY(float value)
 {
 	_y = value;
-	_pendingFrames = Renderer::getNumBuffers();
+	setDirty();
 }

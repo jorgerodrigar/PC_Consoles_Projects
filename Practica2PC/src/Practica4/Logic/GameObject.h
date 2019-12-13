@@ -10,6 +10,7 @@ protected:
 	float _x, _y;
 	bool _active;
     int _pendingFrames;
+	void setDirty();
 
 public:
 	GameObject();
@@ -23,8 +24,8 @@ public:
 	bool getActive();
 	void setActive(bool value);
 
-	float getX();
-	float getY();
+	float const getX() const;
+	float const getY() const;
 	void setX(float value);
 	void setY(float value);
 };
