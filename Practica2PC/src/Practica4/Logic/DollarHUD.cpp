@@ -14,8 +14,17 @@ void DollarHUD::init()
 	_sprite.init(Resources::dolares, 1, 6);
 	Sprite::AnimInfo animInfo(0.2, 6, 3, false);
 	_sprite.addAnim("money", animInfo);
-
 	_id = 0;
+}
+
+void DollarHUD::update(double deltaTime)
+{
+	if (_moneyInserted && _sprite.getCurrentFrame() == 3) {
+		sendMessage(Message(MONEY_INSERTED));
+		_moneyInserted = false;
+	}
+
+	GameObject::update(deltaTime);
 }
 
 void DollarHUD::reset()
@@ -24,6 +33,7 @@ void DollarHUD::reset()
 	_selected = false;
 	_sprite.setFrame(0);
 	setDirty();
+	_moneyInserted = false;
 }
 
 void DollarHUD::setSelected()
@@ -77,6 +87,7 @@ void DollarHUD::receiveMessage(const Message & message)
 	case DEPOSIT: {
 		const IDMessage* msg = static_cast<const IDMessage*>(&message);
 		if (msg->id == _id) {
+			if (_sprite.getCurrentAnimName() != "money") _moneyInserted = true;
 			depositMoney();
 		}
 		break;

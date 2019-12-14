@@ -48,12 +48,13 @@ void GameManager::init(RendererThread* rendererThread)
 	_gameObjects = std::vector<GameObject*>();
 
 	_accFactor = 0.1;
-	_round = 0;
 	_iniTimePerEvent = 5;
 	_iniTimeToClose = 3;
 	_firstSeenDoor = 0;
 	_numOfDollars = 9;
 	_numOfVisibleDoors = 3;
+	_round = -1;
+	_gameOver = false;
 
 	ScrollManager* scroll = new ScrollManager(100.0f);
 	scroll->init();
@@ -87,6 +88,7 @@ void GameManager::init(RendererThread* rendererThread)
 		dollarHud->setX(_minBound + (i * 64));
 		dollarHud->setId(i);
 		addListener(dollarHud);
+		dollarHud->addListener(this);
 		_gameObjects.push_back(dollarHud);
 	}
 
@@ -111,14 +113,20 @@ void GameManager::init(RendererThread* rendererThread)
 
 void GameManager::reset()
 {
+	if (!_gameOver) {
+		_round++;
+	}
+	else _round = 0;
+
 	_timePerEvent = _iniTimePerEvent - (_round * _accFactor);
 	_timeToClose = _iniTimeToClose - (_round * _accFactor);
-	_round++;
+
 	_currentTime = 0;
 	_isEventActive = _gameOver = false;
 	_gameOver = false;
 	_firstSeenDoor = 0;
 	_isScrolling = false;
+	_dollarsInserted = 8;
 
 	for (int i = 0; i < _gameObjects.size(); i++) {
 		_gameObjects[i]->reset();
@@ -208,6 +216,10 @@ void GameManager::receiveMessage(const Message & message)
 		if (dollarId >= _numOfDollars) dollarId = dollarId - _numOfDollars;
 		sendMessage(IDMessage(DEPOSIT, dollarId));
 		break;
+	}
+	case MONEY_INSERTED: {
+		_dollarsInserted++;
+		if (_dollarsInserted == _numOfDollars) reset();
 	}
 	default:
 		break;

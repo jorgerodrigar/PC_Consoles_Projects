@@ -26,6 +26,7 @@ private:
 	bool _isEventActive, _gameOver, _isScrolling;
 	int _firstSeenDoor;
 	int _numOfDollars;
+	int _dollarsInserted;
 	int _numOfVisibleDoors;
 
 	void reset();

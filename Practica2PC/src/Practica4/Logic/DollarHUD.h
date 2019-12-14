@@ -1,11 +1,12 @@
 #pragma once
 #include "GameObject.h"
 #include <Utils/Listener.h>
+#include <Utils/Emitter.h>
 
-class DollarHUD : public GameObject, public Listener
+class DollarHUD : public GameObject, public Listener, public Emitter
 {
 private:
-	bool _selected;
+	bool _selected, _moneyInserted;
 	char _id;
 
 public:
@@ -13,6 +14,7 @@ public:
 	virtual ~DollarHUD();
 
 	virtual void init();
+	virtual void update(double deltaTime);
 	virtual void reset();
 
 	void setSelected();

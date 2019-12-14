@@ -12,8 +12,8 @@ Bang::~Bang()
 
 void Bang::init()
 {
-	setX(296);
-	setY(256);
+	setX(256);
+	setY(156);
 
 	_sprite.init(Resources::bang, 1, 6, 0);
 	Sprite::AnimInfo bangAnimInfo(0.35f, 0, 5, false);
