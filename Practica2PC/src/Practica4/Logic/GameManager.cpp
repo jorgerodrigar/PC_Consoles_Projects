@@ -126,7 +126,7 @@ void GameManager::reset()
 	_gameOver = false;
 	_firstSeenDoor = 0;
 	_isScrolling = false;
-	_dollarsInserted = 8;
+	_dollarsInserted = 0;
 
 	for (int i = 0; i < _gameObjects.size(); i++) {
 		_gameObjects[i]->reset();

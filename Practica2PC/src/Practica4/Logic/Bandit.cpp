@@ -97,10 +97,6 @@ void Bandit::closeDoor()
 void Bandit::getAShot()
 {
 	if (_sprite.getCurrentAnimName() != "dying") {
-		if (_isAiming) {
-			std::cout << "GJ BRO" << std::endl;
-		}
-
 		_sprite.setAnim("dying");
 		setDirty();
 	}

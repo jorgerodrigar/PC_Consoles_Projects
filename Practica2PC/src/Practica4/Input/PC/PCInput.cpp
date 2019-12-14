@@ -68,14 +68,17 @@ void PCInput::handleKeyDown(const SDL_Event& event)
 	case SDLK_1:
 		_inputData.leftStick.x = -1.0f;    // izq
 		_inputData.triggersInfo.R2 = 1.0f; // disparo
+		_inputData.triggersInfo.L2 = 1.0f; // disparo
 		break;
 	case SDLK_2:
 		_inputData.leftStick.x = 0.0f;     // centro
 		_inputData.triggersInfo.R2 = 1.0f; // disparo
+		_inputData.triggersInfo.L2 = 1.0f; // disparo
 		break;
 	case SDLK_3:
 		_inputData.leftStick.x = 1.0f;     // der
 		_inputData.triggersInfo.R2 = 1.0f; // disparo
+		_inputData.triggersInfo.L2 = 1.0f; // disparo
 		break;
 	default:
 		break;
