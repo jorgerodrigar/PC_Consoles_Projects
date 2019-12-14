@@ -12,6 +12,8 @@ private:
 	InputData* _inputData;
 	bool _scrollingRight, _scrollingLeft;
 
+	Sprite::Rect _originalRect;
+
 	int _numDoors;
 	float _vel;
 	int _dir;

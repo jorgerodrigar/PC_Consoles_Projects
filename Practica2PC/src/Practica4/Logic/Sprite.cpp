@@ -75,7 +75,7 @@ bool Sprite::update(double deltaTime)
 void Sprite::render(int x, int y, RendererThread* renderThread)
 {
 	if (_isVisible) {  // PROVISIONAL
-		//sourceInWidthBounds(x, 32.0f*2.0f, Renderer::getWindowWidth() - (32.0f*2.0f));
+		sourceInWidthBounds(x, 32.0f*2.0f, Renderer::getWindowWidth() - (32.0f*2.0f));
 		draw(x, y, _rows, _cols, _currentFrame, renderThread);
 	}
 }

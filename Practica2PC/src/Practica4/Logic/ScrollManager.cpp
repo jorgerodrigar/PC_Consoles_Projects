@@ -46,6 +46,8 @@ void ScrollManager::init()
 	_gm = GameManager::getInstance();
 	_sprite.init(Resources::marcoPuerta, 1, 1);
 
+	_originalRect = Sprite::Rect(0, 0, _sprite.getWidth(), _sprite.getHeight());
+
 	_gm->getGameBounds(_minBound, _maxBound);
 	_actualPositions = new float[_numDoors];
 	_targetPositions = new float[_numDoors];
@@ -93,6 +95,7 @@ void ScrollManager::render(RendererThread * renderThread)
 	if (_active && _pendingFrames >= 0) {
 		for (int i = 0; i < _numDoors; i++) {
 			_sprite.render(_actualPositions[i], _y, renderThread);
+			_sprite.setCurrentRect(_originalRect);
 		}
 		_pendingFrames--;
 	}
