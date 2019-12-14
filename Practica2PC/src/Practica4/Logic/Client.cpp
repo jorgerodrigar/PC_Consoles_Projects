@@ -15,7 +15,7 @@ void Client::init()
 	_sprite.init(Resources::cliente, 1, 3, 0);
 	Sprite::AnimInfo idleAnimInfo(0, 0, 0, false);
 	_sprite.addAnim("idle", idleAnimInfo);
-	Sprite::AnimInfo dyingAnimInfo(0.1f, 1, 2, false);
+	Sprite::AnimInfo dyingAnimInfo(0.2f, 1, 2, false);
 	_sprite.addAnim("dying", dyingAnimInfo);
 
 	setActive(false);

@@ -29,7 +29,7 @@ void Bandit::init()
 	_sprite.addAnim("idle", idleAnimInfo);
 	Sprite::AnimInfo aimingAnimInfo(0, 1, 1, false);
 	_sprite.addAnim("aiming", aimingAnimInfo);
-	Sprite::AnimInfo dyingAnimInfo(0.1f, 2, 3, false);
+	Sprite::AnimInfo dyingAnimInfo(0.2f, 2, 3, false);
 	_sprite.addAnim("dying", dyingAnimInfo);
 
 	setActive(false);
