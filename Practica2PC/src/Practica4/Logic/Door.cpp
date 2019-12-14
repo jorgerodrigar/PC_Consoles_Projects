@@ -33,7 +33,7 @@ void Door::adjustSprite()
 	r.right = 116 - r.left;
 	setX(initialPosX + r.left * 2);
 	_sprite.setCurrentRect(r);
-	sendMessage(SetDirtyMessage(SET_DIRTY));
+	sendMessage(Message(SET_DIRTY));
 }
 
 Door::Door()
@@ -91,6 +91,14 @@ void Door::receiveMessage(const Message & message)
 		if (!isClosed() && shootMessage->id == _id) {
 			sendMessage(message);
 		}
+		break;
+	}
+	case ACTIVATE_DOORS: {
+		setActive(true);
+		break;
+	}
+	case DEACTIVATE_DOORS: {
+		setActive(false);
 		break;
 	}
 	default:

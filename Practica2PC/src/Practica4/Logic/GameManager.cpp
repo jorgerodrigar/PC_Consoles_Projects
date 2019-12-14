@@ -21,11 +21,14 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+	for (int i = 0; i < _gameObjects.size(); i++) {
+		delete _gameObjects[i];
+		_gameObjects[i] = nullptr;
+	}
 }
 
 GameManager * GameManager::getInstance()
 {
-
 	if (_instance == nullptr)
 		_instance = new GameManager();
 
@@ -48,12 +51,14 @@ void GameManager::init(RendererThread* rendererThread)
 	_round = 0;
 	_iniTimePerEvent = 2;
 	_iniTimeToClose = 3;
+	_firstSeenDoor = 0;
+	_numOfDollars = 9;
+	_numOfVisibleDoors = 3;
 
-	//TODO: SCROLL
-	//ScrollManager* scroll = new ScrollManager();
-	//scroll->init();
-	//scroll->addListener(this);
-	//_gameObjects.push_back(scroll);
+	ScrollManager* scroll = new ScrollManager(100.0f);
+	scroll->init();
+	scroll->addListener(this);
+	_gameObjects.push_back(scroll);
 
 	Shooter* shooter = new Shooter();
 	shooter->init();
@@ -64,7 +69,7 @@ void GameManager::init(RendererThread* rendererThread)
 	bang->addListener(this);
 	_gameObjects.push_back(bang);
 
-	Client* client = new Client();
+	/*Client* client = new Client();
 	client->init();
 	client->addListener(this);
 	client->addListener(bang);
@@ -74,17 +79,18 @@ void GameManager::init(RendererThread* rendererThread)
 	bandit->init();
 	bandit->addListener(this);
 	bandit->addListener(bang);
-	_gameObjects.push_back(bandit);
+	_gameObjects.push_back(bandit);*/
 
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < _numOfDollars; i++) {
 		DollarHUD* dollarHud = new DollarHUD();
 		dollarHud->init();
-		dollarHud->setX(32.0f * 2 + (i * 64 * 2));
+		dollarHud->setX(_minBound + (i * 64 * 2));
+		dollarHud->setId(i);
 		addListener(dollarHud);
 		_gameObjects.push_back(dollarHud);
 	}
 
-	for (int i = 0; i < 3; i++) {
+	/*for (int i = 0; i < _numOfVisibleDoors; i++) {
 		Door* door = new Door();
 		door->init();
 		door->setId(i);
@@ -95,10 +101,10 @@ void GameManager::init(RendererThread* rendererThread)
 		door->addListener(client);
 		door->addListener(bandit);
 		door->addListener(this);
-		//scroll.addListener(door);
+		scroll->addListener(door);
 		shooter->addListener(door);
 		_gameObjects.push_back(door);
-	}
+	}*/
 
 	reset();
 }
@@ -111,10 +117,13 @@ void GameManager::reset()
 	_currentTime = 0;
 	_isEventActive = _gameOver = false;
 	_gameOver = false;
+	_firstSeenDoor = 0;
 
 	for (int i = 0; i < _gameObjects.size(); i++) {
 		_gameObjects[i]->reset();
 	}
+
+	setSeenDollars();
 }
 
 void GameManager::update(double deltaTime)
@@ -145,6 +154,17 @@ void GameManager::handleInput()
 	}
 }
 
+bool GameManager::allDoorsClosed()
+{
+	return true;
+}
+
+void GameManager::getGameBounds(float & minBound, float & maxBound)
+{
+	minBound = _minBound;
+	maxBound = _maxBound;
+}
+
 void GameManager::receiveMessage(const Message & message)
 {
 	switch (message.type)
@@ -164,8 +184,13 @@ void GameManager::receiveMessage(const Message & message)
 		_isEventActive = false;
 		break;
 	}
-	case LATERAL_SCROLL:
+	case SCROLL_FINISHED:
 	{
+		const ScrollMessage* msg = static_cast<const ScrollMessage*>(&message);
+		_firstSeenDoor += msg->dir;
+		if (_firstSeenDoor < 0)_firstSeenDoor = _numOfDollars - 1;
+		else if (_firstSeenDoor >= _numOfDollars)_firstSeenDoor = 0;
+		setSeenDollars();
 
 		break;
 	}
@@ -176,10 +201,21 @@ void GameManager::receiveMessage(const Message & message)
 
 void GameManager::activateRandomEvent()
 {
-	unsigned char rnd = rand() % 3;
+	unsigned char rnd = rand() % _numOfVisibleDoors;
 
 	_isEventActive = true;
 	StartEventMessage m(START_EVENT, rnd);
+	sendMessage(m);
+}
+
+void GameManager::setSeenDollars()
+{
+	char ids[3];
+	for (int i = 0; i < _numOfVisibleDoors; i++) {
+		ids[i] = _firstSeenDoor + i;
+		if (ids[i] >= _numOfDollars)ids[i] = _firstSeenDoor - _numOfDollars + i;
+	}
+	SelectDollarsMessage m(SELECT_DOLLARS, ids);
 	sendMessage(m);
 }
 

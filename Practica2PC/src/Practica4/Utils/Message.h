@@ -10,23 +10,20 @@ enum MessageType
 	START_EVENT,
 	DOOR_OPENING,
 	DOOR_CLOSED,
-	LATERAL_SCROLL,
+	SCROLL_FINISHED,
 	SET_DIRTY,
 	GAME_OVER,
 	DEPOSIT,
-	START_ROUND
+	START_ROUND,
+	ACTIVATE_DOORS,
+	DEACTIVATE_DOORS,
+	SELECT_DOLLARS
 };
 
 struct Message
 {
 	const MessageType type;
 	Message(MessageType type) : type(type) {};
-};
-
-struct TestMessage: public Message
-{
-	const std::string test = "testing";
-	TestMessage(MessageType type) : Message(type) {};
 };
 
 struct ShootMessage : public Message //mensaje de disparo. Lleva el identificador de la puerta que ha sido disparada
@@ -53,21 +50,10 @@ struct DoorClosedMessage : public Message
 	DoorClosedMessage(MessageType type, const char id) : Message(type), id(id) {};
 };
 
-struct ScrollMessage : public Message //mensaje de scroll. Indica la velocidad del scroll y su direccion (-1, 1)
+struct ScrollMessage : public Message //mensaje de scroll. Indica su direccion (-1, 1)
 {
-	const float vel;
 	const int dir;
-	ScrollMessage(MessageType type, const float vel, const int dir) : Message(type), vel(vel), dir(dir) {};
-};
-
-struct SetDirtyMessage : public Message
-{
-	SetDirtyMessage(MessageType type) : Message(type) {};
-};
-
-struct GameOverMessage : public Message
-{
-	GameOverMessage(MessageType type) : Message(type) {};
+	ScrollMessage(MessageType type, const int dir) : Message(type), dir(dir) {};
 };
 
 struct DepositMessage : public Message
@@ -76,9 +62,10 @@ struct DepositMessage : public Message
 	DepositMessage(MessageType type, const char doorId) : Message(type), doorId(doorId) {};
 }; 
 
-struct StartRoundMessage : public Message
+struct SelectDollarsMessage : public Message
 {
-	StartRoundMessage(MessageType type) : Message(type) {};
+	const char* ids;
+	SelectDollarsMessage(MessageType type, const char* ids) : Message(type), ids(ids) {};
 };
 
 

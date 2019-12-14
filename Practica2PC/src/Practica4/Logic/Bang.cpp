@@ -27,7 +27,7 @@ void Bang::update(double deltaTime)
 
 	if (_active) {
 		if (_sprite.isAnimated() && _sprite.getCurrentFrame() == 5) {
-			StartRoundMessage m(START_ROUND);
+			Message m(START_ROUND);
 			sendMessage(m);
 		}
 	}

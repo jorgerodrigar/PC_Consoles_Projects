@@ -5,7 +5,6 @@ DollarHUD::DollarHUD()
 {
 }
 
-
 DollarHUD::~DollarHUD()
 {
 }
@@ -16,24 +15,65 @@ void DollarHUD::init()
 	Sprite::AnimInfo animInfo(0.2, 6, 3, false);
 	_sprite.addAnim("money", animInfo);
 
-	_selected = false;
+	_id = 0;
+	reset();
 }
 
-void DollarHUD::switchSelected()
+void DollarHUD::reset()
 {
-	_selected = !_selected;
-	char currentFrame = _sprite.getCurrentFrame();
+	GameObject::reset();
+	setUnSelected();
+}
 
-	if (_selected)
+void DollarHUD::setSelected()
+{
+	if (!_selected) {
+		_selected = true;
+		char currentFrame = _sprite.getCurrentFrame();
 		_sprite.setFrame(currentFrame + 1);
-	else
-		_sprite.setFrame(currentFrame - 1);
+		setDirty();
+	}
+}
 
-	_pendingFrames = Renderer::getNumBuffers();
+void DollarHUD::setUnSelected()
+{
+	if (_selected) {
+		_selected = false;
+		char currentFrame = _sprite.getCurrentFrame();
+		_sprite.setFrame(currentFrame - 1);
+		setDirty();
+	}
 }
 
 void DollarHUD::depositMoney()
 {
 	if (_selected)
 		_sprite.setAnim("money");
+}
+
+void DollarHUD::setId(char id)
+{
+	_id = id;
+}
+
+char DollarHUD::getId()
+{
+	return _id;
+}
+
+void DollarHUD::receiveMessage(const Message & message)
+{
+	switch (message.type) {
+	case SELECT_DOLLARS: {
+		const SelectDollarsMessage* msg = static_cast<const SelectDollarsMessage*>(&message);
+		const char* ids = msg->ids;
+		int i = 0;
+		while (_id != ids[i] && i < 3)i++;
+		if (i < 3)setSelected();
+		else setUnSelected();
+		break;
+	}
+	default:
+		break;
+	}
 }

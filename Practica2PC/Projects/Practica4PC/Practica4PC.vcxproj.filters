@@ -87,9 +87,6 @@
     <ClCompile Include="..\..\src\Practica4\Logic\Door.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica4\Logic\BackgroundDoor.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Logic\Bang.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
@@ -165,9 +162,6 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\Door.h">
-      <Filter>Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Practica4\Logic\BackgroundDoor.h">
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\Bang.h">

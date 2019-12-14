@@ -74,7 +74,7 @@ void Client::closeDoor()
 void Client::getAShot()
 {
 	if (_sprite.getCurrentAnimName() != "dying") {
-		GameOverMessage m(GAME_OVER);
+		Message m(GAME_OVER);
 		sendMessage(m);
 
 		_sprite.setAnim("dying");

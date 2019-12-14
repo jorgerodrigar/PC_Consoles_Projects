@@ -1,72 +1,97 @@
 #include "ScrollManager.h"
 #include <Input/Input.h>
 #include <Renderer/Renderer.h>
+#include <Logic/GameManager.h>
+#include <Input/InputData.h>
 
 void ScrollManager::setNextTargetPositions()
 {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < _numDoors; i++) {
 		if (isOutsideBounds(_actualPositions[i])) {
 			if (_dir > 0)
-				_actualPositions[i] = ((32.0f*2.0f) - (192.0f*2.0f)); // PROVISIONAL
+				_actualPositions[i] = (_minBound - (_sprite.getWidth()*2.0f)); // PROVISIONAL
 			else if (_dir < 0)
-				_actualPositions[i] = (Renderer::getWindowWidth() - (32.0f*2.0f)); // PROVISIONAL
+				_actualPositions[i] = _maxBound;
 		}
-		_targetPositions[i] = _actualPositions[i] + (_dir * 192 * 2);// PROVISIONAL
+		_targetPositions[i] = _actualPositions[i] + (_dir * _sprite.getWidth() * 2);// PROVISIONAL
 	}
 
-	//send msg a puertas -> invisibles
+	Message m(DEACTIVATE_DOORS);
+	sendMessage(m);
 }
 
 bool ScrollManager::isOutsideBounds(float x) // PROVISIONAL
 {
-	return (x >= Renderer::getWindowWidth() - 32.0f*2.0f || x + (192 * 2) <= 32.0f*2.0f);
+	return (x >= _maxBound || x + (_sprite.getWidth() * 2) <= _minBound);
 }
 
-ScrollManager::ScrollManager()
+ScrollManager::ScrollManager() :_scrollingRight(false), _scrollingLeft(false),
+_vel(0), _dir(0), _numDoors(0), _minBound(0), _maxBound(0)
 {
 }
 
-ScrollManager::ScrollManager(float vel):_scrollingRight(false), _scrollingLeft(false), _vel(vel)
+ScrollManager::ScrollManager(float vel, int numDoors) : _scrollingRight(false), _scrollingLeft(false),
+_vel(vel), _dir(0), _numDoors(numDoors), _minBound(0), _maxBound(Renderer::getWindowWidth())
 {
 }
 
 ScrollManager::~ScrollManager()
 {
+	delete _actualPositions; _actualPositions = nullptr;
+	delete _targetPositions; _targetPositions = nullptr;
 }
 
 void ScrollManager::init()
 {
+	_gm = GameManager::getInstance();
 	_sprite.init(Resources::marcoPuerta, 1, 1);
-	_dir = 0;
-	_x = 32 * 2; // PROVISIONAL
-	_y = 48 * 2;
 
-	for (int i = 0; i < 4; i++) {
-		_actualPositions[0] = _x + (i*_sprite.getWidth() * 2);
+	_gm->getGameBounds(_minBound, _maxBound);
+	_actualPositions = new float[_numDoors];
+	_targetPositions = new float[_numDoors];
+
+	_x = _minBound;
+	_y = 48 * 2; // PROVISIONAL
+
+	reset();
+}
+
+void ScrollManager::reset()
+{
+	GameObject::reset();
+
+	for (int i = 0; i < _numDoors; i++) {
+		_actualPositions[i] = _x + (i*_sprite.getWidth() * 2);
 	}
+	_dir = 0;
 }
 
 void ScrollManager::update(double deltaTime)
 {
 	if (_active && _dir != 0) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < _numDoors; i++) {
 			_actualPositions[i] += _dir * _vel*deltaTime;
 			if (_dir > 0 && _actualPositions[i] >= _targetPositions[i] ||
 				_dir < 0 && _actualPositions[i] <= _targetPositions[i] || _dir == 0) {
 				_actualPositions[i] = _targetPositions[i];
+				if (_dir != 0) {
+					Message m(ACTIVATE_DOORS);
+					sendMessage(m);
+					ScrollMessage scrollMsg(SCROLL_FINISHED, _dir);
+					sendMessage(scrollMsg);
+				}
 				_dir = 0;
-				// send msg dir + send msg puertas -> visible
 			}
 
-			setDirty();
 		}
+		setDirty();
 	}
 }
 
 void ScrollManager::render(RendererThread * renderThread)
 {
 	if (_active && _pendingFrames >= 0) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < _numDoors; i++) {
 			_sprite.render(_actualPositions[i], _y, renderThread);
 		}
 		_pendingFrames--;
@@ -76,23 +101,27 @@ void ScrollManager::render(RendererThread * renderThread)
 void ScrollManager::handleInput()
 {
 	if (_active) {
-		_inputData = Input::getUserInput();
+		_inputData = &Input::getUserInput();
 
-		if (!_scrollingLeft && _inputData.buttonsInfo.R1) { // scroll de la camara hacia la derecha
+		if (!_scrollingLeft && _inputData->buttonsInfo.R1) { // scroll de la camara hacia la derecha
 			_scrollingRight = true;                         // (las puertas se moveran hacia la izquierda)
-			_dir = -1;
-			setNextTargetPositions();
+			if (_dir == 0 && _gm->allDoorsClosed()) {
+				_dir = -1;
+				setNextTargetPositions();
+			}
 		}
-		else if (!_scrollingRight && _inputData.buttonsInfo.L1) { // scroll de la camara hacia la izquierda
+		else if (!_scrollingRight && _inputData->buttonsInfo.L1) { // scroll de la camara hacia la izquierda
 			_scrollingLeft = true;                                // (las puertas se moveran hacia la derecha)
-			_dir = 1;
-			setNextTargetPositions();
+			if (_dir == 0 && _gm->allDoorsClosed()) {
+				_dir = 1;
+				setNextTargetPositions();
+			}
 		}
 
-		else if (_scrollingRight && !_inputData.buttonsInfo.R1) {
+		else if (_scrollingRight && !_inputData->buttonsInfo.R1) {
 			_scrollingRight = false;
 		}
-		else if (_scrollingLeft && !_inputData.buttonsInfo.L1) {
+		else if (_scrollingLeft && !_inputData->buttonsInfo.L1) {
 			_scrollingLeft = false;
 		}
 	}

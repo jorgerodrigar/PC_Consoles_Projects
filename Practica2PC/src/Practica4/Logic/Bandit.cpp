@@ -72,7 +72,7 @@ void Bandit::receiveMessage(const Message & message)
 void Bandit::closeDoor()
 {
 	if (_sprite.getCurrentAnimName() != "dying" && _isAiming) {
-		GameOverMessage m(GAME_OVER);
+		Message m(GAME_OVER);
 		sendMessage(m);
 	}
 }
@@ -81,7 +81,7 @@ void Bandit::getAShot()
 {
 	if (_sprite.getCurrentAnimName() != "dying") {
 		if (!_isAiming) {
-			GameOverMessage m(GAME_OVER);
+			Message m(GAME_OVER);
 			sendMessage(m);
 		}
 		else {

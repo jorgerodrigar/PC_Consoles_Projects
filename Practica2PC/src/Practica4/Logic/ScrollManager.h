@@ -1,28 +1,36 @@
 #pragma once
 #include <Utils/Emitter.h>
 #include <Logic/GameObject.h>
-#include <Input/InputData.h>
+
+class GameManager;
+class InputData;
 
 class ScrollManager : public GameObject, public Emitter
 {
 private:
-	InputData _inputData;
+	GameManager* _gm;
+	InputData* _inputData;
 	bool _scrollingRight, _scrollingLeft;
+
+	int _numDoors;
 	float _vel;
 	int _dir;
 
-	float _targetPositions[4];
-	float _actualPositions[4];
+	float _minBound, _maxBound;
+
+	float* _targetPositions;
+	float* _actualPositions;
 
 	void setNextTargetPositions();
 	bool isOutsideBounds(float x);
 
 public:
 	ScrollManager();
-	ScrollManager(float vel);
+	ScrollManager(float vel, int numDoors = 4);
 	virtual ~ScrollManager();
 
 	virtual void init();
+	virtual void reset();
 
 	virtual void update(double deltaTime);
 	virtual void render(RendererThread* renderThread);
