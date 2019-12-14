@@ -69,7 +69,7 @@ void GameManager::init(RendererThread* rendererThread)
 	bang->addListener(this);
 	_gameObjects.push_back(bang);
 
-	/*Client* client = new Client();
+	Client* client = new Client();
 	client->init();
 	client->addListener(this);
 	client->addListener(bang);
@@ -79,7 +79,7 @@ void GameManager::init(RendererThread* rendererThread)
 	bandit->init();
 	bandit->addListener(this);
 	bandit->addListener(bang);
-	_gameObjects.push_back(bandit);*/
+	_gameObjects.push_back(bandit);
 
 	for (int i = 0; i < _numOfDollars; i++) {
 		DollarHUD* dollarHud = new DollarHUD();
@@ -90,7 +90,7 @@ void GameManager::init(RendererThread* rendererThread)
 		_gameObjects.push_back(dollarHud);
 	}
 
-	/*for (int i = 0; i < _numOfVisibleDoors; i++) {
+	for (int i = 0; i < _numOfVisibleDoors; i++) {
 		Door* door = new Door();
 		door->init();
 		door->setId(i);
@@ -104,7 +104,7 @@ void GameManager::init(RendererThread* rendererThread)
 		scroll->addListener(door);
 		shooter->addListener(door);
 		_gameObjects.push_back(door);
-	}*/
+	}
 
 	reset();
 }

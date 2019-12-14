@@ -8,7 +8,6 @@
 #include <Logic/Door.h>
 #include <Logic/Client.h>
 #include <Logic/Bandit.h>
-#include <Logic/BackgroundDoor.h>
 #include <iostream>
 
 int main() {
@@ -24,10 +23,6 @@ int main() {
 	GameManager* gm;
 	gm = GameManager::getInstance();
 	gm->init(&rendererThread);
-
-	/*BackgroundDoor bd;
-	bd.init();
-	bd.setX(832);*/
 
 	rendererThread.start();
 
