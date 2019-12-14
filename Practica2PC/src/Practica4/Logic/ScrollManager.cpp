@@ -9,20 +9,20 @@ void ScrollManager::setNextTargetPositions()
 	for (int i = 0; i < _numDoors; i++) {
 		if (isOutsideBounds(_actualPositions[i])) {
 			if (_dir > 0)
-				_actualPositions[i] = (_minBound - (_sprite.getWidth()*2.0f)); // PROVISIONAL
+				_actualPositions[i] = (_minBound - (_sprite.getWidth()));
 			else if (_dir < 0)
 				_actualPositions[i] = _maxBound;
 		}
-		_targetPositions[i] = _actualPositions[i] + (_dir * _sprite.getWidth() * 2);// PROVISIONAL
+		_targetPositions[i] = _actualPositions[i] + (_dir * _sprite.getWidth());
 	}
 
 	Message m(DEACTIVATE_DOORS);
 	sendMessage(m);
 }
 
-bool ScrollManager::isOutsideBounds(float x) // PROVISIONAL
+bool ScrollManager::isOutsideBounds(float x)
 {
-	return (x >= _maxBound || x + (_sprite.getWidth() * 2) <= _minBound);
+	return (x >= _maxBound || x + (_sprite.getWidth()) <= _minBound);
 }
 
 ScrollManager::ScrollManager() :_scrollingRight(false), _scrollingLeft(false),
@@ -53,7 +53,7 @@ void ScrollManager::init()
 	_targetPositions = new float[_numDoors];
 
 	_x = _minBound;
-	_y = 48 * 2; // PROVISIONAL
+	_y = 48;
 
 	reset();
 }
@@ -63,7 +63,7 @@ void ScrollManager::reset()
 	GameObject::reset();
 
 	for (int i = 0; i < _numDoors; i++) {
-		_actualPositions[i] = _x + (i*_sprite.getWidth() * 2);
+		_actualPositions[i] = _x + (i*_sprite.getWidth());
 	}
 	_dir = 0;
 }
@@ -77,14 +77,15 @@ void ScrollManager::update(double deltaTime)
 				_dir < 0 && _actualPositions[i] <= _targetPositions[i] || _dir == 0) {
 				_actualPositions[i] = _targetPositions[i];
 				if (_dir != 0) {
-					Message m(ACTIVATE_DOORS);
-					sendMessage(m);
-					ScrollMessage scrollMsg(SCROLL_FINISHED, _dir);
+					if (!_scrollingRight && !_scrollingLeft) {
+						Message m(ACTIVATE_DOORS);
+						sendMessage(m);
+					}
+					Message scrollMsg(SCROLL_FINISHED);
 					sendMessage(scrollMsg);
 				}
 				_dir = 0;
 			}
-
 		}
 		setDirty();
 	}
@@ -94,7 +95,9 @@ void ScrollManager::render(RendererThread * renderThread)
 {
 	if (_active && _pendingFrames >= 0) {
 		for (int i = 0; i < _numDoors; i++) {
-			_sprite.render(_actualPositions[i], _y, renderThread);
+			float _x = _actualPositions[i];
+			_sprite.sourceInWidthBounds(_x, _minBound, _maxBound);
+			_sprite.render(_x, _y, renderThread);
 			_sprite.setCurrentRect(_originalRect);
 		}
 		_pendingFrames--;
@@ -110,6 +113,7 @@ void ScrollManager::handleInput()
 			_scrollingRight = true;                         // (las puertas se moveran hacia la izquierda)
 			if (_dir == 0 && _gm->allDoorsClosed()) {
 				_dir = -1;
+				sendMessage(ScrollMessage(SCROLL_STARTED, _dir));
 				setNextTargetPositions();
 			}
 		}
@@ -117,10 +121,10 @@ void ScrollManager::handleInput()
 			_scrollingLeft = true;                                // (las puertas se moveran hacia la derecha)
 			if (_dir == 0 && _gm->allDoorsClosed()) {
 				_dir = 1;
+				sendMessage(ScrollMessage(SCROLL_STARTED, _dir));
 				setNextTargetPositions();
 			}
 		}
-
 		else if (_scrollingRight && !_inputData->buttonsInfo.R1) {
 			_scrollingRight = false;
 		}

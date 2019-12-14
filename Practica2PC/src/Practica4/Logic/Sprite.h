@@ -30,7 +30,7 @@ public:
 
 	void setImage(Resources::ImageId id);
 
-	void init(Resources::ImageId id, char rows, char cols, char frame = 0, bool visible = true);
+	void init(Resources::ImageId id, char rows, char cols, char frame = 0);
 
 	void draw(int x, int y, RendererThread* renderThread);
 	void draw(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread);
@@ -52,13 +52,9 @@ public:
 	int const getFrameHeight() const;
 	int const getCurrentFrame() const;
 	std::string getCurrentAnimName() const;
-	bool const getVisible() const;
 	bool const isAnimated() const;
 
-
-	void const setVisible(bool value);
-
-	void sourceInWidthBounds(int& x, int boundMin, int boundMax);
+	void sourceInWidthBounds(float& x, int boundMin, int boundMax);
 
 private:
 	uint32_t* _image;
@@ -66,7 +62,7 @@ private:
 	Rect _srcRect;
 	Rect _currentSrcRect;
 	float _lastTime; 
-	bool _isAnimated, _isVisible;
+	bool _isAnimated;
 	int  _width, _height;
 	char _rows, _cols,_currentFrame;
 

@@ -12,11 +12,13 @@ Client::~Client()
 
 void Client::init()
 {
-	_sprite.init(Resources::cliente, 1, 3, 0, false);
+	_sprite.init(Resources::cliente, 1, 3, 0);
 	Sprite::AnimInfo idleAnimInfo(0, 0, 0, false);
 	_sprite.addAnim("idle", idleAnimInfo);
-	Sprite::AnimInfo dyingAnimInfo(0.8f, 1, 2, false);
+	Sprite::AnimInfo dyingAnimInfo(0.1f, 1, 2, false);
 	_sprite.addAnim("dying", dyingAnimInfo);
+
+	setActive(false);
 }
 
 void Client::receiveMessage(const Message & message)
@@ -28,6 +30,8 @@ void Client::receiveMessage(const Message & message)
 		if (doorOpening->id == _id)
 		{
 			_currentDoorId = doorOpening->doorId;
+			setX(doorOpening->posX);
+			setY(doorOpening->posY);
 			openDoor();
 		}
 		break;
@@ -52,10 +56,16 @@ void Client::receiveMessage(const Message & message)
 	}
 }
 
+void Client::reset()
+{
+	GameObject::reset();
+	_sprite.setAnim("idle");
+	setActive(false);
+}
+
 void Client::openDoor()
 {
 	setActive(true);
-	_sprite.setVisible(true);
 	_sprite.setAnim("idle");
 	setDirty();
 }
@@ -66,17 +76,17 @@ void Client::closeDoor()
 		DepositMessage m(DEPOSIT, _currentDoorId);
 		sendMessage(m);
 	}
+	else {
+		Message m(GAME_OVER);
+		sendMessage(m);
+	}
 
 	setActive(false);
-	_sprite.setVisible(false);
 }
 
 void Client::getAShot()
 {
 	if (_sprite.getCurrentAnimName() != "dying") {
-		Message m(GAME_OVER);
-		sendMessage(m);
-
 		_sprite.setAnim("dying");
 		setDirty();
 	}

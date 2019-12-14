@@ -27,5 +27,5 @@ public:
 	unsigned char const getId() const;
 	void setId(unsigned char value);
 	void setInitialPosX(float value);
-
+	virtual void reset();
 };

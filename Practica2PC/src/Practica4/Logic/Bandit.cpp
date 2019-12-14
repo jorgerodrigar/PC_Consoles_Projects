@@ -24,16 +24,15 @@ Bandit::~Bandit()
 
 void Bandit::init()
 {
-	_sprite.init(Resources::ladron, 1, 5, 0, false);
+	_sprite.init(Resources::ladron, 1, 5, 0);
 	Sprite::AnimInfo idleAnimInfo(0, 0, 0, false);
 	_sprite.addAnim("idle", idleAnimInfo);
 	Sprite::AnimInfo aimingAnimInfo(0, 1, 1, false);
 	_sprite.addAnim("aiming", aimingAnimInfo);
-	Sprite::AnimInfo dyingAnimInfo(0.8f, 2, 3, false);
+	Sprite::AnimInfo dyingAnimInfo(0.1f, 2, 3, false);
 	_sprite.addAnim("dying", dyingAnimInfo);
 
 	setActive(false);
-	_sprite.setVisible(false);
 }
 
 void Bandit::receiveMessage(const Message & message)
@@ -45,6 +44,8 @@ void Bandit::receiveMessage(const Message & message)
 		if (doorOpening->id == _id)
 		{
 			_currentDoorId = doorOpening->doorId;
+			setX(doorOpening->posX);
+			setY(doorOpening->posY);
 			openDoor();
 		}
 		break;
@@ -69,24 +70,37 @@ void Bandit::receiveMessage(const Message & message)
 	}
 }
 
+void Bandit::reset()
+{
+	GameObject::reset();
+	_sprite.setAnim("idle");
+	_isAiming = false;
+	setActive(false);
+}
+
 void Bandit::closeDoor()
 {
-	if (_sprite.getCurrentAnimName() != "dying" && _isAiming) {
+	if (_sprite.getCurrentAnimName() != "dying") {
+		if (_isAiming) {
+			Message m(GAME_OVER);
+			sendMessage(m);
+		}
+	}
+	else if (!_isAiming) {
 		Message m(GAME_OVER);
 		sendMessage(m);
 	}
+
+	setActive(false);
 }
 
 void Bandit::getAShot()
 {
 	if (_sprite.getCurrentAnimName() != "dying") {
-		if (!_isAiming) {
-			Message m(GAME_OVER);
-			sendMessage(m);
-		}
-		else {
+		if (_isAiming) {
 			std::cout << "GJ BRO" << std::endl;
 		}
+
 		_sprite.setAnim("dying");
 		setDirty();
 	}
@@ -95,7 +109,6 @@ void Bandit::getAShot()
 void Bandit::openDoor()
 {
 	setActive(true);
-	_sprite.setVisible(true);
 	_sprite.setAnim("idle");
 
 	randomAiming();

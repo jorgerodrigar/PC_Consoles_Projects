@@ -21,14 +21,13 @@ void Sprite::setImage(Resources::ImageId id)
 	_height = params.first[1];
 }
 
-void Sprite::init(Resources::ImageId id, char rows, char cols, char frame, bool visible)
+void Sprite::init(Resources::ImageId id, char rows, char cols, char frame)
 {
 	setImage(id);
 	_rows = rows;
 	_cols = cols;
 	_currentFrame = frame;
 	_isAnimated = false;
-	_isVisible = visible;
 
 	int frameWidth = _width / _cols;
 	int frameHeight = _height / _rows;
@@ -74,10 +73,7 @@ bool Sprite::update(double deltaTime)
 
 void Sprite::render(int x, int y, RendererThread* renderThread)
 {
-	if (_isVisible) {  // PROVISIONAL
-		sourceInWidthBounds(x, 32.0f*2.0f, Renderer::getWindowWidth() - (32.0f*2.0f));
-		draw(x, y, _rows, _cols, _currentFrame, renderThread);
-	}
+	draw(x, y, _rows, _cols, _currentFrame, renderThread);
 }
 
 void Sprite::addAnim(std::string name, AnimInfo& animInfo)
@@ -171,31 +167,21 @@ int const Sprite::getFrameHeight() const
 	return _currentSrcRect.bottom;
 }
 
-bool const Sprite::getVisible() const
-{
-	return _isVisible;
-}
-
 bool const Sprite::isAnimated() const
 {
 	return _isAnimated;
 }
 
-void const Sprite::setVisible(bool value)
+void Sprite::sourceInWidthBounds(float& x, int boundMin, int boundMax)
 {
-	_isVisible = value;
-}
-
-void Sprite::sourceInWidthBounds(int& x, int boundMin, int boundMax)
-{
-	if (x + (_srcRect.left * SCALE_FACTOR) <= boundMin) {
-		_currentSrcRect.left = _srcRect.left + ((boundMin - x) / SCALE_FACTOR);
+	if (x + (_srcRect.left) <= boundMin) {
+		_currentSrcRect.left = _srcRect.left + ((boundMin - x));
 		_currentSrcRect.right = _srcRect.right - _currentSrcRect.left;
 		x = boundMin;
 	}
 
-	if ((x + (_srcRect.right * SCALE_FACTOR) >= boundMax)) {
-		_currentSrcRect.right = _currentSrcRect.left + ((boundMax - x) / SCALE_FACTOR);
+	if ((x + (_srcRect.right) >= boundMax)) {
+		_currentSrcRect.right = _currentSrcRect.left + ((boundMax - x));
 	}
 }
 

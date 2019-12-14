@@ -10,7 +10,7 @@ void Door::openDoor()
 {
 	if (isClosed()) {
 		_sprite.setAnim("opening");
-		DoorOpeningMessage m(DOOR_OPENING, getId(), rand() % 2); //elige si aparece un bandido / cliente
+		DoorOpeningMessage m(DOOR_OPENING, getId(), rand() % 2, getX(), getY()); //elige si aparece un bandido / cliente
 		sendMessage(m);
 		setDirty();
 	}
@@ -31,12 +31,12 @@ void Door::adjustSprite()
 
 	r.left += 32 * _sprite.getCurrentFrame();
 	r.right = 116 - r.left;
-	setX(initialPosX + r.left * 2);
+	setX(initialPosX + r.left);
 	_sprite.setCurrentRect(r);
 	sendMessage(Message(SET_DIRTY));
 }
 
-Door::Door()
+Door::Door(): _id(0)
 {
 }
 
@@ -47,9 +47,9 @@ Door::~Door()
 void Door::init()
 {
 	_sprite.init(Resources::puertas, 1, 4, 0);
-	Sprite::AnimInfo openingAnimInfo(0.1f, 0, 3, false);
+	Sprite::AnimInfo openingAnimInfo(0.07f, 0, 3, false);
 	_sprite.addAnim("opening", openingAnimInfo);
-	Sprite::AnimInfo closingAnimInfo(0.1f, 3, 0, false);
+	Sprite::AnimInfo closingAnimInfo(0.07f, 3, 0, false);
 	_sprite.addAnim("closing", closingAnimInfo);
 }
 
@@ -80,9 +80,11 @@ void Door::receiveMessage(const Message & message)
 	switch (message.type)
 	{
 	case START_EVENT: {
-		const StartEventMessage* startEvent = static_cast<const StartEventMessage*>(&message);
-		if (startEvent->id == _id) {
-			openDoor();
+		if (_active) {
+			const StartEventMessage* startEvent = static_cast<const StartEventMessage*>(&message);
+			if (startEvent->id == _id) {
+				openDoor();
+			}
 		}
 		break;
 	}
@@ -99,6 +101,11 @@ void Door::receiveMessage(const Message & message)
 	}
 	case DEACTIVATE_DOORS: {
 		setActive(false);
+		break;
+	}
+	case CHANGE_DOOR_TIME: {
+		const ChangeDoorTimeMessage* doorTimeMessage = static_cast<const ChangeDoorTimeMessage*>(&message);
+		timeToClose = doorTimeMessage->time;
 		break;
 	}
 	default:
@@ -119,4 +126,13 @@ void Door::setId(unsigned char value)
 void Door::setInitialPosX(float value)
 {
 	initialPosX = value;
+}
+
+void Door::reset()
+{
+	GameObject::reset();
+	_sprite.setFrame(0);
+	adjustSprite();
+	_isClosing = false;
+	timer = 0;
 }

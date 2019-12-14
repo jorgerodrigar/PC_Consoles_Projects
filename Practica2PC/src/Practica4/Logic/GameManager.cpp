@@ -49,7 +49,7 @@ void GameManager::init(RendererThread* rendererThread)
 
 	_accFactor = 0.1;
 	_round = 0;
-	_iniTimePerEvent = 2;
+	_iniTimePerEvent = 5;
 	_iniTimeToClose = 3;
 	_firstSeenDoor = 0;
 	_numOfDollars = 9;
@@ -64,7 +64,7 @@ void GameManager::init(RendererThread* rendererThread)
 	shooter->init();
 	_gameObjects.push_back(shooter);
 
-	/*Bang* bang = new Bang();
+	Bang* bang = new Bang();
 	bang->init();
 	bang->addListener(this);
 	_gameObjects.push_back(bang);
@@ -79,23 +79,23 @@ void GameManager::init(RendererThread* rendererThread)
 	bandit->init();
 	bandit->addListener(this);
 	bandit->addListener(bang);
-	_gameObjects.push_back(bandit);*/
+	_gameObjects.push_back(bandit);
 
 	for (int i = 0; i < _numOfDollars; i++) {
 		DollarHUD* dollarHud = new DollarHUD();
 		dollarHud->init();
-		dollarHud->setX(_minBound + (i * 64 * 2));
+		dollarHud->setX(_minBound + (i * 64));
 		dollarHud->setId(i);
 		addListener(dollarHud);
 		_gameObjects.push_back(dollarHud);
 	}
 
-	/*for (int i = 0; i < _numOfVisibleDoors; i++) {
+	for (int i = 0; i < _numOfVisibleDoors; i++) {
 		Door* door = new Door();
 		door->init();
 		door->setId(i);
-		door->setY(48 * 2);
-		door->setX(64 * 2 + (192 * i * 2));
+		door->setY(72);
+		door->setX(64 + (192 * i));
 		door->setInitialPosX(door->getX());
 		addListener(door);
 		door->addListener(client);
@@ -104,7 +104,7 @@ void GameManager::init(RendererThread* rendererThread)
 		scroll->addListener(door);
 		shooter->addListener(door);
 		_gameObjects.push_back(door);
-	}*/
+	}
 
 	reset();
 }
@@ -118,17 +118,19 @@ void GameManager::reset()
 	_isEventActive = _gameOver = false;
 	_gameOver = false;
 	_firstSeenDoor = 0;
+	_isScrolling = false;
 
 	for (int i = 0; i < _gameObjects.size(); i++) {
 		_gameObjects[i]->reset();
 	}
 
+	sendMessage(ChangeDoorTimeMessage(CHANGE_DOOR_TIME, _timeToClose));
 	setSeenDollars();
 }
 
 void GameManager::update(double deltaTime)
 {
-	if(!_isEventActive && !_gameOver) _currentTime += deltaTime;
+	if(!_isEventActive && !_gameOver && !_isScrolling) _currentTime += deltaTime;
 
 	if (_currentTime >= _timePerEvent) {
 		activateRandomEvent();
@@ -156,7 +158,7 @@ void GameManager::handleInput()
 
 bool GameManager::allDoorsClosed()
 {
-	return true;
+	return !_isEventActive;
 }
 
 void GameManager::getGameBounds(float & minBound, float & maxBound)
@@ -184,14 +186,27 @@ void GameManager::receiveMessage(const Message & message)
 		_isEventActive = false;
 		break;
 	}
-	case SCROLL_FINISHED:
+	case SCROLL_STARTED:
 	{
 		const ScrollMessage* msg = static_cast<const ScrollMessage*>(&message);
+		_isScrolling = true;
 		_firstSeenDoor += msg->dir;
+		_currentTime = 0;
+
 		if (_firstSeenDoor < 0)_firstSeenDoor = _numOfDollars - 1;
 		else if (_firstSeenDoor >= _numOfDollars)_firstSeenDoor = 0;
 		setSeenDollars();
-
+		break;
+	}
+	case SCROLL_FINISHED: {
+		_isScrolling = false;
+		break;
+	}
+	case DEPOSIT: {
+		const DepositMessage* msg = static_cast<const DepositMessage*>(&message);
+		char dollarId = msg->id + _firstSeenDoor;
+		if (dollarId >= _numOfDollars) dollarId = dollarId - _numOfDollars;
+		sendMessage(DepositMessage(DEPOSIT, dollarId));
 		break;
 	}
 	default:

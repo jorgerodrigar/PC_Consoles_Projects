@@ -22,6 +22,7 @@ public:
 	virtual void init();
 
 	virtual void receiveMessage(const Message& message);
+	virtual void reset();
 
 };
 

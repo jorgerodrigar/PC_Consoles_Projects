@@ -13,4 +13,5 @@ public:
 
 	virtual void init();
 	virtual void handleInput();
+	virtual void render(RendererThread* renderThread);
 };

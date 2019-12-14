@@ -23,6 +23,7 @@ void DollarHUD::reset()
 {
 	GameObject::reset();
 	setUnSelected();
+	_sprite.setFrame(0);
 }
 
 void DollarHUD::setSelected()
@@ -71,6 +72,13 @@ void DollarHUD::receiveMessage(const Message & message)
 		while (_id != ids[i] && i < 3)i++;
 		if (i < 3)setSelected();
 		else setUnSelected();
+		break;
+	}
+	case DEPOSIT: {
+		const DepositMessage* msg = static_cast<const DepositMessage*>(&message);
+		if (msg->id == _id) {
+			depositMoney();
+		}
 		break;
 	}
 	default:

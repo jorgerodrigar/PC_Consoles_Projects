@@ -2,6 +2,7 @@
 #include <Input/Input.h>
 #include <Input/InputData.h>
 #include <Utils/Message.h>
+#include <Logic/GameManager.h>
 
 Shooter::Shooter()
 {
@@ -19,7 +20,7 @@ void Shooter::init()
 
 void Shooter::handleInput()
 {
-	if (_active) {
+	if (_active && !GameManager::getInstance()->allDoorsClosed()) {
 		InputData inputData = Input::getUserInput();
 
 		if (inputData.triggersInfo.R2 > _deadZone) {
@@ -37,4 +38,8 @@ void Shooter::handleInput()
 			}
 		}
 	}
+}
+
+void Shooter::render(RendererThread * renderThread)
+{
 }

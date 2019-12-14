@@ -15,15 +15,15 @@ private:
 
 	static GameManager* _instance;
 
-	const float _minBound = 32.0f * 2.0f; // PROVISIONAL
-	const float _maxBound = 608.0f * 2.0f; // PROVISIONAL
+	const float _minBound = 32.0f; // PROVISIONAL
+	const float _maxBound = 608.0f; // PROVISIONAL
 
 	float _timePerEvent, _iniTimePerEvent;
 	float _timeToClose, _iniTimeToClose;
 	float _accFactor;
 	float _currentTime;
 	int _round;
-	bool _isEventActive, _gameOver;
+	bool _isEventActive, _gameOver, _isScrolling;
 	int _firstSeenDoor;
 	int _numOfDollars;
 	int _numOfVisibleDoors;

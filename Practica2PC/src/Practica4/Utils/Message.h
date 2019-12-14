@@ -10,6 +10,7 @@ enum MessageType
 	START_EVENT,
 	DOOR_OPENING,
 	DOOR_CLOSED,
+	SCROLL_STARTED,
 	SCROLL_FINISHED,
 	SET_DIRTY,
 	GAME_OVER,
@@ -17,7 +18,8 @@ enum MessageType
 	START_ROUND,
 	ACTIVATE_DOORS,
 	DEACTIVATE_DOORS,
-	SELECT_DOLLARS
+	SELECT_DOLLARS,
+	CHANGE_DOOR_TIME
 };
 
 struct Message
@@ -35,7 +37,8 @@ struct ShootMessage : public Message //mensaje de disparo. Lleva el identificado
 struct DoorOpeningMessage : public Message 
 {
 	const char doorId, id;
-	DoorOpeningMessage(MessageType type, const char doorId, const char id) : Message(type), doorId(doorId), id(id) {};
+	const int posX, posY;
+	DoorOpeningMessage(MessageType type, const char doorId, const char id, const int posX, const int posY) : Message(type), doorId(doorId), id(id), posX(posX), posY(posY) {};
 };
 
 struct StartEventMessage : public Message
@@ -58,8 +61,8 @@ struct ScrollMessage : public Message //mensaje de scroll. Indica su direccion (
 
 struct DepositMessage : public Message
 {
-	const char doorId;
-	DepositMessage(MessageType type, const char doorId) : Message(type), doorId(doorId) {};
+	const char id;
+	DepositMessage(MessageType type, const char id) : Message(type), id(id) {};
 }; 
 
 struct SelectDollarsMessage : public Message
@@ -68,4 +71,8 @@ struct SelectDollarsMessage : public Message
 	SelectDollarsMessage(MessageType type, const char* ids) : Message(type), ids(ids) {};
 };
 
-
+struct ChangeDoorTimeMessage : public Message //mensaje de cambio del tiempo que tardan en cerrarse las puertas
+{
+	const float time;
+	ChangeDoorTimeMessage(MessageType type, const float time) : Message(type), time(time) {};
+};
