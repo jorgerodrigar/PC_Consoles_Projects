@@ -73,7 +73,7 @@ void Client::openDoor()
 void Client::closeDoor()
 {
 	if (_sprite.getCurrentAnimName() != "dying") {
-		DepositMessage m(DEPOSIT, _currentDoorId);
+		IDMessage m(DEPOSIT, _currentDoorId);
 		sendMessage(m);
 	}
 	else {

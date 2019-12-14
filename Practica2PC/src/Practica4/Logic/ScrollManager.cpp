@@ -54,8 +54,6 @@ void ScrollManager::init()
 
 	_x = _minBound;
 	_y = 48;
-
-	reset();
 }
 
 void ScrollManager::reset()

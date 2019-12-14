@@ -190,7 +190,7 @@ void GameManager::receiveMessage(const Message & message)
 	{
 		const ScrollMessage* msg = static_cast<const ScrollMessage*>(&message);
 		_isScrolling = true;
-		_firstSeenDoor += msg->dir;
+		_firstSeenDoor -= msg->dir;
 		_currentTime = 0;
 
 		if (_firstSeenDoor < 0)_firstSeenDoor = _numOfDollars - 1;
@@ -203,10 +203,10 @@ void GameManager::receiveMessage(const Message & message)
 		break;
 	}
 	case DEPOSIT: {
-		const DepositMessage* msg = static_cast<const DepositMessage*>(&message);
+		const IDMessage* msg = static_cast<const IDMessage*>(&message);
 		char dollarId = msg->id + _firstSeenDoor;
 		if (dollarId >= _numOfDollars) dollarId = dollarId - _numOfDollars;
-		sendMessage(DepositMessage(DEPOSIT, dollarId));
+		sendMessage(IDMessage(DEPOSIT, dollarId));
 		break;
 	}
 	default:
@@ -219,7 +219,7 @@ void GameManager::activateRandomEvent()
 	unsigned char rnd = rand() % _numOfVisibleDoors;
 
 	_isEventActive = true;
-	StartEventMessage m(START_EVENT, rnd);
+	IDMessage m(START_EVENT, rnd);
 	sendMessage(m);
 }
 

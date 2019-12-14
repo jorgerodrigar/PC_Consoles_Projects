@@ -28,11 +28,11 @@ struct Message
 	Message(MessageType type) : type(type) {};
 };
 
-struct ShootMessage : public Message //mensaje de disparo. Lleva el identificador de la puerta que ha sido disparada
+struct IDMessage : public Message // todos los mensajes que necesiten un id
 {
 	const char id;
-	ShootMessage(MessageType type, const char id) : Message(type), id(id) {};
-};
+	IDMessage(MessageType type, const char id) : Message(type), id(id) {};
+}; 
 
 struct DoorOpeningMessage : public Message 
 {
@@ -41,29 +41,11 @@ struct DoorOpeningMessage : public Message
 	DoorOpeningMessage(MessageType type, const char doorId, const char id, const int posX, const int posY) : Message(type), doorId(doorId), id(id), posX(posX), posY(posY) {};
 };
 
-struct StartEventMessage : public Message
-{
-	const char id;
-	StartEventMessage(MessageType type, const char id) : Message(type), id(id) {};
-};
-
-struct DoorClosedMessage : public Message
-{
-	const char id;
-	DoorClosedMessage(MessageType type, const char id) : Message(type), id(id) {};
-};
-
 struct ScrollMessage : public Message //mensaje de scroll. Indica su direccion (-1, 1)
 {
 	const int dir;
 	ScrollMessage(MessageType type, const int dir) : Message(type), dir(dir) {};
 };
-
-struct DepositMessage : public Message
-{
-	const char id;
-	DepositMessage(MessageType type, const char id) : Message(type), id(id) {};
-}; 
 
 struct SelectDollarsMessage : public Message
 {

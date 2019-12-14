@@ -16,14 +16,14 @@ void DollarHUD::init()
 	_sprite.addAnim("money", animInfo);
 
 	_id = 0;
-	reset();
 }
 
 void DollarHUD::reset()
 {
 	GameObject::reset();
-	setUnSelected();
+	_selected = false;
 	_sprite.setFrame(0);
+	setDirty();
 }
 
 void DollarHUD::setSelected()
@@ -75,7 +75,7 @@ void DollarHUD::receiveMessage(const Message & message)
 		break;
 	}
 	case DEPOSIT: {
-		const DepositMessage* msg = static_cast<const DepositMessage*>(&message);
+		const IDMessage* msg = static_cast<const IDMessage*>(&message);
 		if (msg->id == _id) {
 			depositMoney();
 		}

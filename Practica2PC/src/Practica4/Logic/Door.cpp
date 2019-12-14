@@ -67,7 +67,7 @@ void Door::update(double deltaTime)
 			}
 		}
 		else if (_isClosing) {
-			DoorClosedMessage m(DOOR_CLOSED, _id);
+			IDMessage m(DOOR_CLOSED, _id);
 			sendMessage(m);
 			_isClosing = false;
 		}
@@ -81,7 +81,7 @@ void Door::receiveMessage(const Message & message)
 	{
 	case START_EVENT: {
 		if (_active) {
-			const StartEventMessage* startEvent = static_cast<const StartEventMessage*>(&message);
+			const IDMessage* startEvent = static_cast<const IDMessage*>(&message);
 			if (startEvent->id == _id) {
 				openDoor();
 			}
@@ -89,7 +89,7 @@ void Door::receiveMessage(const Message & message)
 		break;
 	}
 	case SHOOT: {
-		const ShootMessage* shootMessage = static_cast<const ShootMessage*>(&message);
+		const IDMessage* shootMessage = static_cast<const IDMessage*>(&message);
 		if (!isClosed() && shootMessage->id == _id) {
 			sendMessage(message);
 		}

@@ -25,15 +25,15 @@ void Shooter::handleInput()
 
 		if (inputData.triggersInfo.R2 > _deadZone) {
 			if (inputData.leftStick.x > _deadZone) {
-				ShootMessage message = ShootMessage(SHOOT, 2);
+				IDMessage message = IDMessage(SHOOT, 2);
 				sendMessage(message);
 			}
 			else if (inputData.leftStick.x < -_deadZone) {
-				ShootMessage message = ShootMessage(SHOOT, 0);
+				IDMessage message = IDMessage(SHOOT, 0);
 				sendMessage(message);
 			}
 			else {
-				ShootMessage message = ShootMessage(SHOOT, 1);
+				IDMessage message = IDMessage(SHOOT, 1);
 				sendMessage(message);
 			}
 		}
