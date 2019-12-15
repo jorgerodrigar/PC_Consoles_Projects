@@ -46,7 +46,7 @@ void GameObject::reset()
 	setDirty();
 }
 
-bool GameObject::getActive()
+bool const GameObject::getActive() const
 {
 	return _active;
 }

@@ -6,11 +6,13 @@
 
 class RendererThread;
 
+///almacena la imagen. Metodos para pintar trozos de la misma, incluir animaciones, etc.
 class SpriteSheet {
 public:
 	SpriteSheet();
 	~SpriteSheet();
 
+	///informacion de las animaciones (nombre, rate, loop, etc)
 	struct AnimInfo {
 		std::string name;
 		float rate;
@@ -21,6 +23,7 @@ public:
 		AnimInfo(float rate, char iniFrame, char endFrame, bool isLooped):rate(rate), iniFrame(iniFrame), endFrame(endFrame), isLooped(isLooped), count(0) {};
 	};
 
+	///rectangulo (left, top, right, bottom)
 	struct Rect {
 		int left, top;
 		int right, bottom;
@@ -28,34 +31,41 @@ public:
 		Rect(int left, int top, int right, int bottom) :left(left), top(top), right(right), bottom(bottom) {};
 	};
 
-	void setImage(Resources::ImageId id);
-
+	///pide a resources la imagen y establece las variables necesarias (cuanto mide un frame, left, right, top, bottom, etc). Por defecto pinta el primer frame
 	void init(Resources::ImageId id, char rows, char cols, char frame = 0);
 
+	///dibuja toda la imagen en (x, y)
 	void draw(int x, int y, RendererThread* renderThread);
+	///dibuja un rectangulo de la imagen en (x, y)
 	void draw(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread);
+	///dibuja un frame de la imagen en (x, y)
 	void draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread);
+	///modifica el source Rect para que no se pinte fuera de los bounds. Solo en el ejeX, la x pasa por referencia.
+	void sourceInWidthBounds(float& x, int boundMin, int boundMax);
 
+	///update de las aniamciones. Devuelve true si currentFrame se modifica (coherencia de buffers)
 	bool update(double deltaTime);
+	///llama draw para dibujar el frame actual
 	void render(int x, int y, RendererThread* renderThread);
 
+	///anyade una nueva animacion al map
 	void addAnim(std::string name, AnimInfo& animInfo);
-	void setAnim(std::string name);
-	void setFrame(char frame);
+	///para la animacion actual
+	void stopAnimation();
 
-	void setCurrentRect(Rect rect);
-	Rect getRect();
-
-	int getWidth();
-	int getHeight();
+	int const getWidth() const;
+	int const getHeight() const;
 	int const getFrameWidth() const;
 	int const getFrameHeight() const;
 	int const getCurrentFrame() const;
-	std::string getCurrentAnimName() const;
+	Rect const getRect() const;
+	std::string const getCurrentAnimName() const;
 	bool const isAnimated() const;
-	void stopAnimation();
 
-	void sourceInWidthBounds(float& x, int boundMin, int boundMax);
+	void setCurrentRect(Rect rect);
+	void setImage(Resources::ImageId id);
+	void setAnim(std::string name);
+	void setFrame(char frame);
 
 private:
 	uint32_t* _image;
@@ -69,6 +79,8 @@ private:
 
 	std::map<std::string, AnimInfo> _animations;
 
+	///actualiza un frame en la animacion
 	void changeFrame();
+	///encola un comando de DRAW_SPRITESHEET en la hebra de render
 	void sendDrawCommand(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread);
 };

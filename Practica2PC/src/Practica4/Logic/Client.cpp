@@ -27,7 +27,7 @@ void Client::receiveMessage(const Message & message)
 	{
 	case DOOR_OPENING: {
 		const DoorOpeningMessage* doorOpening = static_cast<const DoorOpeningMessage*>(&message);
-		if (doorOpening->id == _id)
+		if (doorOpening->characterId == _id)
 		{
 			_currentDoorId = doorOpening->doorId;
 			setX(doorOpening->posX);

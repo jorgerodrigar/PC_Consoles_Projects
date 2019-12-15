@@ -28,7 +28,7 @@ Resources::~Resources()
 	_images.clear();
 }
 
-Resources * Resources::GetInstance()
+Resources * const Resources::GetInstance()
 {
 	if (_instance == nullptr)
 		_instance = new Resources();

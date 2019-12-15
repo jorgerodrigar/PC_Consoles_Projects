@@ -21,7 +21,6 @@ void PCInput::Release()
 	delete _inputListener; _inputListener = nullptr;
 }
 
-// se pide la lista de eventos al listener de Platform y se rellena con ellos InputData
 void PCInput::Tick()
 {
 	std::list<SDL_Event> eventList = _inputListener->getEvents();

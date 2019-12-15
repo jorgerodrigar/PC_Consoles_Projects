@@ -48,7 +48,9 @@ void ScrollManager::init()
 
 	_originalRect = SpriteSheet::Rect(0, 0, _spriteSheet.getWidth(), _spriteSheet.getHeight());
 
-	_gm->getGameBounds(_minBound, _maxBound);
+	_minBound = _gm->MIN_BOUND;
+	_maxBound = _gm->MAX_BOUND;
+
 	_actualPositions = new float[_numDoors];
 	_targetPositions = new float[_numDoors];
 

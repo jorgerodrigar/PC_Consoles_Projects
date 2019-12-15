@@ -11,8 +11,10 @@ void RendererThread::renderLoop()
 			switch (currentCommand.type)
 			{
 			case CLEAR:
-				for(int i = 0; i < Renderer::GetNumBuffers(); i++) 
+				for (int i = 0; i < Renderer::GetNumBuffers(); i++) {
 					Renderer::Clear(currentCommand.params.color);
+					Renderer::Present();
+				}
 				break;
 			case PUT_PIXEL:
 			{
@@ -20,7 +22,7 @@ void RendererThread::renderLoop()
 				Renderer::PutPixel(params.x, params.y, params.color);
 				break;
 			}
-			case DRAW_spriteSheet:
+			case DRAW_SPRITESHEET:
 			{
 				RenderCommandParams params = currentCommand.params;
 				for (int i = params.SpriteSheetData.srcTop; i < params.SpriteSheetData.srcBottom; i++) {

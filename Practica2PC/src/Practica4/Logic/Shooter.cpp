@@ -23,7 +23,7 @@ void Shooter::handleInput()
 	if (_active && !GameManager::GetInstance()->allDoorsClosed()) {
 		InputData inputData = Input::GetUserInput();
 
-		if (inputData.triggersInfo.R2 > _deadZone) {
+		if (inputData.triggersInfo.R2 > _deadZone || inputData.triggersInfo.L2 > _deadZone) {
 			if (inputData.leftStick.x > _deadZone) {
 				IDMessage message = IDMessage(SHOOT, 2);
 				sendMessage(message);

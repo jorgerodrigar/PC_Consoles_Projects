@@ -9,21 +9,26 @@ private:
 	bool _selected, _moneyInserted, _lateUnselect, _messageSent;
 	char _id;
 
+	///establece el frame de seleccionado, haya dolar depositado o no
+	void setSelected();
+	///establece el frame de no seleccionado, haya dolar depositado o no
+	void setUnSelected();
+	///establece la animacion de dinero depositado
+	void depositMoney();
+
 public:
 	DollarHUD();
 	virtual ~DollarHUD();
 
 	virtual void init();
-	virtual void update(double deltaTime);
 	virtual void reset();
+	///comprueba si se ha insertado dinero y manda mensaje al GameManager (solo se envia una vez por ronda)
+	virtual void update(double deltaTime);
 
-	void setSelected();
-	void setUnSelected();
-	void depositMoney();
-
-	void setId(char id);
 	char getId();
+	void setId(char id);
 
+	///recibe mensajes de si ha sido seleccionado o si han depositado dinero en el
 	virtual void receiveMessage(const Message& message);
 };
 

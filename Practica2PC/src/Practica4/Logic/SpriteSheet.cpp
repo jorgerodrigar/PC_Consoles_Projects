@@ -105,7 +105,7 @@ void SpriteSheet::setCurrentRect(Rect rect)
 	_currentSrcRect = rect;
 }
 
-SpriteSheet::Rect SpriteSheet::getRect()
+SpriteSheet::Rect const SpriteSheet::getRect() const
 {
 	return _srcRect;
 }
@@ -137,7 +137,7 @@ void SpriteSheet::changeFrame()
 void SpriteSheet::sendDrawCommand(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread)
 {
 	RendererThread::RenderCommand command;
-	command.type = RendererThread::DRAW_spriteSheet;
+	command.type = RendererThread::DRAW_SPRITESHEET;
 	command.params.x = x;
 	command.params.y = y;
 	command.params.SpriteSheetData.image = _image;
@@ -151,12 +151,12 @@ void SpriteSheet::sendDrawCommand(int x, int y, int left, int top, int right, in
 	renderThread->enqueueCommand(command);
 }
 
-int SpriteSheet::getWidth()
+int const SpriteSheet::getWidth() const
 {
 	return _width;
 }
 
-int SpriteSheet::getHeight()
+int const SpriteSheet::getHeight() const
 {
 	return _height;
 }
@@ -199,7 +199,7 @@ int const SpriteSheet::getCurrentFrame() const
 	return _currentFrame;
 }
 
-std::string SpriteSheet::getCurrentAnimName() const
+std::string const SpriteSheet::getCurrentAnimName() const
 {
 	return _currentAnim.name;
 }

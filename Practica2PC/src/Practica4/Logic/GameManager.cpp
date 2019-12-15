@@ -26,7 +26,7 @@ GameManager::~GameManager()
 	}
 }
 
-GameManager * GameManager::GetInstance()
+GameManager * const GameManager::GetInstance()
 {
 	if (_instance == nullptr)
 		_instance = new GameManager();
@@ -84,7 +84,7 @@ void GameManager::init(RendererThread* rendererThread)
 	for (int i = 0; i < _numOfDollars; i++) {
 		DollarHUD* dollarHud = new DollarHUD();
 		dollarHud->init();
-		dollarHud->setX(_minBound + (i * 64));
+		dollarHud->setX(MIN_BOUND + (i * 64));
 		dollarHud->setId(i);
 		addListener(dollarHud);
 		dollarHud->addListener(this);
@@ -163,15 +163,9 @@ void GameManager::handleInput()
 	}
 }
 
-bool GameManager::allDoorsClosed()
+bool const GameManager::allDoorsClosed() const
 {
 	return !_isEventActive;
-}
-
-void GameManager::getGameBounds(float & minBound, float & maxBound)
-{
-	minBound = _minBound;
-	maxBound = _maxBound;
 }
 
 void GameManager::receiveMessage(const Message & message)
