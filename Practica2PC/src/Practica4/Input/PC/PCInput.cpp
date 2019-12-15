@@ -47,9 +47,9 @@ void PCInput::Tick()
 	}
 }
 
-InputData PCInput::GetUserInput()
+InputData* PCInput::GetUserInput()
 {
-	return *_inputData;
+	return _inputData;
 }
 
 PCInput::PCInput()

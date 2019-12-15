@@ -11,7 +11,7 @@ public:
 	static void Release();
 	/// se pide la lista de eventos al listener de Platform y se rellena con ellos InputData
 	static void Tick();
-	static InputData GetUserInput();
+	static InputData* GetUserInput();
 
 private:
 	PCInput();

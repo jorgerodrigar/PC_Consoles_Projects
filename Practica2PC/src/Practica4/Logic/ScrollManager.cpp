@@ -107,7 +107,7 @@ void ScrollManager::render(RendererThread * renderThread)
 void ScrollManager::handleInput()
 {
 	if (_active) {
-		_inputData = &Input::GetUserInput();
+		_inputData = Input::GetUserInput();
 
 		if (!_scrollingLeft && _inputData->buttonsInfo.R1) { // scroll de la camara hacia la derecha
 			_scrollingRight = true;                         // (las puertas se moveran hacia la izquierda)
