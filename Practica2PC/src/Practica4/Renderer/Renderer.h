@@ -5,9 +5,6 @@ using Renderer = PS4Renderer;
 #elif _WIN64 || _WIN32 
 #include <Renderer/PC/PCRenderer.h>
 using Renderer = PCRenderer;
-#define RGBA(r, g, b, a) ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8) + ((a & 0xff))
 #else
 #error Platform not supported
 #endif
-
-

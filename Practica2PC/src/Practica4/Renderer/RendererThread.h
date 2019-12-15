@@ -4,8 +4,6 @@
 #include <Utils/ConcurrentQueue.h>
 #include <stdint.h>
 
-#define SCALE_FACTOR 2
-
 class RendererThread
 {
 public:
@@ -32,6 +30,8 @@ public:
 	};
 
 private:
+	const unsigned char SCALE_FACTOR = 2;
+
 	std::thread* _thread;
 	std::atomic<bool> _quitRequested;
 	std::atomic<int> _pendingframes;

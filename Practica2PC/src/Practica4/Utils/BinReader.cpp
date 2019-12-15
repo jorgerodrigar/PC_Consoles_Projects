@@ -9,22 +9,22 @@ BinReader::~BinReader()
 {
 }
 
-FILE* BinReader::openFile(const char* filePath)
+FILE* BinReader::OpenFile(const char* filePath)
 {
 	return fopen(filePath, "rb");
 }
 
-void BinReader::closeFile(FILE* filePtr)
+void BinReader::CloseFile(FILE* filePtr)
 {
 	fclose(filePtr);
 }
 
-int BinReader::readByte(FILE* filePtr)
+int BinReader::ReadByte(FILE* filePtr)
 {
 	return fgetc(filePtr);
 }
 
-void BinReader::read(void* buffer, unsigned int size, FILE * filePtr)
+void BinReader::Read(void* buffer, unsigned int size, FILE * filePtr)
 {
 	fread(buffer, sizeof(buffer), size, filePtr);
 }

@@ -1,28 +1,32 @@
 #pragma once
-#include <Input/InputData.h>
 #include <Input/PC/InputListener.h>
+
+class InputData;
+class InputListener;
 
 class PCInput
 {
 public:
-	static void init();
-	static void release();
-	static void tick();
-	static InputData getUserInput();
-	static InputListener _inputListener;
+	static void Init();
+	static void Release();
+	static void Tick();
+	static InputData GetUserInput();
 
 private:
 	PCInput();
 	~PCInput();
 
-	static void handleKeyDown(const SDL_Event& event);
-	static void handleKeyUp(const SDL_Event& event);
+	// input en teclado
+	static void HandleKeyDown(const SDL_Event& event);
+	static void HandleKeyUp(const SDL_Event& event);
 
-	static void openController(const SDL_Event& event);
-	static void handleAxisMotion(const SDL_Event& event);
-	static void handleButtonDown(const SDL_Event& event);
-	static void handleButtonUp(const SDL_Event& event);
+	// input en mando
+	static void OpenController(const SDL_Event& event);
+	static void HandleAxisMotion(const SDL_Event& event);
+	static void HandleButtonDown(const SDL_Event& event);
+	static void HandleButtonUp(const SDL_Event& event);
 
-	static InputData _inputData;
+	static InputData* _inputData;
+	static InputListener* _inputListener; // instancia de la clase listener de Platform
 };
 

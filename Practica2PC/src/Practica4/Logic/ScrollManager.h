@@ -1,5 +1,5 @@
 #pragma once
-#include <Utils/Emitter.h>
+#include <Logic/Emitter.h>
 #include <Logic/GameObject.h>
 
 class GameManager;

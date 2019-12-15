@@ -1,7 +1,7 @@
 #pragma once
 #include <Logic/GameObject.h>
-#include <Utils/Listener.h>
-#include <Utils/Emitter.h>
+#include <Logic/Listener.h>
+#include <Logic/Emitter.h>
 
 class Bang: public GameObject, public Listener, public Emitter
 {

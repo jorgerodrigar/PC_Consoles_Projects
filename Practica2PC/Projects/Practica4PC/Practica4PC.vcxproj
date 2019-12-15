@@ -26,8 +26,10 @@
     <ClCompile Include="..\..\src\Practica4\Logic\Client.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\DollarHUD.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Door.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Emitter.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\GameManager.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Listener.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\ScrollManager.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\Shooter.cpp" />
     <ClCompile Include="..\..\src\Practica4\Logic\SpriteSheet.cpp" />
@@ -36,8 +38,6 @@
     <ClCompile Include="..\..\src\Practica4\Renderer\PC\PCRenderer.cpp" />
     <ClCompile Include="..\..\src\Practica4\Renderer\RendererThread.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\BinReader.cpp" />
-    <ClCompile Include="..\..\src\Practica4\Utils\Emitter.cpp" />
-    <ClCompile Include="..\..\src\Practica4\Utils\Listener.cpp" />
     <ClCompile Include="..\..\src\Practica4\Utils\Resources.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -50,8 +50,11 @@
     <ClInclude Include="..\..\src\Practica4\Logic\Client.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\DollarHUD.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Door.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Emitter.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\GameManager.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Listener.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Message.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\ScrollManager.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\Shooter.h" />
     <ClInclude Include="..\..\src\Practica4\Logic\SpriteSheet.h" />
@@ -62,9 +65,6 @@
     <ClInclude Include="..\..\src\Practica4\Renderer\RendererThread.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\BinReader.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\ConcurrentQueue.h" />
-    <ClInclude Include="..\..\src\Practica4\Utils\Emitter.h" />
-    <ClInclude Include="..\..\src\Practica4\Utils\Listener.h" />
-    <ClInclude Include="..\..\src\Practica4\Utils\Message.h" />
     <ClInclude Include="..\..\src\Practica4\Utils\Resources.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

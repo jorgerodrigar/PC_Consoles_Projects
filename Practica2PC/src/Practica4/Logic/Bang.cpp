@@ -1,6 +1,6 @@
 #include "Bang.h"
 #include <Utils/Resources.h>
-#include <Utils/Message.h>
+#include <Logic/Message.h>
 
 Bang::Bang()
 {

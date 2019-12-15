@@ -4,6 +4,7 @@
 class SDL_Window;
 class SDL_Renderer;
 
+#define RGBA(r, g, b, a) ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8) + ((a & 0xff))
 
 class PCRenderer {
 
@@ -17,18 +18,18 @@ private:
 
 
 public:
-	static void init();
-	static void release();
+	static void Init();
+	static void Release();
 
-	static void clear(int color);
-	static void putPixel(int x, int y, int color);
-	static void present();
+	static void Clear(int color);
+	static void PutPixel(int x, int y, int color);
+	static void Present();
 
-	static int const getWindowWidth();
-	static int const getWindowHeight();
-	static const unsigned int getNumBuffers();
+	static int const GetWindowWidth();
+	static int const GetWindowHeight();
+	static const unsigned int GetNumBuffers();
 
-	static void hexToRGBA(int hexColor, int* rgba);
+	static void HexToRGBA(int hexColor, int* rgba);
 };
 
 #endif 

@@ -10,7 +10,7 @@ double PCPlatform::_currentTime;
 
 PCPlatform::PCPlatform() {}
 
-void PCPlatform::init()
+void PCPlatform::Init()
 {
 	if (!_initialized) {
 		//Inicialización del sistema 
@@ -20,7 +20,7 @@ void PCPlatform::init()
 	_currentTime = SDL_GetTicks();
 }
 
-void PCPlatform::release()
+void PCPlatform::Release()
 {
 	if (_initialized) {
 		SDL_Quit();
@@ -28,43 +28,43 @@ void PCPlatform::release()
 	}
 }
 
-bool PCPlatform::tick()
+bool PCPlatform::Tick()
 {
 	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
+	while (SDL_PollEvent(&event)) { // salimos al clickar dentro de la pantalla
 		if (event.type == SDL_QUIT || event.type == SDL_MOUSEBUTTONDOWN) {
 			return false;
 		}
-		sendEvent(event);
+		SendEvent(event);
 	}
 	return true;
 }
 
-double PCPlatform::getDeltaTime()
+double PCPlatform::GetDeltaTime()
 {
 	double lastTime = _currentTime;
 	_currentTime = SDL_GetTicks();
 	return (_currentTime - lastTime)/1000;
 }
 
-void PCPlatform::addListener(InputListener * listener)
+void PCPlatform::AddListener(InputListener * listener)
 {
 	_listeners.push_back(listener);
 }
 
-void PCPlatform::removeListener(InputListener * listener)
+void PCPlatform::RemoveListener(InputListener * listener)
 {
 	_listeners.remove(listener);
 }
 
-void PCPlatform::sendEvent(const SDL_Event& event)
+void PCPlatform::SendEvent(const SDL_Event& event)
 {
 	for (InputListener* listener : _listeners) {
 		if(listener->receiveEvent(event)) break;
 	}
 }
 
-uint32_t * PCPlatform::toCurrentEndian(uint32_t * endian, uint32_t size)
+uint32_t * PCPlatform::ToCurrentEndian(uint32_t * endian, uint32_t size)
 {
 	if (SDL_BYTEORDER == SDL_LIL_ENDIAN)
 		return _toCurrentEndian(endian, size);

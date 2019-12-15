@@ -28,7 +28,7 @@ Resources::~Resources()
 	_images.clear();
 }
 
-Resources * Resources::getInstance()
+Resources * Resources::GetInstance()
 {
 	if (_instance == nullptr)
 		_instance = new Resources();
@@ -36,7 +36,7 @@ Resources * Resources::getInstance()
 	return _instance;
 }
 
-void Resources::release()
+void Resources::Release()
 {
 	if (_instance != nullptr) {
 		delete _instance; _instance = nullptr;
@@ -61,18 +61,18 @@ void Resources::load()
 		filePath.append(_imageFiles[i]);
 		uint32_t* header = (uint32_t*)malloc(sizeof(uint32_t) * 2);
 
-		FILE* ptr = BinReader::openFile(filePath.c_str());
-		BinReader::read(header, 2, ptr);
+		FILE* ptr = BinReader::OpenFile(filePath.c_str());
+		BinReader::Read(header, 2, ptr);
 
-		header = Platform::toCurrentEndian(header, 2);
+		header = Platform::ToCurrentEndian(header, 2);
 
 		uint32_t* buffer = (uint32_t*)malloc(sizeof(uint32_t) * header[0] * header[1]);
-		BinReader::read(buffer, header[0] * header[1], ptr);
+		BinReader::Read(buffer, header[0] * header[1], ptr);
 
-		buffer = Platform::toCurrentEndian(buffer, header[0]* header[1]);
+		buffer = Platform::ToCurrentEndian(buffer, header[0]* header[1]);
 		
 		_images.insert({ImageId(i), { header, buffer }});
 
-		BinReader::closeFile(ptr);
+		BinReader::CloseFile(ptr);
 	}
 }

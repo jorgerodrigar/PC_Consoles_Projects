@@ -1,5 +1,5 @@
 #pragma once
-#include <Utils/Message.h>
+#include <Logic/Message.h>
 
 class Listener {
 public:

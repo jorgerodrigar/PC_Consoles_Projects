@@ -14,7 +14,7 @@ SpriteSheet::~SpriteSheet()
 
 void SpriteSheet::setImage(Resources::ImageId id)
 {
-	Resources* resources = Resources::getInstance();
+	Resources* resources = Resources::GetInstance();
 	auto params = resources->getImage(id);
 	_image = params.second;
 	_width = params.first[0];

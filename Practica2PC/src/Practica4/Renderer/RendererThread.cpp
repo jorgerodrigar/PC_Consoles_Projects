@@ -11,13 +11,13 @@ void RendererThread::renderLoop()
 			switch (currentCommand.type)
 			{
 			case CLEAR:
-				for(int i = 0; i < Renderer::getNumBuffers(); i++) 
-					Renderer::clear(currentCommand.params.color);
+				for(int i = 0; i < Renderer::GetNumBuffers(); i++) 
+					Renderer::Clear(currentCommand.params.color);
 				break;
 			case PUT_PIXEL:
 			{
 				RenderCommandParams params = currentCommand.params;
-				Renderer::putPixel(params.x, params.y, params.color);
+				Renderer::PutPixel(params.x, params.y, params.color);
 				break;
 			}
 			case DRAW_spriteSheet:
@@ -36,7 +36,7 @@ void RendererThread::renderLoop()
 
 			currentCommand = _concurrentQueue.pop();
 		}
-		Renderer::present();
+		Renderer::Present();
 		_pendingframes--; //ha acabado el frame
 	}
 }
@@ -46,7 +46,7 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 {
 	int color = params.SpriteSheetData.image[i * params.SpriteSheetData.imageWidth + j]; // color del pixel a reescalar
 	int  rgba[4];
-	Renderer::hexToRGBA(color, rgba);
+	Renderer::HexToRGBA(color, rgba);
 
 	int true_color = RGBA(rgba[0], rgba[1], rgba[2], rgba[3]);
 
@@ -56,7 +56,7 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 		int x = j * scale;
 		for (x; x < (j * scale) + scale; x++) {
 			//if ((x + params.x - (params.SpriteSheetData.srcLeft * scale) >= 0 && (x + params.x - (params.SpriteSheetData.srcLeft * scale) < Renderer::getWindowWidth()))) { //todo: esta bien aqui??
-				Renderer::putPixel(x + (params.x * scale) - (params.SpriteSheetData.srcLeft * scale),
+				Renderer::PutPixel(x + (params.x * scale) - (params.SpriteSheetData.srcLeft * scale),
 					y + (params.y * scale) - (params.SpriteSheetData.srcTop*scale), true_color);
 			//}
 		}

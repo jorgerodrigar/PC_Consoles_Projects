@@ -5,6 +5,8 @@
 #include <list>
 #include <SDL_events.h>
 
+const std::string HEADER_PATH = "";
+
 class InputListener;
 
 class PCPlatform {
@@ -18,17 +20,18 @@ private:
 	PCPlatform();
 
 public:
-	static void init();
-	static void release();
-	static bool tick();
+	static void Init();
+	static void Release();
+	static bool Tick();
 
-	static double getDeltaTime();
+	static double GetDeltaTime(); // devuelve deltaTime en segundos
 
-	static void addListener(InputListener* listener);
-	static void removeListener(InputListener* listener);
-	static void sendEvent(const SDL_Event& event);
+	static void AddListener(InputListener* listener);
+	static void RemoveListener(InputListener* listener);
+	static void SendEvent(const SDL_Event& event);
 
-	static uint32_t* toCurrentEndian(uint32_t* endian, uint32_t size);
+	// transforma, si es necesario, dependiendo del endian del PC
+	static uint32_t* ToCurrentEndian(uint32_t* endian, uint32_t size);
 };
 
 #endif 

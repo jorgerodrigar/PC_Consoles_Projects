@@ -5,10 +5,10 @@
 
 void GameObject::setDirty()
 {
-	_pendingFrames = Renderer::getNumBuffers();
+	_pendingFrames = Renderer::GetNumBuffers();
 }
 
-GameObject::GameObject(): _x(0), _y(0), _active(true), _pendingFrames(Renderer::getNumBuffers())
+GameObject::GameObject(): _x(0), _y(0), _active(true), _pendingFrames(Renderer::GetNumBuffers())
 {
 }
 

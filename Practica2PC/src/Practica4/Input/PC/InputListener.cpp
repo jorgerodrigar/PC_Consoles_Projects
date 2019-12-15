@@ -18,7 +18,7 @@ bool InputListener::receiveEvent(const SDL_Event& event)
 
 void InputListener::init()
 {
-	Platform::addListener(this);
+	Platform::AddListener(this);
 }
 
 std::list<SDL_Event> InputListener::getEvents()

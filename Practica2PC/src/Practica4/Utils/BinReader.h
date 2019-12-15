@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <stdio.h>
 
 class BinReader
 {
@@ -8,9 +8,9 @@ private:
 	~BinReader();
 
 public:
-	static FILE* openFile(const char* filePath);
-	static void closeFile(FILE* filePtr);
-	static int readByte(FILE* filePtr);
-	static void read(void* buffer, unsigned int size, FILE* filePtr);
+	static FILE* OpenFile(const char* filePath);
+	static void CloseFile(FILE* filePtr);
+	static int ReadByte(FILE* filePtr);
+	static void Read(void* buffer, unsigned int size, FILE* filePtr);
 };
 

@@ -1,8 +1,9 @@
 #pragma once
 #include <list>
-#include <Utils/Message.h>
+#include <Logic/Message.h>
 
 class Listener;
+
 class Emitter {
 private:
 	std::list<Listener*> _listeners;

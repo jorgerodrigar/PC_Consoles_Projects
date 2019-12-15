@@ -1,6 +1,6 @@
-#include "Emitter.h"
-#include <Utils/Listener.h>
 #if defined(_WIN64) || defined(_WIN32)
+#include "Emitter.h"
+#include <Logic/Listener.h>
 
 Emitter::Emitter()
 {

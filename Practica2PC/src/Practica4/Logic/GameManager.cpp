@@ -5,7 +5,7 @@
 #include <Logic/DollarHUD.h>
 #include <Logic/Door.h>
 #include <Logic/GameObject.h>
-#include <Utils/Message.h>
+#include <Logic/Message.h>
 #include <Logic/ScrollManager.h>
 #include <Logic/Shooter.h>
 #include <Utils/Resources.h>
@@ -26,7 +26,7 @@ GameManager::~GameManager()
 	}
 }
 
-GameManager * GameManager::getInstance()
+GameManager * GameManager::GetInstance()
 {
 	if (_instance == nullptr)
 		_instance = new GameManager();
@@ -34,7 +34,7 @@ GameManager * GameManager::getInstance()
 	return _instance;
 }
 
-void GameManager::release()
+void GameManager::Release()
 {
 	if (_instance != nullptr) {
 		delete _instance; _instance = nullptr;

@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include <Utils/Emitter.h>
+#include <Logic/Emitter.h>
 
 class Shooter :	public GameObject, public Emitter 
 {

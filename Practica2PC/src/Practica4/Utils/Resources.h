@@ -9,8 +9,8 @@ using namespace std;
 class Resources
 {
 public:
-	static Resources* getInstance();
-	static void release();
+	static Resources* GetInstance();
+	static void Release();
 
 	enum ImageId {
 		debug2x2,

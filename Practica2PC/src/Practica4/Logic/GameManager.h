@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include <Utils/Listener.h>
-#include <Utils/Emitter.h>
+#include <Logic/Listener.h>
+#include <Logic/Emitter.h>
 
 class GameObject;
 class RendererThread;
@@ -39,8 +39,8 @@ public:
 	GameManager();
 	~GameManager();
 
-	static GameManager* getInstance();
-	static void release();
+	static GameManager* GetInstance();
+	static void Release();
 
 	void init(RendererThread* rendererThread);
 	void update(double deltaTime);

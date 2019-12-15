@@ -31,7 +31,7 @@ _vel(0), _dir(0), _numDoors(0), _minBound(0), _maxBound(0)
 }
 
 ScrollManager::ScrollManager(float vel, int numDoors) : _scrollingRight(false), _scrollingLeft(false),
-_vel(vel), _dir(0), _numDoors(numDoors), _minBound(0), _maxBound(Renderer::getWindowWidth())
+_vel(vel), _dir(0), _numDoors(numDoors), _minBound(0), _maxBound(Renderer::GetWindowWidth())
 {
 }
 
@@ -43,7 +43,7 @@ ScrollManager::~ScrollManager()
 
 void ScrollManager::init()
 {
-	_gm = GameManager::getInstance();
+	_gm = GameManager::GetInstance();
 	_spriteSheet.init(Resources::marcoPuerta, 1, 1);
 
 	_originalRect = SpriteSheet::Rect(0, 0, _spriteSheet.getWidth(), _spriteSheet.getHeight());
@@ -105,7 +105,7 @@ void ScrollManager::render(RendererThread * renderThread)
 void ScrollManager::handleInput()
 {
 	if (_active) {
-		_inputData = &Input::getUserInput();
+		_inputData = &Input::GetUserInput();
 
 		if (!_scrollingLeft && _inputData->buttonsInfo.R1) { // scroll de la camara hacia la derecha
 			_scrollingRight = true;                         // (las puertas se moveran hacia la izquierda)
