@@ -81,7 +81,7 @@ void DollarHUD::setId(char id)
 	_id = id;
 }
 
-char DollarHUD::getId()
+char const DollarHUD::getId() const
 {
 	return _id;
 }

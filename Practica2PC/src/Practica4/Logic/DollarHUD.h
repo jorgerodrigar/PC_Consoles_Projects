@@ -25,7 +25,7 @@ public:
 	///comprueba si se ha insertado dinero y manda mensaje al GameManager (solo se envia una vez por ronda)
 	virtual void update(double deltaTime);
 
-	char getId();
+	char const getId() const;
 	void setId(char id);
 
 	///recibe mensajes de si ha sido seleccionado o si han depositado dinero en el

@@ -21,7 +21,7 @@ int main() {
 
 	while (Platform::Tick())
 	{
-		//Renderer::clear(0x000000);
+		//Renderer::Clear(0x000000);
 		Input::Tick();
 
 		gm->handleInput();

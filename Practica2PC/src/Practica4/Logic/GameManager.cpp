@@ -47,8 +47,8 @@ void GameManager::init(RendererThread* rendererThread)
 	_gameObjects = std::vector<GameObject*>();
 
 	_accFactor = 0.1;
-	_iniTimePerEvent = 5;
-	_iniTimeToClose = 3;
+	_iniTimePerEvent = 2;
+	_iniTimeToClose = 2;
 	_firstSeenDoor = 0;
 	_numOfDollars = 9;
 	_numOfVisibleDoors = 3;

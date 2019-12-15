@@ -131,6 +131,7 @@ void SpriteSheet::changeFrame()
 			_currentAnim.count = 0;
 		}
 	}
+	else _isAnimated = false;
 }
 
 //Crea y encola un comando DRAW_spriteSheet a la hebra de render

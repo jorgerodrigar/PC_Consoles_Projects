@@ -16,7 +16,7 @@ void Bang::init()
 	setY(156);
 
 	_spriteSheet.init(Resources::bang, 1, 6, 0);
-	SpriteSheet::AnimInfo bangAnimInfo(0.35f, 0, 5, false);
+	SpriteSheet::AnimInfo bangAnimInfo(0.15f, 0, 5, false);
 	_spriteSheet.addAnim("bang", bangAnimInfo);
 }
 
