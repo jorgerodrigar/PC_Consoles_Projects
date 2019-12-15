@@ -18,7 +18,6 @@ GameManager::GameManager()
 {
 }
 
-
 GameManager::~GameManager()
 {
 	for (int i = 0; i < _gameObjects.size(); i++) {

@@ -45,9 +45,6 @@
     <ClCompile Include="..\..\src\Practica4\Utils\BinReader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Practica4\Logic\Sprite.cpp">
-      <Filter>Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Practica4\Utils\Resources.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -90,6 +87,9 @@
     <ClCompile Include="..\..\src\Practica4\Logic\Bang.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Practica4\Logic\SpriteSheet.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Practica4\Platform\Platform.h">
@@ -112,9 +112,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Utils\ConcurrentQueue.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Practica4\Logic\Sprite.h">
-      <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Utils\Resources.h">
       <Filter>Utils</Filter>
@@ -165,6 +162,9 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Practica4\Logic\Bang.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Practica4\Logic\SpriteSheet.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

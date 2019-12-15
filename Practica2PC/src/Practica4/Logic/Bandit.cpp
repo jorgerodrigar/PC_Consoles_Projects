@@ -8,7 +8,7 @@ void Bandit::randomAiming()
 	_isAiming = false;
 
 	if (rnd < 40) {
-		_sprite.setAnim("aiming");
+		_spriteSheet.setAnim("aiming");
 		_isAiming = true;
 	}
 }
@@ -24,13 +24,13 @@ Bandit::~Bandit()
 
 void Bandit::init()
 {
-	_sprite.init(Resources::ladron, 1, 5, 0);
-	Sprite::AnimInfo idleAnimInfo(0, 0, 0, false);
-	_sprite.addAnim("idle", idleAnimInfo);
-	Sprite::AnimInfo aimingAnimInfo(0, 1, 1, false);
-	_sprite.addAnim("aiming", aimingAnimInfo);
-	Sprite::AnimInfo dyingAnimInfo(0.2f, 2, 3, false);
-	_sprite.addAnim("dying", dyingAnimInfo);
+	_spriteSheet.init(Resources::ladron, 1, 5, 0);
+	SpriteSheet::AnimInfo idleAnimInfo(0, 0, 0, false);
+	_spriteSheet.addAnim("idle", idleAnimInfo);
+	SpriteSheet::AnimInfo aimingAnimInfo(0, 1, 1, false);
+	_spriteSheet.addAnim("aiming", aimingAnimInfo);
+	SpriteSheet::AnimInfo dyingAnimInfo(0.2f, 2, 3, false);
+	_spriteSheet.addAnim("dying", dyingAnimInfo);
 
 	setActive(false);
 }
@@ -73,14 +73,14 @@ void Bandit::receiveMessage(const Message & message)
 void Bandit::reset()
 {
 	GameObject::reset();
-	_sprite.setAnim("idle");
+	_spriteSheet.setAnim("idle");
 	_isAiming = false;
 	setActive(false);
 }
 
 void Bandit::closeDoor()
 {
-	if (_sprite.getCurrentAnimName() != "dying") {
+	if (_spriteSheet.getCurrentAnimName() != "dying") {
 		if (_isAiming) {
 			Message m(GAME_OVER);
 			sendMessage(m);
@@ -96,8 +96,8 @@ void Bandit::closeDoor()
 
 void Bandit::getAShot()
 {
-	if (_sprite.getCurrentAnimName() != "dying") {
-		_sprite.setAnim("dying");
+	if (_spriteSheet.getCurrentAnimName() != "dying") {
+		_spriteSheet.setAnim("dying");
 		setDirty();
 	}
 }
@@ -105,7 +105,7 @@ void Bandit::getAShot()
 void Bandit::openDoor()
 {
 	setActive(true);
-	_sprite.setAnim("idle");
+	_spriteSheet.setAnim("idle");
 
 	randomAiming();
 

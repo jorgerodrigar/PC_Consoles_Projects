@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Logic/Sprite.h>
+#include <Logic/SpriteSheet.h>
 
 class RendererThread;
 
 class GameObject {
 protected:
-	Sprite _sprite;
+	SpriteSheet _spriteSheet;
 	float _x, _y;
 	bool _active;
     int _pendingFrames;

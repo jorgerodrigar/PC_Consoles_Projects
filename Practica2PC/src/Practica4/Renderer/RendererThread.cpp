@@ -20,11 +20,11 @@ void RendererThread::renderLoop()
 				Renderer::putPixel(params.x, params.y, params.color);
 				break;
 			}
-			case DRAW_SPRITE:
+			case DRAW_spriteSheet:
 			{
 				RenderCommandParams params = currentCommand.params;
-				for (int i = params.spriteData.srcTop; i < params.spriteData.srcBottom; i++) {
-					for (int j = params.spriteData.srcLeft; j < params.spriteData.srcRight; j++) {
+				for (int i = params.SpriteSheetData.srcTop; i < params.SpriteSheetData.srcBottom; i++) {
+					for (int j = params.SpriteSheetData.srcLeft; j < params.SpriteSheetData.srcRight; j++) {
 						drawRescaled(i, j, params, SCALE_FACTOR); // pintaremos todas las imagenes reescaladas
 					}
 				}
@@ -44,7 +44,7 @@ void RendererThread::renderLoop()
 // por cada pixel en j, i, lo pintamos reescalado a scale * scale
 void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& params, const int scale)
 {
-	int color = params.spriteData.image[i * params.spriteData.imageWidth + j]; // color del pixel a reescalar
+	int color = params.SpriteSheetData.image[i * params.SpriteSheetData.imageWidth + j]; // color del pixel a reescalar
 	int  rgba[4];
 	Renderer::hexToRGBA(color, rgba);
 
@@ -55,9 +55,9 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 	for (y; y < (i * scale) + scale; y++) {
 		int x = j * scale;
 		for (x; x < (j * scale) + scale; x++) {
-			//if ((x + params.x - (params.spriteData.srcLeft * scale) >= 0 && (x + params.x - (params.spriteData.srcLeft * scale) < Renderer::getWindowWidth()))) { //todo: esta bien aqui??
-				Renderer::putPixel(x + (params.x * scale) - (params.spriteData.srcLeft * scale),
-					y + (params.y * scale) - (params.spriteData.srcTop*scale), true_color);
+			//if ((x + params.x - (params.SpriteSheetData.srcLeft * scale) >= 0 && (x + params.x - (params.SpriteSheetData.srcLeft * scale) < Renderer::getWindowWidth()))) { //todo: esta bien aqui??
+				Renderer::putPixel(x + (params.x * scale) - (params.SpriteSheetData.srcLeft * scale),
+					y + (params.y * scale) - (params.SpriteSheetData.srcTop*scale), true_color);
 			//}
 		}
 	}

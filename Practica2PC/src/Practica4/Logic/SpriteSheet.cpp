@@ -1,18 +1,18 @@
-#include "Sprite.h"
+#include "SpriteSheet.h"
 #include <Renderer/RendererThread.h>
 #include <Renderer/Renderer.h>
 #include <iostream>
 
-Sprite::Sprite(): _lastTime(0)
+SpriteSheet::SpriteSheet(): _lastTime(0)
 {
 }
 
-Sprite::~Sprite()
+SpriteSheet::~SpriteSheet()
 {
 	_animations.clear();
 }
 
-void Sprite::setImage(Resources::ImageId id)
+void SpriteSheet::setImage(Resources::ImageId id)
 {
 	Resources* resources = Resources::getInstance();
 	auto params = resources->getImage(id);
@@ -21,13 +21,14 @@ void Sprite::setImage(Resources::ImageId id)
 	_height = params.first[1];
 }
 
-void Sprite::init(Resources::ImageId id, char rows, char cols, char frame)
+void SpriteSheet::init(Resources::ImageId id, char rows, char cols, char frame)
 {
 	setImage(id);
 	_rows = rows;
 	_cols = cols;
 	_currentFrame = frame;
 	_isAnimated = false;
+	_stopAnimating = false;
 
 	int frameWidth = _width / _cols;
 	int frameHeight = _height / _rows;
@@ -39,25 +40,25 @@ void Sprite::init(Resources::ImageId id, char rows, char cols, char frame)
 }
 
 //Dibuja la imagen completa en la posicion x, y
-void Sprite::draw(int x, int y, RendererThread * renderThread)
+void SpriteSheet::draw(int x, int y, RendererThread * renderThread)
 {
 	sendDrawCommand(x, y, 0, 0, _width, _height, renderThread);
 }
 
 //Dibuja un trozo de la imagen en la posicion x, y 
-void Sprite::draw(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread)
+void SpriteSheet::draw(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread)
 {
 	sendDrawCommand(x, y, left, top, right, bottom, renderThread);
 }
 
-void Sprite::draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread)
+void SpriteSheet::draw(int x, int y, char rows, char cols, char frame, RendererThread * renderThread)
 {
 	int left = _currentSrcRect.left + (frame % cols) * _srcRect.right;
 	int top = _currentSrcRect.top + (frame / cols) * _srcRect.bottom;
 	sendDrawCommand(x, y, left, top, _currentSrcRect.right, _currentSrcRect.bottom, renderThread);
 }
 
-bool Sprite::update(double deltaTime)
+bool SpriteSheet::update(double deltaTime)
 {
 	if (_isAnimated) {
 		_lastTime += deltaTime;
@@ -71,18 +72,18 @@ bool Sprite::update(double deltaTime)
 	return false;
 }
 
-void Sprite::render(int x, int y, RendererThread* renderThread)
+void SpriteSheet::render(int x, int y, RendererThread* renderThread)
 {
 	draw(x, y, _rows, _cols, _currentFrame, renderThread);
 }
 
-void Sprite::addAnim(std::string name, AnimInfo& animInfo)
+void SpriteSheet::addAnim(std::string name, AnimInfo& animInfo)
 {
 	animInfo.name = name; //lo pongo aqui para no modificar todos los addAnim que no he hecho TODO: CAMBIARLO?
 	_animations.insert({ name, animInfo });
 }
 
-void Sprite::setAnim(std::string name)
+void SpriteSheet::setAnim(std::string name)
 {
 	auto it = _animations.find(name);
 	if (it != _animations.end()) {
@@ -90,89 +91,97 @@ void Sprite::setAnim(std::string name)
 		_currentAnim.name = name;
 		_currentFrame = _currentAnim.iniFrame;
 		_isAnimated = true;
+		_stopAnimating = false;
 	}
 }
 
-void Sprite::setFrame(char frame)
+void SpriteSheet::setFrame(char frame)
 {
 	_currentFrame = frame;
 }
 
-void Sprite::setCurrentRect(Rect rect)
+void SpriteSheet::setCurrentRect(Rect rect)
 {
 	_currentSrcRect = rect;
 }
 
-Sprite::Rect Sprite::getRect()
+SpriteSheet::Rect SpriteSheet::getRect()
 {
 	return _srcRect;
 }
 
-void Sprite::changeFrame()
+void SpriteSheet::changeFrame()
 {
-	if (_currentAnim.iniFrame > _currentAnim.endFrame)
-		_currentFrame--;
-	else
-		_currentFrame++;
-	
-	_currentAnim.count++;
+	if (!_stopAnimating) {
+		if (_currentAnim.iniFrame > _currentAnim.endFrame)
+			_currentFrame--;
+		else
+			_currentFrame++;
 
-	if (_currentAnim.count > abs(_currentAnim.endFrame - _currentAnim.iniFrame)) {
-		if (_currentAnim.isLooped) {
-			_currentFrame = _currentAnim.iniFrame;
+		_currentAnim.count++;
+
+		if (_currentAnim.count > abs(_currentAnim.endFrame - _currentAnim.iniFrame)) {
+			if (_currentAnim.isLooped) {
+				_currentFrame = _currentAnim.iniFrame;
+			}
+			else {
+				_isAnimated = false;
+				_currentFrame = _currentAnim.endFrame;
+			}
+			_currentAnim.count = 0;
 		}
-		else {
-			_isAnimated = false;
-			_currentFrame = _currentAnim.endFrame;
-		}
-		_currentAnim.count = 0;
 	}
 }
 
-//Crea y encola un comando DRAW_SPRITE a la hebra de render
-void Sprite::sendDrawCommand(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread)
+//Crea y encola un comando DRAW_spriteSheet a la hebra de render
+void SpriteSheet::sendDrawCommand(int x, int y, int left, int top, int right, int bottom, RendererThread * renderThread)
 {
 	RendererThread::RenderCommand command;
-	command.type = RendererThread::DRAW_SPRITE;
+	command.type = RendererThread::DRAW_spriteSheet;
 	command.params.x = x;
 	command.params.y = y;
-	command.params.spriteData.image = _image;
-	command.params.spriteData.imageWidth = _width;
-	command.params.spriteData.imageHeight = _height;
-	command.params.spriteData.srcLeft = left;
-	command.params.spriteData.srcTop = top;
-	command.params.spriteData.srcRight = left + right;
-	command.params.spriteData.srcBottom = top + bottom;
+	command.params.SpriteSheetData.image = _image;
+	command.params.SpriteSheetData.imageWidth = _width;
+	command.params.SpriteSheetData.imageHeight = _height;
+	command.params.SpriteSheetData.srcLeft = left;
+	command.params.SpriteSheetData.srcTop = top;
+	command.params.SpriteSheetData.srcRight = left + right;
+	command.params.SpriteSheetData.srcBottom = top + bottom;
 
 	renderThread->enqueueCommand(command);
 }
 
-int Sprite::getWidth()
+int SpriteSheet::getWidth()
 {
 	return _width;
 }
 
-int Sprite::getHeight()
+int SpriteSheet::getHeight()
 {
 	return _height;
 }
 
-int const Sprite::getFrameWidth() const
+int const SpriteSheet::getFrameWidth() const
 {
 	return _currentSrcRect.right;
 }
 
-int const Sprite::getFrameHeight() const
+int const SpriteSheet::getFrameHeight() const
 {
 	return _currentSrcRect.bottom;
 }
 
-bool const Sprite::isAnimated() const
+bool const SpriteSheet::isAnimated() const
 {
 	return _isAnimated;
 }
 
-void Sprite::sourceInWidthBounds(float& x, int boundMin, int boundMax)
+void SpriteSheet::stopAnimation()
+{
+	_stopAnimating = true;
+}
+
+void SpriteSheet::sourceInWidthBounds(float& x, int boundMin, int boundMax)
 {
 	if (x + (_srcRect.left) <= boundMin) {
 		_currentSrcRect.left = _srcRect.left + ((boundMin - x));
@@ -185,12 +194,12 @@ void Sprite::sourceInWidthBounds(float& x, int boundMin, int boundMax)
 	}
 }
 
-int const Sprite::getCurrentFrame() const
+int const SpriteSheet::getCurrentFrame() const
 {
 	return _currentFrame;
 }
 
-std::string Sprite::getCurrentAnimName() const
+std::string SpriteSheet::getCurrentAnimName() const
 {
 	return _currentAnim.name;
 }

@@ -11,55 +11,69 @@ DollarHUD::~DollarHUD()
 
 void DollarHUD::init()
 {
-	_sprite.init(Resources::dolares, 1, 6);
-	Sprite::AnimInfo animInfo(0.2, 6, 3, false);
-	_sprite.addAnim("money", animInfo);
+	_spriteSheet.init(Resources::dolares, 1, 6);
+	SpriteSheet::AnimInfo animInfo(0.2, 5, 3, false);
+	_spriteSheet.addAnim("money", animInfo);
 	_id = 0;
 }
 
 void DollarHUD::update(double deltaTime)
 {
-	if (_moneyInserted && _sprite.getCurrentFrame() == 3) {
+	GameObject::update(deltaTime);
+
+	if (_lateUnselect)
+		setUnSelected();
+
+	if (_moneyInserted && !_messageSent) {
 		sendMessage(Message(MONEY_INSERTED));
+		_spriteSheet.stopAnimation();
 		_moneyInserted = false;
+		_messageSent = true;
 	}
 
-	GameObject::update(deltaTime);
+	if (_spriteSheet.isAnimated() && _spriteSheet.getCurrentFrame() == 3) {
+		_moneyInserted = true;
+	}
 }
 
 void DollarHUD::reset()
 {
 	GameObject::reset();
 	_selected = false;
-	_sprite.setFrame(0);
-	setDirty();
 	_moneyInserted = false;
+	_lateUnselect = false;
+	_messageSent = false;
+	_spriteSheet.setFrame(0);
 }
 
 void DollarHUD::setSelected()
 {
 	if (!_selected) {
 		_selected = true;
-		char currentFrame = _sprite.getCurrentFrame();
-		_sprite.setFrame(currentFrame + 1);
+		char currentFrame = _spriteSheet.getCurrentFrame();
+		_spriteSheet.setFrame(currentFrame + 1);
 		setDirty();
 	}
 }
 
 void DollarHUD::setUnSelected()
 {
-	if (_selected) {
+	if (_selected && !_spriteSheet.isAnimated()) {
 		_selected = false;
-		char currentFrame = _sprite.getCurrentFrame();
-		_sprite.setFrame(currentFrame - 1);
+		_lateUnselect = false;
+		char currentFrame = _spriteSheet.getCurrentFrame();
+		_spriteSheet.setFrame(currentFrame - 1);
 		setDirty();
 	}
+	else if (_spriteSheet.isAnimated())_lateUnselect = true;
 }
 
 void DollarHUD::depositMoney()
 {
-	if (_selected)
-		_sprite.setAnim("money");
+	if (_selected) {
+		_spriteSheet.setAnim("money");
+		setDirty();
+	}
 }
 
 void DollarHUD::setId(char id)
@@ -87,7 +101,6 @@ void DollarHUD::receiveMessage(const Message & message)
 	case DEPOSIT: {
 		const IDMessage* msg = static_cast<const IDMessage*>(&message);
 		if (msg->id == _id) {
-			if (_sprite.getCurrentAnimName() != "money") _moneyInserted = true;
 			depositMoney();
 		}
 		break;

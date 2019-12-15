@@ -12,7 +12,7 @@ private:
 	InputData* _inputData;
 	bool _scrollingRight, _scrollingLeft;
 
-	Sprite::Rect _originalRect;
+	SpriteSheet::Rect _originalRect;
 
 	int _numDoors;
 	float _vel;

@@ -6,10 +6,10 @@
 
 class RendererThread;
 
-class Sprite {
+class SpriteSheet {
 public:
-	Sprite();
-	~Sprite();
+	SpriteSheet();
+	~SpriteSheet();
 
 	struct AnimInfo {
 		std::string name;
@@ -53,6 +53,7 @@ public:
 	int const getCurrentFrame() const;
 	std::string getCurrentAnimName() const;
 	bool const isAnimated() const;
+	void stopAnimation();
 
 	void sourceInWidthBounds(float& x, int boundMin, int boundMax);
 
@@ -62,7 +63,7 @@ private:
 	Rect _srcRect;
 	Rect _currentSrcRect;
 	float _lastTime; 
-	bool _isAnimated;
+	bool _isAnimated, _stopAnimating;
 	int  _width, _height;
 	char _rows, _cols,_currentFrame;
 

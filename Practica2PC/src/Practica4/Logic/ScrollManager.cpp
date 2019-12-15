@@ -9,11 +9,11 @@ void ScrollManager::setNextTargetPositions()
 	for (int i = 0; i < _numDoors; i++) {
 		if (isOutsideBounds(_actualPositions[i])) {
 			if (_dir > 0)
-				_actualPositions[i] = (_minBound - (_sprite.getWidth()));
+				_actualPositions[i] = (_minBound - (_spriteSheet.getWidth()));
 			else if (_dir < 0)
 				_actualPositions[i] = _maxBound;
 		}
-		_targetPositions[i] = _actualPositions[i] + (_dir * _sprite.getWidth());
+		_targetPositions[i] = _actualPositions[i] + (_dir * _spriteSheet.getWidth());
 	}
 
 	Message m(DEACTIVATE_DOORS);
@@ -22,7 +22,7 @@ void ScrollManager::setNextTargetPositions()
 
 bool ScrollManager::isOutsideBounds(float x)
 {
-	return (x >= _maxBound || x + (_sprite.getWidth()) <= _minBound);
+	return (x >= _maxBound || x + (_spriteSheet.getWidth()) <= _minBound);
 }
 
 ScrollManager::ScrollManager() :_scrollingRight(false), _scrollingLeft(false),
@@ -44,9 +44,9 @@ ScrollManager::~ScrollManager()
 void ScrollManager::init()
 {
 	_gm = GameManager::getInstance();
-	_sprite.init(Resources::marcoPuerta, 1, 1);
+	_spriteSheet.init(Resources::marcoPuerta, 1, 1);
 
-	_originalRect = Sprite::Rect(0, 0, _sprite.getWidth(), _sprite.getHeight());
+	_originalRect = SpriteSheet::Rect(0, 0, _spriteSheet.getWidth(), _spriteSheet.getHeight());
 
 	_gm->getGameBounds(_minBound, _maxBound);
 	_actualPositions = new float[_numDoors];
@@ -61,7 +61,7 @@ void ScrollManager::reset()
 	GameObject::reset();
 
 	for (int i = 0; i < _numDoors; i++) {
-		_actualPositions[i] = _x + (i*_sprite.getWidth());
+		_actualPositions[i] = _x + (i*_spriteSheet.getWidth());
 	}
 	_dir = 0;
 }
@@ -94,9 +94,9 @@ void ScrollManager::render(RendererThread * renderThread)
 	if (_active && _pendingFrames >= 0) {
 		for (int i = 0; i < _numDoors; i++) {
 			float _x = _actualPositions[i];
-			_sprite.sourceInWidthBounds(_x, _minBound, _maxBound);
-			_sprite.render(_x, _y, renderThread);
-			_sprite.setCurrentRect(_originalRect);
+			_spriteSheet.sourceInWidthBounds(_x, _minBound, _maxBound);
+			_spriteSheet.render(_x, _y, renderThread);
+			_spriteSheet.setCurrentRect(_originalRect);
 		}
 		_pendingFrames--;
 	}

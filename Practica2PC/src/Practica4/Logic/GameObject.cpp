@@ -19,23 +19,23 @@ GameObject::~GameObject()
 
 void GameObject::init()
 {
-	_sprite.init(Resources::debug500x500, 2, 2);
-	Sprite::AnimInfo animInfo(1, 0, 3, true);
-	_sprite.addAnim("test", animInfo);
-	_sprite.setAnim("test");
+	_spriteSheet.init(Resources::debug500x500, 2, 2);
+	SpriteSheet::AnimInfo animInfo(1, 0, 3, true);
+	_spriteSheet.addAnim("test", animInfo);
+	_spriteSheet.setAnim("test");
 }
 
 void GameObject::render(RendererThread* renderThread)
 {
 	if (_active && _pendingFrames >= 0) {
-		_sprite.render(_x, _y, renderThread);
+		_spriteSheet.render(_x, _y, renderThread);
 		_pendingFrames--;
 	}
 }
 
 void GameObject::update(double deltaTime)
 {
-	if (_active && _sprite.update(deltaTime)) {
+	if (_active && _spriteSheet.update(deltaTime)) {
 		setDirty();
 	}
 }

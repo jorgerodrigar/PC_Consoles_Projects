@@ -6,7 +6,7 @@
 class DollarHUD : public GameObject, public Listener, public Emitter
 {
 private:
-	bool _selected, _moneyInserted;
+	bool _selected, _moneyInserted, _lateUnselect, _messageSent;
 	char _id;
 
 public:

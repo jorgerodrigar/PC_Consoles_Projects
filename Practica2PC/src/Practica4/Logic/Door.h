@@ -14,7 +14,7 @@ private:
 	bool const isClosed() const;
 	void openDoor();
 	void closeDoor();
-	void adjustSprite();
+	void adjustSpriteSheet();
 
 public:
 	Door();

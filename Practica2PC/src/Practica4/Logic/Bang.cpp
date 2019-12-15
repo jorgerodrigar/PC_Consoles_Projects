@@ -15,9 +15,9 @@ void Bang::init()
 	setX(256);
 	setY(156);
 
-	_sprite.init(Resources::bang, 1, 6, 0);
-	Sprite::AnimInfo bangAnimInfo(0.35f, 0, 5, false);
-	_sprite.addAnim("bang", bangAnimInfo);
+	_spriteSheet.init(Resources::bang, 1, 6, 0);
+	SpriteSheet::AnimInfo bangAnimInfo(0.35f, 0, 5, false);
+	_spriteSheet.addAnim("bang", bangAnimInfo);
 }
 
 void Bang::update(double deltaTime)
@@ -25,7 +25,7 @@ void Bang::update(double deltaTime)
 	GameObject::update(deltaTime);
 
 	if (_active) {
-		if (_sprite.isAnimated() && _sprite.getCurrentFrame() == 5) {
+		if (_spriteSheet.isAnimated() && _spriteSheet.getCurrentFrame() == 5) {
 			Message m(START_ROUND);
 			sendMessage(m);
 		}
@@ -44,7 +44,7 @@ void Bang::receiveMessage(const Message & message)
 	case GAME_OVER:
 		setActive(true);
 		setDirty();
-		_sprite.setAnim("bang");
+		_spriteSheet.setAnim("bang");
 		break;
 	default:
 		break;

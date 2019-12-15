@@ -3,13 +3,13 @@
 
 bool const Door::isClosed() const
 {
-	return !_sprite.isAnimated() && _sprite.getCurrentFrame() == 0;
+	return !_spriteSheet.isAnimated() && _spriteSheet.getCurrentFrame() == 0;
 }
 
 void Door::openDoor()
 {
 	if (isClosed()) {
-		_sprite.setAnim("opening");
+		_spriteSheet.setAnim("opening");
 		DoorOpeningMessage m(DOOR_OPENING, getId(), rand() % 2, getX(), getY()); //elige si aparece un bandido / cliente
 		sendMessage(m);
 		setDirty();
@@ -19,20 +19,20 @@ void Door::openDoor()
 void Door::closeDoor()
 {
 	if (!isClosed()) {
-		_sprite.setAnim("closing");
+		_spriteSheet.setAnim("closing");
 		_isClosing = true;
 		setDirty();
 	}
 }
 
-void Door::adjustSprite()
+void Door::adjustSpriteSheet()
 {
-	Sprite::Rect r(0, 0, _sprite.getRect().right, _sprite.getRect().bottom);
+	SpriteSheet::Rect r(0, 0, _spriteSheet.getRect().right, _spriteSheet.getRect().bottom);
 
-	r.left += 32 * _sprite.getCurrentFrame();
+	r.left += 32 * _spriteSheet.getCurrentFrame();
 	r.right = 116 - r.left;
 	setX(initialPosX + r.left);
-	_sprite.setCurrentRect(r);
+	_spriteSheet.setCurrentRect(r);
 	sendMessage(Message(SET_DIRTY));
 }
 
@@ -46,11 +46,11 @@ Door::~Door()
 
 void Door::init()
 {
-	_sprite.init(Resources::puertas, 1, 4, 0);
-	Sprite::AnimInfo openingAnimInfo(0.07f, 0, 3, false);
-	_sprite.addAnim("opening", openingAnimInfo);
-	Sprite::AnimInfo closingAnimInfo(0.07f, 3, 0, false);
-	_sprite.addAnim("closing", closingAnimInfo);
+	_spriteSheet.init(Resources::puertas, 1, 4, 0);
+	SpriteSheet::AnimInfo openingAnimInfo(0.07f, 0, 3, false);
+	_spriteSheet.addAnim("opening", openingAnimInfo);
+	SpriteSheet::AnimInfo closingAnimInfo(0.07f, 3, 0, false);
+	_spriteSheet.addAnim("closing", closingAnimInfo);
 }
 
 void Door::update(double deltaTime)
@@ -71,7 +71,7 @@ void Door::update(double deltaTime)
 			sendMessage(m);
 			_isClosing = false;
 		}
-		if (_sprite.isAnimated()) adjustSprite();
+		if (_spriteSheet.isAnimated()) adjustSpriteSheet();
 	}
 }
 
@@ -131,8 +131,8 @@ void Door::setInitialPosX(float value)
 void Door::reset()
 {
 	GameObject::reset();
-	_sprite.setFrame(0);
-	adjustSprite();
+	_spriteSheet.setFrame(0);
+	adjustSpriteSheet();
 	_isClosing = false;
 	timer = 0;
 }

@@ -9,9 +9,9 @@
 class RendererThread
 {
 public:
-	enum RenderCommandType { CLEAR, END_FRAME, PUT_PIXEL, DRAW_SPRITE };
+	enum RenderCommandType { CLEAR, END_FRAME, PUT_PIXEL, DRAW_spriteSheet };
 
-	struct SpriteData {
+	struct SpriteSheetData {
 		uint32_t* image;
 		int imageWidth, imageHeight;
 		int srcLeft, srcTop, srcRight, srcBottom;
@@ -19,10 +19,10 @@ public:
 
 	struct RenderCommandParams {
 		int color;  //USADO POR CLEAR Y PUT_PIXEL
-		int x, y;	//USADO POR DRAW_SPRITE Y PUT_PIXEL
+		int x, y;	//USADO POR DRAW_spriteSheet Y PUT_PIXEL
 		//TODO: quitar put_pixel?
 		union {
-			SpriteData spriteData;
+			SpriteSheetData SpriteSheetData;
 		};
 	};
 
