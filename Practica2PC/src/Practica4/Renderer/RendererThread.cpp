@@ -57,7 +57,7 @@ void RendererThread::drawRescaled(int i, int j, const RenderCommandParams& param
 	for (y; y < (i * scale) + scale; y++) {
 		int x = j * scale;
 		for (x; x < (j * scale) + scale; x++) {
-			//if ((x + params.x - (params.SpriteSheetData.srcLeft * scale) >= 0 && (x + params.x - (params.SpriteSheetData.srcLeft * scale) < Renderer::getWindowWidth()))) { //todo: esta bien aqui??
+			//if ((x + params.x - (params.SpriteSheetData.srcLeft * scale) >= 0 && (x + params.x - (params.SpriteSheetData.srcLeft * scale) < Renderer::getWindowWidth()))) {
 				Renderer::PutPixel(x + (params.x * scale) - (params.SpriteSheetData.srcLeft * scale),
 					y + (params.y * scale) - (params.SpriteSheetData.srcTop*scale), true_color);
 			//}
@@ -91,7 +91,7 @@ void RendererThread::stop()
 
 	RenderCommand command;
 	command.type = END_FRAME;
-	_concurrentQueue.push(command); //	TODO: PROVISIONAL, AQUI O EN MAIN??
+	_concurrentQueue.push(command);
 
 	_thread->join(); delete _thread; _thread = nullptr;
 }

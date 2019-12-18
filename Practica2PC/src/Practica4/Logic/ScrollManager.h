@@ -1,16 +1,16 @@
 #pragma once
 #include <Logic/Emitter.h>
 #include <Logic/GameObject.h>
+#include <Input/InputData.h>
 
 class GameManager;
-class InputData;
 
 ///maneja el input de scroll y pinta un unico sprite del fondo de la puerta 4 veces de forma que simule un scroll de 3 puertas
 class ScrollManager : public GameObject, public Emitter
 {
 private:
 	GameManager* _gm;
-	InputData* _inputData;
+	InputData _inputData;
 	bool _scrollingRight, _scrollingLeft;
 
 	SpriteSheet::Rect _originalRect;

@@ -16,6 +16,6 @@ public:
 	///lee y devuelve un solo caracter
 	static int ReadByte(FILE* filePtr);
 	///lee size bytes del archivo especificado por filePtr y los almacena en buffer
-	static void Read(void* buffer, unsigned int size, FILE* filePtr);
+	static void Read(void* buffer, size_t size, size_t nMemb, FILE* filePtr);
 };
 

@@ -1,11 +1,12 @@
 #include "Resources.h"
 #include <Platform/Platform.h>
 #include <Utils/BinReader.h>
+#include <iostream>
 
 
 Resources* Resources::_instance = nullptr;
 
-std::vector<std::string> Resources::_imageFiles{ "assets/SpritesSheetsWestBank/Debug/rgb.rgba", 
+std::vector<std::string> Resources::_imageFiles{ "assets/SpritesSheetsWestBank/Debug/rgb.rgba",
 "assets/SpritesSheetsWestBank/Debug/rgb_500x500.rgba",
 "assets/SpritesSheetsWestBank/bang.rgba",
 "assets/SpritesSheetsWestBank/client.rgba",
@@ -62,15 +63,13 @@ void Resources::load()
 		uint32_t* header = (uint32_t*)malloc(sizeof(uint32_t) * 2);
 
 		FILE* ptr = BinReader::OpenFile(filePath.c_str());
-		BinReader::Read(header, 2, ptr);
-
+		BinReader::Read(header, sizeof(uint32_t), 2, ptr);
 		header = Platform::ToCurrentEndian(header, 2);
 
 		uint32_t* buffer = (uint32_t*)malloc(sizeof(uint32_t) * header[0] * header[1]);
-		BinReader::Read(buffer, header[0] * header[1], ptr);
-
+		BinReader::Read(buffer, sizeof(uint32_t), header[0] * header[1], ptr);
 		buffer = Platform::ToCurrentEndian(buffer, header[0]* header[1]);
-		
+
 		_images.insert({ImageId(i), { header, buffer }});
 
 		BinReader::CloseFile(ptr);

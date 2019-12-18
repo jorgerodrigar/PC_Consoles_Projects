@@ -1,7 +1,7 @@
 #pragma once
 #include <Input/PC/InputListener.h>
+#include <Input/InputData.h>
 
-class InputData;
 class InputListener;
 
 class PCInput
@@ -11,7 +11,8 @@ public:
 	static void Release();
 	/// se pide la lista de eventos al listener de Platform y se rellena con ellos InputData
 	static void Tick();
-	static InputData* GetUserInput();
+	/// se devuelve un inputData con la info del mando
+	static InputData GetUserInput();
 
 private:
 	PCInput();
@@ -28,7 +29,7 @@ private:
 	static void HandleButtonDown(const SDL_Event& event);
 	static void HandleButtonUp(const SDL_Event& event);
 
-	static InputData* _inputData;
+	static InputData _inputData;
 	static InputListener* _inputListener; // instancia de la clase listener de Platform
 };
 

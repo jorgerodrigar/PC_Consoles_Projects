@@ -1,4 +1,3 @@
-#if defined(_WIN64) || defined(_WIN32)
 #include "Emitter.h"
 #include <Logic/Listener.h>
 
@@ -26,5 +25,3 @@ void Emitter::sendMessage(const Message& message)
 		listener->receiveMessage(message);
 	}
 }
-
-#endif

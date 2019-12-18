@@ -24,7 +24,7 @@ int BinReader::ReadByte(FILE* filePtr)
 	return fgetc(filePtr);
 }
 
-void BinReader::Read(void* buffer, unsigned int size, FILE * filePtr)
+void BinReader::Read(void* buffer, size_t size, size_t nMemb, FILE * filePtr)
 {
-	fread(buffer, sizeof(buffer), size, filePtr);
+	fread(buffer, size, nMemb, filePtr);
 }

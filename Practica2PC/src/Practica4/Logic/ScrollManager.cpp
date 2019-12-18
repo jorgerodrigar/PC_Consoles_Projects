@@ -2,7 +2,6 @@
 #include <Input/Input.h>
 #include <Renderer/Renderer.h>
 #include <Logic/GameManager.h>
-#include <Input/InputData.h>
 
 void ScrollManager::setNextTargetPositions()
 {
@@ -109,7 +108,7 @@ void ScrollManager::handleInput()
 	if (_active) {
 		_inputData = Input::GetUserInput();
 
-		if (!_scrollingLeft && _inputData->buttonsInfo.R1) { // scroll de la camara hacia la derecha
+		if (!_scrollingLeft && _inputData.buttonsInfo.R1) { // scroll de la camara hacia la derecha
 			_scrollingRight = true;                         // (las puertas se moveran hacia la izquierda)
 			if (_dir == 0 && _gm->allDoorsClosed()) {
 				_dir = -1;
@@ -117,7 +116,7 @@ void ScrollManager::handleInput()
 				setNextTargetPositions();
 			}
 		}
-		else if (!_scrollingRight && _inputData->buttonsInfo.L1) { // scroll de la camara hacia la izquierda
+		else if (!_scrollingRight && _inputData.buttonsInfo.L1) { // scroll de la camara hacia la izquierda
 			_scrollingLeft = true;                                // (las puertas se moveran hacia la derecha)
 			if (_dir == 0 && _gm->allDoorsClosed()) {
 				_dir = 1;
@@ -125,10 +124,10 @@ void ScrollManager::handleInput()
 				setNextTargetPositions();
 			}
 		}
-		else if (_scrollingRight && !_inputData->buttonsInfo.R1) {
+		else if (_scrollingRight && !_inputData.buttonsInfo.R1) {
 			_scrollingRight = false;
 		}
-		else if (_scrollingLeft && !_inputData->buttonsInfo.L1) {
+		else if (_scrollingLeft && !_inputData.buttonsInfo.L1) {
 			_scrollingLeft = false;
 		}
 	}

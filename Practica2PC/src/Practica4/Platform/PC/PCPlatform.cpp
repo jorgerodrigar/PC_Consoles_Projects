@@ -7,6 +7,7 @@
 bool PCPlatform::_initialized = false;
 std::list<InputListener*> PCPlatform::_listeners;
 double PCPlatform::_currentTime;
+double PCPlatform::_deltaTime;
 
 PCPlatform::PCPlatform() {}
 
@@ -37,14 +38,17 @@ bool PCPlatform::Tick()
 		}
 		SendEvent(event);
 	}
+
+	double lastTime = _currentTime;
+	_currentTime = SDL_GetTicks();
+	_deltaTime = (_currentTime - lastTime) / 1000;
+
 	return true;
 }
 
 double PCPlatform::GetDeltaTime()
 {
-	double lastTime = _currentTime;
-	_currentTime = SDL_GetTicks();
-	return (_currentTime - lastTime)/1000;
+	return _deltaTime;
 }
 
 void PCPlatform::AddListener(InputListener * listener)

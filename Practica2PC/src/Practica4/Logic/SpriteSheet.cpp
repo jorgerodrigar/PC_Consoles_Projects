@@ -79,7 +79,7 @@ void SpriteSheet::render(int x, int y, RendererThread* renderThread)
 
 void SpriteSheet::addAnim(std::string name, AnimInfo& animInfo)
 {
-	animInfo.name = name; //lo pongo aqui para no modificar todos los addAnim que no he hecho TODO: CAMBIARLO?
+	animInfo.name = name;
 	_animations.insert({ name, animInfo });
 }
 

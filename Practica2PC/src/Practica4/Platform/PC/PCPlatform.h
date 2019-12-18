@@ -14,6 +14,7 @@ private:
 	static bool _initialized;
 	static std::list<InputListener*> _listeners;
 	static double _currentTime;
+	static double _deltaTime;
 	
 	static uint32_t* _toCurrentEndian(uint32_t* endian, uint32_t size);
 
