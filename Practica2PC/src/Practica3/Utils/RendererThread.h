@@ -13,14 +13,13 @@ public:
 	};
 
 	struct SimulationData {
-		int* current;
 		int* image;
 		int* increments;
 	};
 
-	struct RenderCommandParams { 
+	struct RenderCommandParams {
 		int color;
-		union { // TODO: HACER QUE SEA UNION
+		union {
 			RenderCommandPutPixelParams putPixelParams;
 			SimulationData simulationData;
 		};
@@ -38,7 +37,7 @@ private:
 	ConcurrentQueue<RenderCommand> _concurrentQueue;
 
 	void renderLoop();
-	void renderRain(int* current, int* image, int* increments);
+	void renderRain(int* image, int* increments);
 	int clamp(int value, int min, int max);
 
 public:

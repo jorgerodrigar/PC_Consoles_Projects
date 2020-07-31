@@ -18,9 +18,58 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Practica4\Input\PC\InputListener.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Input\PC\PCInput.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Bandit.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Bang.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Client.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\DollarHUD.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Door.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Emitter.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\GameManager.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\GameObject.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Listener.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\ScrollManager.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\Shooter.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Logic\SpriteSheet.cpp" />
+    <ClCompile Include="..\..\src\Practica4\main.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Platform\PC\PCPlatform.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Renderer\PC\PCRenderer.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Renderer\RendererThread.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Utils\BinReader.cpp" />
+    <ClCompile Include="..\..\src\Practica4\Utils\Resources.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Practica4\Input\Input.h" />
+    <ClInclude Include="..\..\src\Practica4\Input\InputData.h" />
+    <ClInclude Include="..\..\src\Practica4\Input\PC\InputListener.h" />
+    <ClInclude Include="..\..\src\Practica4\Input\PC\PCInput.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Bandit.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Bang.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Client.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\DollarHUD.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Door.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Emitter.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\GameManager.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\GameObject.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Listener.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Message.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\ScrollManager.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\Shooter.h" />
+    <ClInclude Include="..\..\src\Practica4\Logic\SpriteSheet.h" />
+    <ClInclude Include="..\..\src\Practica4\Platform\PC\PCPlatform.h" />
+    <ClInclude Include="..\..\src\Practica4\Platform\Platform.h" />
+    <ClInclude Include="..\..\src\Practica4\Renderer\PC\PCRenderer.h" />
+    <ClInclude Include="..\..\src\Practica4\Renderer\Renderer.h" />
+    <ClInclude Include="..\..\src\Practica4\Renderer\RendererThread.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\BinReader.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\ConcurrentQueue.h" />
+    <ClInclude Include="..\..\src\Practica4\Utils\Resources.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{642B8180-D3C8-4DF3-B8FE-691D25620488}</ProjectGuid>
+    <ProjectGuid>{66F43348-655B-4531-B63C-6E147FCEDFEF}</ProjectGuid>
     <RootNamespace>Practica3PC</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -71,25 +120,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica3;$(SolutionDir)src\Practica2;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica4;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)exes\</OutDir>
     <IntDir>$(SolutionDir)inter\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica3;$(SolutionDir)src\Practica2;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica4;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)exes\</OutDir>
     <IntDir>$(SolutionDir)inter\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica3;$(SolutionDir)src\Practica2;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica4;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)exes\</OutDir>
     <IntDir>$(SolutionDir)inter\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica3;$(SolutionDir)src\Practica2;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\SDL2-2.0.8\include\;$(SolutionDir)src\Practica4;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)exes\</OutDir>
     <IntDir>$(SolutionDir)inter\$(Configuration)</IntDir>
   </PropertyGroup>
@@ -157,25 +206,6 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\Practica2\Platform\PC\PCPlatform.h" />
-    <ClInclude Include="..\..\src\Practica2\Platform\Platform.h" />
-    <ClInclude Include="..\..\src\Practica2\Renderer\PC\PCRenderer.h" />
-    <ClInclude Include="..\..\src\Practica2\Renderer\Renderer.h" />
-    <ClInclude Include="..\..\src\Practica3\Logic\ScreenSimulation.h" />
-    <ClInclude Include="..\..\src\Practica3\Utils\BinReader.h" />
-    <ClInclude Include="..\..\src\Practica3\Utils\ConcurrentQueue.h" />
-    <ClInclude Include="..\..\src\Practica3\Utils\RendererThread.h" />
-    <ClInclude Include="..\..\src\Practica3\Utils\user_malloc.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\Practica2\Platform\PC\PCPlatform.cpp" />
-    <ClCompile Include="..\..\src\Practica2\Renderer\PC\PCRenderer.cpp" />
-    <ClCompile Include="..\..\src\Practica3\Logic\ScreenSimulation.cpp" />
-    <ClCompile Include="..\..\src\Practica3\main.cpp" />
-    <ClCompile Include="..\..\src\Practica3\Utils\BinReader.cpp" />
-    <ClCompile Include="..\..\src\Practica3\Utils\RendererThread.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

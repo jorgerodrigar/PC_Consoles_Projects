@@ -1,21 +1,22 @@
 #include <Renderer/Renderer.h>
 #include <Platform/Platform.h>
 #include <Logic/ScreenSimulation.h>
-#include <Utils/user_malloc.h>
 #include <Utils/RendererThread.h>
 #include <iostream>
-
-//"..\\..\\files\\fdi.rgba"
-//"/app0/fdi.rgba"
 
 int main() {
 	Platform::init();
 	Renderer::init();
 
 	RendererThread rendererThread;
-	ScreenSimulation screenSim;
 
-	screenSim.init("..\\..\\files\\fdi.rgba", &rendererThread);
+	// iniciamos la simulacion leyendo el archivo del fondo
+	ScreenSimulation screenSim;
+	std::string filePath = HEADER_PATH; // obtiene la ruta especifica de cada plataforma
+	filePath.append("assets/fdi.rgba");
+	screenSim.init(filePath.c_str(), &rendererThread);
+
+	// dibujamos el fondo una sola vez por buffer
 	for (int fb = 0; fb < Renderer::getNumBuffers(); fb++) {
 		screenSim.drawBackground();
 		RendererThread::RenderCommand command;
@@ -26,13 +27,13 @@ int main() {
 	bool exit = false;
 	int frame = 0;
 
-	rendererThread.start();
+	rendererThread.start(); // se lanza la hebra de renderizado
 	while (!exit)
 	{
 		//Renderer::clear(0x000000);
 		exit = Platform::tick();
 
-		if (frame == 5) {
+		if (frame == 10) { // cada 10 frames se lanza una gota aleatoria
 			screenSim.startRandomWave();
 			frame = 0;
 		}
@@ -44,13 +45,14 @@ int main() {
 		RendererThread::RenderCommand command;
 		command.type = RendererThread::END_FRAME;
 		rendererThread.enqueueCommand(command);
-		
+
 		screenSim.swap();
 
 		frame++;
 
 		while (rendererThread.getPendingFrames() >= Renderer::getNumBuffers()); //espera activa de la cpu
 	}
+
 	rendererThread.stop();
 	Renderer::release();
 	Platform::release();

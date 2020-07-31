@@ -14,20 +14,20 @@ bool PCRenderer::_initialized = false;
 
 PCRenderer::PCRenderer() {}
 
-void PCRenderer::init()
+void PCRenderer::Init()
 {
 	if (!_initialized) {
 		int winX, winY;
 		winX = winY = SDL_WINDOWPOS_CENTERED;
 		//Inicialización del renderer. Creacion de la ventana
-		_window = SDL_CreateWindow("Practica 2", winX, winY, WIN_WIDTH, WIN_HEIGHT, windowType);
+		_window = SDL_CreateWindow("Practica 4", winX, winY, WIN_WIDTH, WIN_HEIGHT, windowType);
 		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 
 		_initialized = true;
 	}
 }
 
-void PCRenderer::release()
+void PCRenderer::Release()
 {
 	if (_initialized) {
 		SDL_DestroyRenderer(_renderer);
@@ -39,26 +39,26 @@ void PCRenderer::release()
 	}
 }
 
-void PCRenderer::clear(int color)
+void PCRenderer::Clear(int color)
 {
 	SDL_SetRenderDrawColor(_renderer, color, color, color, 255);
 	SDL_RenderClear(_renderer);
 }
 
-void PCRenderer::putPixel(int x, int y, int color)
+void PCRenderer::PutPixel(int x, int y, int color)
 {
 	int rgba[4];
-	hexToRGBA(color, rgba);
+	HexToRGBA(color, rgba);
 	SDL_SetRenderDrawColor(_renderer, rgba[0], rgba[1], rgba[2], rgba[3]);
 	SDL_RenderDrawPoint(_renderer, x, y); //Renders on middle of screen.
 }
 
-void PCRenderer::present()
+void PCRenderer::Present()
 {
 	SDL_RenderPresent(_renderer);
 }
 
-void PCRenderer::hexToRGBA(int hexColor, int* rgba)
+void PCRenderer::HexToRGBA(int hexColor, int* rgba)
 {
 	rgba[0] = (hexColor >> 24) & 0xFF; //r
 	rgba[1] = (hexColor >> 16) & 0xFF;  //g
@@ -66,17 +66,17 @@ void PCRenderer::hexToRGBA(int hexColor, int* rgba)
 	rgba[3] = (hexColor) & 0xFF; //a
 }
 
-unsigned const int PCRenderer::getNumBuffers()
+unsigned const int PCRenderer::GetNumBuffers()
 {
 	return windowType == SDL_WINDOW_FULLSCREEN ? 2 : 1;
 }
 
-const int PCRenderer::getWindowWidth()
+const int PCRenderer::GetWindowWidth()
 {
 	return WIN_WIDTH;
 }
 
-const int PCRenderer::getWindowHeight()
+const int PCRenderer::GetWindowHeight()
 {
 	return WIN_HEIGHT;
 }
